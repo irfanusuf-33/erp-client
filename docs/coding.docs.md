@@ -111,7 +111,7 @@ export function UserCard({ user }) {
 
 ## 🌐 API Handling
 
-* Centralize API calls (e.g., `/lib/api.ts`)
+* Centralize API calls (e.g., `/lib/axiosInstance.ts`)
 * Handle errors gracefully
 * Use consistent response handling
 

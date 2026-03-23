@@ -1,12 +1,13 @@
 import { axiosInstance } from "@/lib/axiosInstance";
-import { AuthUser, LoginRequest, LoginResponse } from "@/types/auth.types";
+import {  LoginRequest, LoginResponse } from "@/types/auth.types";
+import { User } from "@/types/iam.types";
 import { StateCreator } from "zustand";
 
 
 
 
 export type AuthSlice = {
-    user: AuthUser | null;
+    user: User | null;
     token: string | null;
     authLoading: boolean;
     isAuthenticated: boolean;
@@ -15,7 +16,7 @@ export type AuthSlice = {
     login: (params: LoginRequest) => Promise<LoginResponse>;
     getRememberedCredentials: () => Promise<{ tenantId?: string; email?: string } | null>;
     logout: () => Promise<boolean>;
-    setUser: (user: AuthUser) => void;
+    setUser: (user: User) => void;
 };
 
 export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
