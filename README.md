@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ERP System (Next.js + shadcn/ui + Tailwind)
 
-## Getting Started
+## 🚀 Overview
 
-First, run the development server:
+This is a modern ERP (Enterprise Resource Planning) system built using:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+* Next.js (App Router)
+* Tailwind CSS
+* shadcn/ui (component system)
+* Radix UI (accessible primitives)
+
+The project provides a scalable foundation for building a full ERP platform with multiple modules like IAM, HRM, CRM, Accounts, Calendar, and Ticketing.
+
+---
+
+## 🧱 Tech Stack
+
+* **Frontend Framework:** Next.js
+* **Styling:** Tailwind CSS
+* **UI Components:** shadcn/ui
+* **Icons:** lucide-react
+* **Headless UI:** Radix UI
+
+---
+
+## 📦 Features
+
+* Modular ERP dashboard
+* Clean and responsive UI
+* Reusable component-based architecture
+* Ready for multi-tenant expansion
+* Easily customizable design system
+
+---
+
+## 📁 Project Structure
+
+```
+/app
+  /dashboard        → Main ERP dashboard
+  /hrm              → HRM module
+  /crm              → CRM module
+  /iam              → Identity & Access
+  /accounts         → Finance module
+  /calendar         → Scheduling
+  /ticketing        → Support system
+
+/components
+  /ui               → shadcn components
+
+/lib
+  utils.ts          → helper functions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Clone the repository
+git clone <your-repo-url>
 
-## Learn More
+# Install dependencies
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# Run development server
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧩 Adding Components
 
-## Deploy on Vercel
+Use shadcn CLI to add UI components:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npx shadcn@latest add button card dialog input
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🎨 Customization
+
+* Modify `globals.css` for theme variables
+* Update Tailwind config for design tokens
+* Customize components inside `/components/ui`
+
+---
+
+## 🔐 Modules
+
+* **IAM** → User roles, permissions, authentication
+* **HRM** → Employees, attendance, payroll
+* **CRM** → Leads, customers, deals
+* **Accounts** → Billing, invoices, reports
+* **Calendar** → Events and scheduling
+* **Ticketing** → Support and issue tracking
+
+---
+
+## 🚀 Future Improvements
+
+* Role-based access control (RBAC)
+* API integration (.NET / Node backend)
+* Real-time notifications
+* Analytics dashboard
+* Multi-tenant architecture
+
+---
+
+## 🧑‍💻 Development Notes
+
+* shadcn components are locally editable
+* Radix is used under the hood for accessibility
+* Keep UI consistent using design tokens
+
+---
+
+## 📄 License
+
+This project is for internal or learning purposes. Add a proper license if deploying publicly.
+
+---
+
+## 🤝 Contributing
+
+Contributions, ideas, and improvements are welcome.
+
+---
+
+## 📬 Contact
+
+For any queries or collaboration, feel free to reach out.
+
+---
