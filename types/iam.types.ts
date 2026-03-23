@@ -20,12 +20,14 @@ export type TabType = 'policies' | 'groups' | 'roles';
 export type PermissionsData = Record<TabType, PolicyCategory[]>;
 
 
-export interface GroupData {
+export interface Group {
+  _id : string;
     groupName: string;
     groupAdmin: string;
     groupCode: string;
     groupDescription: string;
     files?: any[];
+    disabled : boolean
 }
 
 

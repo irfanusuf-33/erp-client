@@ -1,48 +1,65 @@
 import { create, StateCreator } from "zustand";
 
-import { User, PermissionsData, GroupData, FetchGroupsResponse, RoleCategory, PolicyCategory, PolicyGroupsResponse } from "@/types/iam.types";
+import { User, PermissionsData, FetchGroupsResponse, RoleCategory, PolicyCategory, PolicyGroupsResponse, Group } from "@/types/iam.types";
 import { axiosInstance } from "@/lib/axiosInstance";
 
 
 
+
+// setFunctions are not necessary because  u dont use them often 
+
+
 export type IamSlice = {
     users: User[];
-    usersLoading: boolean;
+    
     userData: User | null;
-    errorMessage: string
-    permissionsData: PermissionsData | null;
     IamdashboardData: any;
-    IamDashloading: boolean;
-    allGroups: any[];
-    groupDetails: any | null;
-    groupData: GroupData | null;
+
+    permissionsData: PermissionsData | null;
+
+    group: Group | null;
+    groups: Group[];
+
     roles: RoleCategory[];
     policies: PolicyCategory[];
 
+    iamLoading: boolean;
+    iamErrorMsg: string
+
+
+    getUsers: (page?: number, limit?: number) => Promise<any>;
+
+    setUsers: (users: User[]) => void;
+    setUserData: (data: User) => void;
+    toggleUserStatus: (userIds: string[]) => Promise<any>;
+    fetchUserDetails: (email: string) => Promise<User>;
+    updateUserDetails: (userId: string, data: any) => Promise<User>;
+    searchUsers: (searchTerm: string) => Promise<User>;
+    searchUsersFromHrm: (searchTerm: string) => Promise<User>;
+
+
+    setPermissionsData: (data: PermissionsData) => void;
+
+    createRole: (roleName: string, policies: string[]) => Promise<any>;
     fetchRoles: () => Promise<RoleCategory[] | undefined>;
     fetchCustomRoles: () => Promise<RoleCategory[]>;
-    createRole: (roleName: string, policies: string[]) => Promise<any>;
-
 
 
 
 
     setIamDashboardData: (data: any) => void;
     fetchIamDashboard: () => Promise<any>;
-    setUserData: (data: User) => void;
-    setPermissionsData: (data: PermissionsData) => void;
     clearIamData: () => void;
-    setUsers: (users: User[]) => void;
-    getUsers: (page?: number, limit?: number) => Promise<any>;
-    toggleUserStatus: (userIds: string[]) => Promise<any>;
-    fetchUserDetails: (email: string) => Promise<any>;
-    updateUserDetails: (userId: string, data: any) => Promise<any>;
-    searchUsers: (searchTerm: string) => Promise<any>;
-    searchUsersFromHrm: (searchTerm: string) => Promise<any>;
-    setAllGroups: (groups: any[]) => void;
-    setGroupData: (data: GroupData) => void;
+
+
+
+
+    setgroups: (groups: any[]) => void;
+    setGroupData: (data: Group) => void;
+
+
     fetchGroups: (page?: number, limit?: number) => Promise<any>;
-    createGroup: (groupData: GroupData, policyIds: string[]) => Promise<any>;
+    createGroup: (groupData: Group, policyIds: string[]) => Promise<any>;
     updateGroup: (groupId: string, data: any) => Promise<any>;
     toggleGroupStatus: (groupIds: string[]) => Promise<any>;
     addUserToGroup: (groupId: string, users: string[]) => Promise<any>;
@@ -52,6 +69,10 @@ export type IamSlice = {
         groupId: string,
         selectedUsers: string[]
     ) => Promise<any>;
+
+
+
+
     fetchEmailTemplates: () => Promise<any>;
     sendBulkEmail: (payload: any) => Promise<any>;
     saveTemplate: (templateData: any) => Promise<any>;
@@ -66,27 +87,35 @@ export type IamSlice = {
 
 
 export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
+
+
+    // intial State
+
     users: [],
-    usersLoading: false,
+    iamLoading: false,
     userData: null,
+
     permissionsData: null,
-    errorMessage: "",
     IamdashboardData: null,
-    IamDashloading: false,
-    allGroups: [],
-    groupDetails: null,
-    groupData: null,
+
+
+    group: null,
+    groups: [],
+
     roles: [],
     policies: [],
 
 
+    iamErrorMsg: "",
 
 
-    setIamDashboardData: (data) => set({ IamdashboardData: data }),
+
+
+    setIamDashboardData: (data) => set({ IamdashboardData: data }),   // not necessary 
 
     fetchIamDashboard: async () => {
         try {
-            set({ IamDashloading: true });
+            set({ iamLoading: true });
 
             const res = await axiosInstance.get("/iam/dashboard");
 
@@ -100,19 +129,20 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
             console.log("Error fetching iam dashboard:", error);
             return null;
         } finally {
-            set({ IamDashloading: false });
+            set({ iamLoading: false });
         }
     },
 
-    setUserData: (data) => set({ userData: data }),
+
     setPermissionsData: (data) => set({ permissionsData: data }),
     clearIamData: () => set({ userData: null, permissionsData: null }),
 
     setUsers: (users) => set({ users: users }),
+    setUserData: (data) => set({ userData: data }),
 
     getUsers: async (page = 1, limit = 10) => {
         try {
-            set({ usersLoading: true });
+            set({ iamLoading: true });
 
             const res = await axiosInstance.get(
                 `/iam/users?page=${page}&limit=${limit}`
@@ -132,10 +162,10 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
             return res.data;
         } catch (error: any) {
             console.log("Error fetching users:", error);
-            set({ errorMessage: error.message })
+            set({ iamErrorMsg: error.message })
             return null;
         } finally {
-            set({ usersLoading: false });
+            set({ iamLoading: false });
         }
     },
 
@@ -226,35 +256,12 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
     },
 
 
-    setAllGroups: (groups) => set({ allGroups: groups }),
-    setGroupData: (data) => set({ groupData: data }),
+    // Groups 
 
-    fetchGroups: async (page = 1, limit = 10) => {
-        try {
-            const res = await axiosInstance.get(
-                `/iam/groups?page=${page}&limit=${limit}`
-            );
+    setgroups: (groups) => set({ groups: groups }),
 
-            const apiGroups: FetchGroupsResponse[] =
-                res.data.data?.groups || res.data.groups || [];
+    setGroupData: (group) => set({ group: group }),
 
-            const mappedGroups = apiGroups.map((group) => ({
-                ...group,
-                status: group.disabled ? "Disable" : "Active",
-            }));
-
-            if (page === 1) {
-                set({ allGroups: mappedGroups });
-            } else {
-                set({ allGroups: [...get().allGroups, ...mappedGroups] });
-            }
-
-            return res.data;
-        } catch (error) {
-            console.log("Error fetching groups:", error);
-            return null;
-        }
-    },
 
     createGroup: async (groupData, policyIds) => {
         try {
@@ -293,7 +300,7 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
 
                 if (newGroup) {
                     set({
-                        allGroups: [
+                        groups: [
                             {
                                 ...newGroup,
                                 name: newGroup.name || groupData.groupName,
@@ -301,7 +308,7 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
                                     newGroup.description || groupData.groupDescription,
                                 status: newGroup.disabled ? "Disable" : "Active",
                             },
-                            ...get().allGroups,
+                            ...get().groups,
                         ],
                     });
                 }
@@ -343,7 +350,7 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
             });
 
             if (res.data.success || res.status === 200) {
-                const updated = get().allGroups.map((group) => {
+                const updated = get().groups.map((group: Group) => {
                     if (groupIds.includes(group._id)) {
                         const nextDisabled = !group.disabled;
 
@@ -356,7 +363,7 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
                     return group;
                 });
 
-                set({ allGroups: updated });
+                set({ groups: updated });
             }
 
             return { success: true, ...res.data };
@@ -370,6 +377,46 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
                     error?.response?.data?.msg ||
                     "Failed to update group status",
             };
+        }
+    },
+
+    fetchGroups: async (page = 1, limit = 10) => {
+        try {
+            const res = await axiosInstance.get(
+                `/iam/groups?page=${page}&limit=${limit}`
+            );
+
+            const apiGroups: Group[] =
+                res.data.data?.groups || res.data.groups || [];
+
+            const mappedGroups = apiGroups.map((group) => ({
+                ...group,
+                status: group.disabled ? "Disable" : "Active",
+            }));
+
+            if (page === 1) {
+                set({ groups: mappedGroups });
+            } else {
+                set({ groups: [...get().groups, ...mappedGroups] });
+            }
+
+            return res.data;
+        } catch (error) {
+            console.log("Error fetching groups:", error);
+            return null;
+        }
+    },
+
+    getGroupDetails: async (groupName) => {
+        try {
+            const res = await axiosInstance.get(`/iam/groups/${groupName}`);
+
+            set({ group: res.data });
+
+            return res.data;
+        } catch (error) {
+            console.log("Error fetching group details:", error);
+            return null;
         }
     },
 
@@ -390,19 +437,6 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
                 success: false,
                 msg: error?.response?.data?.message || "Failed to add user",
             };
-        }
-    },
-
-    getGroupDetails: async (groupName) => {
-        try {
-            const res = await axiosInstance.get(`/iam/groups/${groupName}`);
-
-            set({ groupDetails: res.data });
-
-            return res.data;
-        } catch (error) {
-            console.log("Error fetching group details:", error);
-            return null;
         }
     },
 
@@ -427,6 +461,14 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
             };
         }
     },
+
+
+  
+    
+
+
+
+    //Bulk  Email 
 
     fetchEmailTemplates: async () => {
         try {
@@ -479,6 +521,51 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
             return null;
         }
     },
+
+
+   // policies 
+
+    setPolicies: (policies) => set({ policies }),
+
+    fetchPolicies: async () => {
+        try {
+            const res = await axiosInstance.get("/iam/policies");
+
+            const policyGroups: PolicyGroupsResponse[] = res.data.policyGroups || [];
+
+            const transformedPolicies: PolicyCategory[] = policyGroups.flatMap(
+                (group) =>
+                    Object.entries(group).map(([categoryName, policiesMap]) => ({
+                        id: categoryName,
+                        title: categoryName
+                            .replace(/_/g, " ")
+                            .replace(/\b\w/g, (l) => l.toUpperCase()),
+
+                        policies: Object.entries(policiesMap).map(
+                            ([policyName, policy]) => ({
+                                id: policyName,
+                                name: policyName
+                                    .replace(/_/g, " ")
+                                    .replace(/\b\w/g, (l) => l.toUpperCase()),
+
+                                description: policy.description,
+                                selected: false,
+                                showDescription: false,
+                            })
+                        ),
+                    }))
+            );
+
+            set({ policies: transformedPolicies });
+
+            return transformedPolicies;
+        } catch (error) {
+            console.log("Error fetching policies:", error);
+        }
+    },
+
+
+    // roles 
 
     createRole: async (roleName: string, policies: string[]) => {
         try {
@@ -581,44 +668,9 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
         }
     },
 
-    setPolicies: (policies) => set({ policies }),
 
-    fetchPolicies: async () => {
-        try {
-            const res = await axiosInstance.get("/iam/policies");
 
-            const policyGroups: PolicyGroupsResponse[] = res.data.policyGroups || [];
 
-            const transformedPolicies: PolicyCategory[] = policyGroups.flatMap(
-                (group) =>
-                    Object.entries(group).map(([categoryName, policiesMap]) => ({
-                        id: categoryName,
-                        title: categoryName
-                            .replace(/_/g, " ")
-                            .replace(/\b\w/g, (l) => l.toUpperCase()),
-
-                        policies: Object.entries(policiesMap).map(
-                            ([policyName, policy]) => ({
-                                id: policyName,
-                                name: policyName
-                                    .replace(/_/g, " ")
-                                    .replace(/\b\w/g, (l) => l.toUpperCase()),
-
-                                description: policy.description,
-                                selected: false,
-                                showDescription: false,
-                            })
-                        ),
-                    }))
-            );
-
-            set({ policies: transformedPolicies });
-
-            return transformedPolicies;
-        } catch (error) {
-            console.log("Error fetching policies:", error);
-        }
-    },
 
 
 }));
