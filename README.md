@@ -50,6 +50,15 @@ The project provides a scalable foundation for building a full ERP platform with
 
 /lib
   utils.ts          → helper functions
+
+
+
+ /store 
+  /slices
+    /iam.slice.ts      -- slice for each module
+  /index.ts            -- main SSOT where slices are combined 
+
+
 ```
 
 ---
@@ -58,7 +67,7 @@ The project provides a scalable foundation for building a full ERP platform with
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone  https://github.com/irfanusuf-33/erp-client.git
 
 # Install dependencies
 npm install
@@ -118,18 +127,21 @@ npx shadcn@latest add button card dialog input
 
 ## 📄 License
 
-This project is for internal or learning purposes. Add a proper license if deploying publicly.
+This project is for internal purposes. Add a proper license if deploying publicly.
 
 ---
 
-## 🤝 Contributing
-
-Contributions, ideas, and improvements are welcome.
-
----
 
 ## 📬 Contact
 
 For any queries or collaboration, feel free to reach out.
+
+---
+
+## 📬 documentation
+
+/docs
+  /coding.docs.md
+  /state-management.docs.md
 
 ---

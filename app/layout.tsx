@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Erp Client Module ",
+  title: "Voctrum Erp ",
   description: "Erp Client Module",
 };
 
