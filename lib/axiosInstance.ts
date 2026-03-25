@@ -4,5 +4,6 @@ import axios from "axios";
 
 
 export const axiosInstance = axios.create({
-    baseURL : "put the testing backend Url here "
+    baseURL: "http://localhost:8000/api/v1",
+    withCredentials: true,
 })
