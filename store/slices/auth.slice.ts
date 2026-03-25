@@ -13,10 +13,13 @@ export type AuthSlice = {
     isAuthenticated: boolean;
     errorMessage : string,
 
+    setUser: (user: User) => void;
+
     login: (params: LoginRequest) => Promise<LoginResponse>;
     getRememberedCredentials: () => Promise<{ tenantId?: string; email?: string } | null>;
     logout: () => Promise<boolean>;
-    setUser: (user: User) => void;
+
+ 
 };
 
 export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
@@ -26,6 +29,8 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
     isAuthenticated: false,
     errorMessage : "",
 
+
+    setUser: (user) => set({ user }),
 
     login: async (params: LoginRequest): Promise<LoginResponse> => {
         try {
@@ -125,5 +130,5 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
 
     },
 
-    setUser: (user) => set({ user }),
+    
 });
