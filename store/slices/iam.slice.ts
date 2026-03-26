@@ -6,12 +6,11 @@ import { axiosInstance } from "@/lib/axiosInstance";
 
 
 
-// setFunctions are not necessary because  u dont use them often 
 
 
 export type IamSlice = {
     users: User[];
-    
+
     userData: User | null;
     IamdashboardData: any;
 
@@ -26,11 +25,39 @@ export type IamSlice = {
     iamLoading: boolean;
     iamErrorMsg: string
 
+    // dispatch functions   // setFunctions are not necessary because  u dont use them often 
+    // it needs proper usage of ssot so that u are not calling backend api un necessarily 
 
-    getUsers: (page?: number, limit?: number) => Promise<any>;
 
+    // dash
+    setIamDashboardData: (data: any) => void;
+
+    //user
     setUsers: (users: User[]) => void;
     setUserData: (data: User) => void;
+
+    // groups
+    setgroups: (groups: any[]) => void;
+    setGroupData: (data: Group) => void;
+
+    // policies 
+    setPolicies: (policies: PolicyCategory[]) => void;
+    
+
+    // niche 
+    setPermissionsData: (data: PermissionsData) => void;
+    clearIamData: () => void;
+
+
+    // reducer Functions 
+
+
+    // Dash 
+    fetchIamDashboard: () => Promise<any>;
+
+
+    // users
+    getUsers: (page?: number, limit?: number) => Promise<any>;
     toggleUserStatus: (userIds: string[]) => Promise<any>;
     fetchUserDetails: (email: string) => Promise<User>;
     updateUserDetails: (userId: string, data: any) => Promise<User>;
@@ -38,28 +65,16 @@ export type IamSlice = {
     searchUsersFromHrm: (searchTerm: string) => Promise<User>;
 
 
-    setPermissionsData: (data: PermissionsData) => void;
-
+    // role 
     createRole: (roleName: string, policies: string[]) => Promise<any>;
     fetchRoles: () => Promise<RoleCategory[] | undefined>;
     fetchCustomRoles: () => Promise<RoleCategory[]>;
+    fetchPolicies: () => Promise<PolicyCategory[] | undefined>;
 
 
-
-
-    setIamDashboardData: (data: any) => void;
-    fetchIamDashboard: () => Promise<any>;
-    clearIamData: () => void;
-
-
-
-
-    setgroups: (groups: any[]) => void;
-    setGroupData: (data: Group) => void;
-
-
-    fetchGroups: (page?: number, limit?: number) => Promise<any>;
+    // group 
     createGroup: (groupData: Group, policyIds: string[]) => Promise<any>;
+    fetchGroups: (page?: number, limit?: number) => Promise<any>;
     updateGroup: (groupId: string, data: any) => Promise<any>;
     toggleGroupStatus: (groupIds: string[]) => Promise<any>;
     addUserToGroup: (groupId: string, users: string[]) => Promise<any>;
@@ -71,14 +86,11 @@ export type IamSlice = {
     ) => Promise<any>;
 
 
-
-
+    // bulk email 
     fetchEmailTemplates: () => Promise<any>;
     sendBulkEmail: (payload: any) => Promise<any>;
     saveTemplate: (templateData: any) => Promise<any>;
     fetchTemplateFeilds: () => Promise<any>
-    setPolicies: (policies: PolicyCategory[]) => void;
-    fetchPolicies: () => Promise<PolicyCategory[] | undefined>;
 
 }
 
@@ -90,9 +102,7 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
 
 
     // intial State
-
     users: [],
-    iamLoading: false,
     userData: null,
 
     permissionsData: null,
@@ -105,7 +115,7 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
     roles: [],
     policies: [],
 
-
+    iamLoading: false,      
     iamErrorMsg: "",
 
 
@@ -463,8 +473,8 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
     },
 
 
-  
-    
+
+
 
 
 
@@ -523,7 +533,7 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
     },
 
 
-   // policies 
+    // policies 
 
     setPolicies: (policies) => set({ policies }),
 

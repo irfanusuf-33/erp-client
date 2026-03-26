@@ -13,10 +13,13 @@ export type AuthSlice = {
     isAuthenticated: boolean;
     errorMessage : string,
 
+    setUser: (user: User) => void;
+
     login: (params: LoginRequest) => Promise<LoginResponse>;
     getRememberedCredentials: () => Promise<{ tenantId?: string; email?: string } | null>;
     logout: () => Promise<boolean>;
-    setUser: (user: User) => void;
+
+ 
 };
 
 export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
@@ -27,9 +30,11 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
     errorMessage : "",
 
 
+    setUser: (user) => set({ user }),
+
     login: async (params: LoginRequest): Promise<LoginResponse> => {
         try {
-            set({ authLoading: true });
+            set({ authLoading: true, errorMessage: "" });
 
             // remember credentials
             if (params.rememberMe) {
@@ -50,12 +55,10 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
             );
 
             if (!loginResponse?.success) {
-                set({ authLoading: false });
+                const msg = loginResponse?.msg || "Login failed";
+                set({ authLoading: false, errorMessage: msg });
 
-                return {
-                    success: false,
-                    msg: loginResponse?.msg ||  "Login failed",
-                };
+                return { success: false, msg };
             }
             // just iterate zustand store after succesful login and return login response  
             set({
@@ -88,15 +91,13 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
 
 
         } catch (error: any) {
-            set({ authLoading: false });
+            const msg =
+                error?.response?.data?.msg ||
+                error?.response?.data?.message ||
+                "Login failed";
+            set({ authLoading: false, errorMessage: msg });
 
-            return {
-                success: false,
-                msg:
-                    error?.response?.data?.msg ||
-                    error?.response?.data?.message ||
-                    "Login failed",
-            };
+            return { success: false, msg };
         }
     },
 
@@ -129,5 +130,5 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
 
     },
 
-    setUser: (user) => set({ user }),
+    
 });
