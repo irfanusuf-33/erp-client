@@ -1,9 +1,9 @@
-import React from 'react'
+import HrmDashboard from "./components/HrmDashboard";
 
-const HrmDashboard = () => {
-  return (
-    <div>HrmDashboard</div>
-  )
+export const metadata = {
+  title: "HRM Dashboard",
+};
+
+export default function HrmPage() {
+  return <HrmDashboard />;
 }
-
-export default HrmDashboard
