@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, Shield, Calendar, Briefcase, DollarSign, Ticket } from "lucide-react";
+import { useGlobalStore } from "@/store";
 
 const modules = [
   {
@@ -36,6 +37,11 @@ const modules = [
 ];
 
 export default function Dashboard() {
+
+
+
+
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
