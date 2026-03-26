@@ -1,38 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, Shield, Calendar, Briefcase, DollarSign, Ticket } from "lucide-react";
+import Link from "next/link";
+import { Users, Shield, Calendar, Briefcase, DollarSign, Ticket, Package } from "lucide-react";
 
 const modules = [
-  {
-    name: "IAM",
-    desc: "Identity & Access Management",
-    icon: Shield,
-  },
-  {
-    name: "HRM",
-    desc: "Human Resource Management",
-    icon: Users,
-  },
-  {
-    name: "CRM",
-    desc: "Customer Relationship Management",
-    icon: Briefcase,
-  },
-  {
-    name: "Calendar",
-    desc: "Events & Scheduling",
-    icon: Calendar,
-  },
-  {
-    name: "Accounts",
-    desc: "Finance & Billing",
-    icon: DollarSign,
-  },
-  {
-    name: "Ticketing",
-    desc: "Support & Issues",
-    icon: Ticket,
-  },
+  { name: "IAM", desc: "Identity & Access Management", icon: Shield, href: "/iam" },
+  { name: "HRM", desc: "Human Resource Management", icon: Users, href: "/hrm" },
+  { name: "CRM", desc: "Customer Relationship Management", icon: Briefcase, href: "/crm" },
+  { name: "Calendar", desc: "Events & Scheduling", icon: Calendar, href: "/calendar" },
+  { name: "Accounts", desc: "Finance & Billing", icon: DollarSign, href: "/accounts" },
+  { name: "Ticketing", desc: "Support & Issues", icon: Ticket, href: "/ticketing" },
+  { name: "Inventory", desc: "Inventory Management", icon: Package, href: "/inventory" },
 ];
 
 export default function Dashboard() {
@@ -88,23 +66,16 @@ export default function Dashboard() {
           {modules.map((module) => {
             const Icon = module.icon;
             return (
-              <Card
-                key={module.name}
-                className="cursor-pointer hover:shadow-lg transition"
-              >
+              <Card key={module.name} className="cursor-pointer hover:shadow-lg transition">
                 <CardHeader className="flex flex-row items-center gap-3">
                   <Icon className="w-6 h-6" />
                   <CardTitle>{module.name}</CardTitle>
                 </CardHeader>
-
                 <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {module.desc}
-                  </p>
-
-                  <Button variant="outline" className="w-full">
-                    Open Module
-                  </Button>
+                  <p className="text-sm text-muted-foreground mb-4">{module.desc}</p>
+                  <Link href={module.href}>
+                    <Button variant="outline" className="w-full">Open Module</Button>
+                  </Link>
                 </CardContent>
               </Card>
             );
