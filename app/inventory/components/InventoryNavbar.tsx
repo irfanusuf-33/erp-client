@@ -76,12 +76,13 @@ export default function InventoryNavbar() {
   return (
     <div className="h-12 bg-white border-b border-gray-200 flex items-center px-5 shrink-0">
       <div className="flex items-center gap-3 mr-6">
-        <span
+        <Link
+          href="/inventory"
           className="flex items-center gap-1 text-white text-sm font-bold"
           style={{ background: "#2B7FFF", borderRadius: "0.75rem", padding: "4px 2.25rem" }}
         >
           Inventory
-        </span>
+        </Link>
         <span className="text-xs font-semibold" style={{ color: "#2B7FFF" }}>
           Inventory Management
         </span>

@@ -110,24 +110,18 @@ export const createAuthSlice: StateCreator<AuthSlice> = (set) => ({
 
 
     logout: async () => {
-
-
-        set({ authLoading: true })
-        const res = await axiosInstance.post('/auth/logout');
-        if (res.data.success) {
-            // await AsyncStorage.removeItem("rememberedCredentials");
-            set({
-                user: null,
-                token: null,
-                isAuthenticated: false,
-                authLoading: false
-            });
-
-            return true
-        } else {
-            return false
-        }
-
+        set({ authLoading: true });
+        try {
+            await axiosInstance.post('/auth/logout');
+        } catch {}
+        // clear persisted auth state regardless of API response
+        set({
+            user: null,
+            token: null,
+            isAuthenticated: false,
+            authLoading: false
+        });
+        return true;
     },
 
     
