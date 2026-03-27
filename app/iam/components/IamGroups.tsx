@@ -122,7 +122,7 @@ export default function IamGroups({ selectionMode = false, selectedGroups = [], 
                         </span>
                       </TableCell>
                       <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{group.groupDescription || "-"}</TableCell>
-                      <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{(group as any).createdByUser?.username || "-"}</TableCell>
+                      <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{(group as any).createdBy || "-"}</TableCell>
                       <TableCell sx={{ fontSize: "0.875rem" }}>
                         <span className={`px-2 py-1 rounded text-xs font-medium ${group.disabled ? "bg-red-50 text-red-600" : "bg-green-100 text-green-700"}`}>
                           {group.disabled ? "Disabled" : "Active"}
