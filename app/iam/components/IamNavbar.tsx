@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { useRef } from "react";
 import { usePathname } from "next/navigation";
 
 const navItems = [
@@ -29,22 +28,16 @@ const navItems = [
 ];
 
 function DropdownItem({ item }: { item: (typeof navItems)[0] }) {
-  const ref = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const isActive = item.links.some((l) => pathname.startsWith(l.href));
 
   return (
-    <div ref={ref} className="relative h-full flex items-center group">
+    <div className="relative h-full flex items-center group">
       <button
         type="button"
-        className={`flex items-center gap-1 text-xs px-6 h-full font-semibold transition-colors border-t-4
-          ${isActive
-            ? "text-blue-600 border-blue-600 bg-blue-50"
-            : "text-gray-700 border-transparent hover:text-blue-600 hover:border-blue-600 hover:bg-blue-50"
-          }`}
+        className="flex items-center gap-1 text-xs px-6 h-full font-semibold transition-colors border-t-4 text-gray-700 border-transparent hover:text-blue-600 hover:border-blue-600 hover:bg-blue-50"
       >
         {item.label}
-        <span className={`text-[14px] ${isActive ? "text-blue-600" : "text-gray-500 group-hover:text-blue-600"}`}>▾</span>
+        <span className="text-[14px] text-gray-500 group-hover:text-blue-600">▾</span>
       </button>
 
       <div className="absolute top-full left-0 z-50 hidden group-hover:block pt-0.5">
@@ -54,7 +47,9 @@ function DropdownItem({ item }: { item: (typeof navItems)[0] }) {
               <span className="absolute left-2 top-3 bottom-3 w-0.5 bg-transparent group-hover/item:bg-blue-600" />
               <Link
                 href={link.href}
-                className="flex items-center px-4 py-2.5 text-sm text-gray-700 font-medium hover:text-blue-600"
+                className={`flex items-center px-4 py-2.5 text-sm font-medium hover:text-blue-600 ${
+                  pathname === link.href ? "text-blue-600" : "text-gray-700"
+                }`}
               >
                 {link.title}
               </Link>

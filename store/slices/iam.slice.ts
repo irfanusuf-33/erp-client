@@ -91,6 +91,12 @@ export type IamSlice = {
     sendBulkEmail: (payload: any) => Promise<any>;
     saveTemplate: (templateData: any) => Promise<any>;
     fetchTemplateFeilds: () => Promise<any>
+    disableUser: (userId: string) => Promise<any>;
+    enableUser: (userId: string) => Promise<any>;
+    forceResetPassword: (userId: string, newPassword: string) => Promise<any>;
+    deleteRole: (roleId: string) => Promise<any>;
+    searchGroups: (searchTerm: string) => Promise<any>;
+    removeGroupPolicies: (groupId: string, policies: string[], groupName: string) => Promise<any>;
 
 }
 
@@ -399,8 +405,12 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
             const apiGroups: Group[] =
                 res.data.data?.groups || res.data.groups || [];
 
-            const mappedGroups = apiGroups.map((group) => ({
+            const mappedGroups = apiGroups.map((group: any) => ({
                 ...group,
+                groupName: group.groupName || group.name || "",
+                groupDescription: group.groupDescription || group.description || "",
+                groupAdmin: group.groupAdmin || group.admin || "",
+                groupCode: group.groupCode || group.code || "",
                 status: group.disabled ? "Disable" : "Active",
             }));
 
@@ -421,9 +431,18 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
         try {
             const res = await axiosInstance.get(`/iam/groups/${groupName}`);
 
-            set({ group: res.data });
+            const raw = res.data?.group || res.data;
+            const normalized = raw ? {
+                ...raw,
+                groupName: raw.groupName || raw.name || "",
+                groupDescription: raw.groupDescription || raw.description || "",
+                groupAdmin: raw.groupAdmin || raw.admin || "",
+                groupCode: raw.groupCode || raw.code || "",
+            } : raw;
 
-            return res.data;
+            set({ group: normalized });
+
+            return res.data?.group ? { ...res.data, group: normalized } : normalized;
         } catch (error) {
             console.log("Error fetching group details:", error);
             return null;
@@ -678,9 +697,68 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
         }
     },
 
+    disableUser: async (userId) => {
+        try {
+            const res = await axiosInstance.post("/iam/users/disable", { userId });
+            if (res.data?.success) {
+                set({ users: get().users.map((u) => u._id === userId ? { ...u, disabled: true } : u) });
+            }
+            return res.data;
+        } catch (error: any) {
+            return { success: false, msg: error?.response?.data?.msg || "Failed to disable user" };
+        }
+    },
 
+    enableUser: async (userId) => {
+        try {
+            const res = await axiosInstance.post("/iam/users/enable", { userId });
+            if (res.data?.success) {
+                set({ users: get().users.map((u) => u._id === userId ? { ...u, disabled: false } : u) });
+            }
+            return res.data;
+        } catch (error: any) {
+            return { success: false, msg: error?.response?.data?.msg || "Failed to enable user" };
+        }
+    },
 
+    forceResetPassword: async (userId, newPassword) => {
+        try {
+            const res = await axiosInstance.post("/iam/users/password/force-reset", { _id: userId, newPassword });
+            return res.data;
+        } catch (error: any) {
+            return { success: false, msg: error?.response?.data?.msg || "Failed to reset password" };
+        }
+    },
 
+    deleteRole: async (roleId) => {
+        try {
+            const res = await axiosInstance.post("/iam/roles/delete", { roleId });
+            return res.data;
+        } catch (error: any) {
+            return { success: false, msg: error?.response?.data?.msg || "Failed to delete role" };
+        }
+    },
 
+    searchGroups: async (searchTerm) => {
+        try {
+            const res = await axiosInstance.get("/iam/groups/search", { params: { search: searchTerm } });
+            return res.data;
+        } catch (error: any) {
+            return { success: false, msg: error?.response?.data?.msg || "Failed to search groups" };
+        }
+    },
+
+    removeGroupPolicies: async (groupId, policies, groupName) => {
+        try {
+            const res = await axiosInstance.patch(
+                "/iam/groups/policies/remove",
+                { groupId, policies },
+                { params: { name: groupName } }
+            );
+            return res.data;
+        } catch (error: any) {
+            return { success: false, msg: error?.response?.data?.msg || "Failed to remove policies" };
+        }
+    },
 
 }));
