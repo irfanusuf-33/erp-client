@@ -190,7 +190,7 @@ export default function IamGroupDetails() {
           </div>
           <div className="flex flex-col gap-2 p-4 rounded-lg">
             <span className="text-sm font-medium text-gray-500">Created By</span>
-            <span className="text-sm text-gray-800">{group.createdByUser?.username || "-"}</span>
+            <span className="text-sm text-gray-800">{group.createdBy || "-"}</span>
           </div>
           <div className="flex flex-col gap-2 p-4 rounded-lg">
             <span className="text-sm font-medium text-gray-500">Group code</span>
