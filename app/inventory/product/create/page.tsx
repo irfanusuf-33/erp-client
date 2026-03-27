@@ -107,6 +107,8 @@ export default function CreateProduct() {
   };
 
   return (
+
+      
     <div className="create-product-container p-6 space-y-6">
       <h1 className="text-2xl font-bold">Create Product</h1>
 
