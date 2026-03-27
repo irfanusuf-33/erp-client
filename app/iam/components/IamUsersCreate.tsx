@@ -62,12 +62,14 @@ export default function IamUsersCreate({ setView, formData, setFormData }: IamSt
   return (
     <div className="px-6 py-12">
       <div className="max-w-xl mx-auto">
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 flex flex-col gap-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-lg font-semibold">Set User Details</h2>
-              <p className="text-sm text-gray-400">*Required field</p>
-            </div>
+        <div className="rounded-2xl border border-gray-200 bg-white">
+          <div className="px-6 py-5">
+            <h2 className="text-base font-medium text-gray-800">Set User Details</h2>
+            <p className="mt-1 text-sm text-gray-500">*Required field</p>
+          </div>
+          <div className="p-6 border-t border-gray-100">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex justify-end">
             <Button type="button" variant="outline" className="border-blue-500 text-blue-500 hover:bg-blue-50" onClick={() => setShowImport(!showImport)}>
               Import User {showImport ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </Button>
@@ -122,6 +124,8 @@ export default function IamUsersCreate({ setView, formData, setFormData }: IamSt
             <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">Next</Button>
           </div>
         </form>
+          </div>
+        </div>
       </div>
     </div>
   );

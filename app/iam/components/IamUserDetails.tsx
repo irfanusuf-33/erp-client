@@ -124,11 +124,11 @@ export default function IamUserDetails() {
           ))}
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium text-blue-600">Status</span>
-            <span className="text-sm">
+            <div className="text-sm">
               {user.disabled
                 ? <div className="flex items-center gap-1.5"><XCircle size={16} className="text-red-600" /><span className="text-red-600">Disabled</span></div>
                 : <div className="flex items-center gap-1.5"><CheckCircle size={16} className="text-green-700" /><span className="text-green-700">Active</span></div>}
-            </span>
+            </div>
           </div>
         </div>
       </div>

@@ -155,8 +155,8 @@ export default function IamGroupDetails() {
   const policiesData = isEditing ? policies : group.policies || [];
 
   const usersColumns: MRT_ColumnDef<any>[] = [
-    { accessorKey: "username", header: "User Name" },
-    { accessorKey: "email", header: "User Email" },
+    { accessorKey: "username", header: "Name" },
+    { accessorKey: "email", header: "Email" },
     {
       id: "actions", header: "Actions",
       Cell: ({ row }: any) => (
@@ -169,20 +169,19 @@ export default function IamGroupDetails() {
 
   return (
     <div className="p-9 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-semibold text-gray-800">Group Details</h1>
-        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon-sm"><MoreVertical size={20} className="text-gray-600" /></Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={handleEdit}><Edit size={14} />Edit</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => { handledisable(); setDropdownOpen(false); }}><Trash2 size={14} />Disable Group</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-5 mb-9">
+<div className="bg-white border border-gray-200 rounded-lg shadow-sm p-5 mb-9">
+        <div className="flex justify-between items-center">
+          <h1 className="text-xl font-semibold text-gray-800 pl-4">Group Details</h1>
+          <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon-sm"><MoreVertical size={20} className="text-gray-600" /></Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleEdit}><Edit size={14} />Edit</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => { handledisable(); setDropdownOpen(false); }}><Trash2 size={14} />Disable Group</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
         <div className="grid grid-cols-3 gap-4 mt-4">
           <div className="flex flex-col gap-2 p-4 rounded-lg">
             <span className="text-sm font-medium text-gray-500">Group Name</span>
@@ -204,6 +203,22 @@ export default function IamGroupDetails() {
       </div>
 
       <div className="mt-9 rounded-lg bg-white shadow-sm p-8 mb-9">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-xl font-semibold">Users</h2>
+          <div className="flex gap-2">
+            <Button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => setIsAddUserModalOpen(true)}><Plus size={16} />Add User to Group</Button>
+            <Button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => router.push(`/iam/send-bulk-email?groupId=${group._id}`)}><Send size={16} />Send Bulk Email</Button>
+          </div>
+        </div>
+        <BaseTable data={userData} columns={usersColumns} />
+      </div>
+
+      <div className="mt-9 rounded-lg bg-white shadow-sm p-8 mb-9">
+        <h2 className="text-xl font-semibold mb-5">Assigned Policies</h2>
+        <BaseTable data={policiesData} columns={policiesColumns} />
+      </div>
+
+      <div className="mt-9 rounded-lg bg-white shadow-sm p-8 mb-9">
         <h2 className="text-xl font-semibold mb-5">AI Training Files</h2>
         {filesData.length > 0 ? (
           <BaseTable data={filesData} columns={filesColumns} />
@@ -220,26 +235,12 @@ export default function IamGroupDetails() {
         )}
       </div>
 
-      <div className="mt-9 rounded-lg bg-white shadow-sm p-8 mb-9">
-        <h2 className="text-xl font-semibold mb-5">Assigned Policies</h2>
-        <BaseTable data={policiesData} columns={policiesColumns} />
-      </div>
-
       {isEditing && (
         <div className="flex justify-end gap-3 my-4">
           <Button variant="outline" onClick={() => { setIsEditing(false); setEditedGroup({}); setEditedFiles([]); setNewFiles([]); }}><X size={16} />Cancel</Button>
           <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSaveEdit} disabled={loader}>{loader ? <span className="text-xs">Saving...</span> : <><Check size={16} />Save</>}</Button>
         </div>
       )}
-
-      <div className="mt-9 rounded-lg bg-white shadow-sm p-8">
-        <h2 className="text-xl font-semibold mb-5">Users</h2>
-        <div className="flex gap-2 mb-4">
-          <Button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => setIsAddUserModalOpen(true)}><Plus size={16} />Add User to Group</Button>
-          <Button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => router.push(`/iam/send-bulk-email?groupId=${group._id}`)}><Send size={16} />Send Bulk Email</Button>
-        </div>
-        <BaseTable data={userData} columns={usersColumns} />
-      </div>
 
       <AddUserToGroupModal isOpen={isAddUserModalOpen} onClose={() => setIsAddUserModalOpen(false)} groupId={group._id || ""} onUserAdded={(users) => setGroup({ ...group, users: [...(group.users || []), ...users] })} />
       <EditGroupSingleModal isOpen={isEditGroupModalOpen} onClose={() => setIsEditGroupModalOpen(false)} onNext={() => { setIsEditGroupModalOpen(false); fetchGroup(); }} groupData={editGroupData} setGroupData={setEditGroupData} />

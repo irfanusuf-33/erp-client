@@ -14,8 +14,8 @@ import {
 import { Box, Button, MenuItem, ListItemIcon, Menu, IconButton } from '@mui/material';
 import { Download, MoreVertical } from 'lucide-react';
 import { mkConfig, generateCsv, download } from 'export-to-csv';
-import autoTable from 'jspdf-autotable';
 import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 type RowAction<T> = {
   label: string | ((rows: T[]) => string);
@@ -82,7 +82,7 @@ function BaseTable<T extends Record<string, any>>({
     const doc = new jsPDF();
     const tableData: (string | number)[][] = rows.map((row) =>
       columns.map((col) => {
-        if ('accessorFn' in col && col.accessorFn) return String(col.accessorFn(row.original, 0));
+        if ('accessorFn' in col && col.accessorFn) return String(col.accessorFn(row.original,));
         if ('accessorKey' in col && col.accessorKey) {
           const value = row.original[col.accessorKey as string];
           return typeof value === 'object' && value !== null ? JSON.stringify(value) : String(value);
@@ -91,7 +91,7 @@ function BaseTable<T extends Record<string, any>>({
       })
     );
     const tableHeaders: string[] = columns.map((c) => String(c.header));
-    autoTable(doc, { head: [tableHeaders], body: tableData });
+    ({ doc: doc as any, head: [tableHeaders], body: tableData });
     doc.save('export.pdf');
   };
 
@@ -143,7 +143,7 @@ function BaseTable<T extends Record<string, any>>({
     renderRowActionMenuItems: hasRowActions
       ? ({ row, closeMenu }) =>
           rowActions!.map((action, index) => (
-            <MenuItem key={index} onClick={() => { action.onClick(row.original); closeMenu(); }}>
+            <MenuItem key={index} onClick={() => { action.onClick([row.original]); closeMenu(); }}>
               {action.icon && <ListItemIcon>{action.icon}</ListItemIcon>}
               {action.label as string}
             </MenuItem>
@@ -198,7 +198,7 @@ function BaseTable<T extends Record<string, any>>({
               <MRT_ToggleDensePaddingButton table={table} />
               <MRT_ToggleFullScreenButton table={table} />
               {toolbarQuickActions?.map((action, index) => {
-                const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original);
+                const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original) as T[];
                 const label = typeof action.label === 'function' ? action.label(selectedRows) : action.label;
                 return (
                   <IconButton key={`quick-${index}`} size="small" aria-label={label} title={label} onClick={() => action.onClick(selectedRows)} disabled={action.alwaysEnabled ? false : !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}>
@@ -213,7 +213,7 @@ function BaseTable<T extends Record<string, any>>({
                   </IconButton>
                   <Menu anchorEl={toolbarMenuAnchor} open={openToolbarMenu} onClose={() => setToolbarMenuAnchor(null)}>
                     {toolbarActions.map((action, index) => {
-                      const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original);
+                      const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original) as T[];
                       const label = typeof action.label === 'function' ? action.label(selectedRows) : action.label;
                       return (
                         <MenuItem key={index} onClick={() => { action.onClick(selectedRows); setToolbarMenuAnchor(null); }} disabled={action.alwaysEnabled ? false : !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()}>

@@ -21,8 +21,8 @@ const navItems = [
   {
     label: "Groups",
     links: [
-      { title: "Manage Groups", href: "/iam/groups" },
       { title: "Add Group", href: "/iam/groups/create" },
+      { title: "Manage Groups", href: "/iam/groups" },
     ],
   },
 ];
@@ -41,7 +41,7 @@ function DropdownItem({ item }: { item: (typeof navItems)[0] }) {
       </button>
 
       <div className="absolute top-full left-0 z-50 hidden group-hover:block pt-0.5">
-        <div className="bg-white rounded-lg min-w-[180px] py-2 mt-0" style={{ boxShadow: "0 4px 20px rgba(43, 127, 255, 0.35)" }}>
+        <div className="bg-white rounded-sm min-w-[180px] py-2 mt-0" style={{ boxShadow: "0 4px 20px rgba(154, 192, 248, 0.35)" }}>
           {item.links.map((link) => (
             <div key={link.href} className="relative group/item">
               <span className="absolute left-2 top-3 bottom-3 w-0.5 bg-transparent group-hover/item:bg-blue-600" />
