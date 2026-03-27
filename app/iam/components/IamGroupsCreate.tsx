@@ -53,12 +53,13 @@ export default function IamGroupsCreate({ setView, formData, setFormData }: IamS
   return (
     <div className="px-6 py-9">
       <h1 className="text-xl font-semibold mb-4 ml-[72px]">Create Group</h1>
-      <div className="mx-[72px] bg-white rounded-lg p-6">
+      <div className="mx-[72px] rounded-2xl border border-gray-200 bg-white">
+        <div className="px-6 py-5">
+          <h2 className="text-base font-medium text-gray-800">Set Group Details</h2>
+          <p className="mt-1 text-sm text-gray-500">*Required field</p>
+        </div>
+        <div className="p-6 border-t border-gray-100">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div>
-            <h2 className="text-lg font-semibold">Set Group Details</h2>
-            <p className="text-sm text-gray-400">*Required field</p>
-          </div>
           <div className="grid grid-cols-3 gap-4">
             {([["name","Group Name"],["code","Group Code"]] as [string,string][]).map(([id, label]) => (
               <div key={id}>
@@ -79,7 +80,18 @@ export default function IamGroupsCreate({ setView, formData, setFormData }: IamS
           </div>
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <p className="flex items-center gap-1.5 text-base font-medium text-gray-800 mb-2.5">AI Knowledge Base <Info size={14} className="text-gray-500" /></p>
+              <div className="flex items-center gap-1.5 text-base font-medium text-gray-800 mb-2.5">
+                AI Knowledge Base
+                <div className="relative group flex items-center">
+                  <Info size={14} className="text-gray-500 cursor-pointer" />
+                  <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
+                    <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
+                    <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 leading-snug w-72">
+                      Upload PDF documents to power the AI knowledge base for this group.
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div
                 className={`min-h-[150px] border-2 border-dashed rounded-lg flex flex-col items-center justify-center text-center p-4 cursor-pointer transition-colors ${isDragOver ? "border-blue-500 bg-blue-50" : "border-gray-300 bg-white hover:border-blue-400"}`}
                 onClick={() => fileInputRef.current?.click()}
@@ -124,6 +136,7 @@ export default function IamGroupsCreate({ setView, formData, setFormData }: IamS
             <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">Next</Button>
           </div>
         </form>
+        </div>
       </div>
     </div>
   );

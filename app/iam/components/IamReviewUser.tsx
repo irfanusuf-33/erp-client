@@ -5,8 +5,12 @@ import { Eye, EyeOff, HelpCircle, ChevronRight, ChevronUp } from "lucide-react";
 import { axiosInstance } from "@/lib/axiosInstance";
 import { useGlobalStore } from "@/store";
 import { Button } from "@/components/ui/button";
-import BaseTable from "@/components/ui/table/BaseTable";
-import type { MRT_ColumnDef } from "material-react-table";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import type { IamStepProps } from "@/types/iam.types";
 
 export default function IamReviewUser({ setView, formData }: IamStepProps) {
@@ -32,72 +36,6 @@ export default function IamReviewUser({ setView, formData }: IamStepProps) {
     setPending(false);
   };
 
-  const userDetailsColumns: MRT_ColumnDef<any>[] = [
-    { accessorKey: "fName", header: "First Name" },
-    { accessorKey: "lName", header: "Last Name" },
-    { accessorKey: "email", header: "Email" },
-    { accessorKey: "username", header: "Username" },
-    {
-      accessorKey: "pwd",
-      header: "Password",
-      Cell: ({ row }) => (
-        <div className="flex items-center gap-1">
-          {showPassword ? row.original.pwd : "•".repeat(row.original.pwd.length)}
-          <button type="button" className="ml-2 text-gray-500" onClick={() => setShowPassword((p) => !p)}>
-            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-          </button>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "forceMfa",
-      header: "Access Type",
-      Cell: ({ row }) => (
-        <div className="flex items-center gap-1">
-          {row.original.forceMfa ? "MFA Authentication Access" : "Standard Access"}
-          <HelpCircle size={12} className="text-gray-500" />
-        </div>
-      ),
-    },
-  ];
-
-  const policiesColumns: MRT_ColumnDef<any>[] = [
-    { accessorKey: "name", header: "Policy Name" },
-    { accessorKey: "description", header: "Description" },
-  ];
-
-  const groupsColumns: MRT_ColumnDef<any>[] = [
-    { accessorKey: "name", header: "Group Name" },
-    { accessorKey: "description", header: "Description" },
-  ];
-
-  const rolesColumns: MRT_ColumnDef<any>[] = [
-    {
-      accessorKey: "name",
-      header: "Role Name",
-      Cell: ({ row }) => (
-        <div className="flex items-center gap-1 cursor-pointer" onClick={() => setExpandedRole((p) => (p === row.original.name ? null : row.original.name))}>
-          {expandedRole === row.original.name ? <ChevronUp size={16} /> : <ChevronRight size={16} />}
-          {row.original.name}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "description",
-      header: "Description",
-      Cell: ({ row }) =>
-        expandedRole === row.original.name ? (
-          <div className="flex flex-col gap-1">
-            {row.original.policies.map((p: string) => (
-              <div key={p} className="pl-4 text-sm text-gray-600">{p}</div>
-            ))}
-          </div>
-        ) : (
-          <span>{row.original.name} role permissions</span>
-        ),
-    },
-  ];
-
   const policiesData = formData.policies.map((policy: string) => {
     const found = policies.flatMap((cat) => cat.policies).find((p) => p.id === policy);
     return { name: policy, description: found?.description || "-" };
@@ -113,6 +51,8 @@ export default function IamReviewUser({ setView, formData }: IamStepProps) {
     return { name: role, policies: roleCategory?.description?.replace("Policies: ", "").split(", ").filter(Boolean) || [] };
   });
 
+  const pwd = formData.pwd || "";
+
   return (
     <div className="px-6 py-9 bg-gray-50 min-h-screen">
       <div className="mb-6">
@@ -120,14 +60,46 @@ export default function IamReviewUser({ setView, formData }: IamStepProps) {
         <p className="text-sm text-gray-500 mt-1">Review your choices.</p>
       </div>
       <div className="flex flex-col gap-4">
+
+        {/* User Details */}
         <div className="bg-white rounded-lg border border-gray-200 p-5">
           <h4 className="text-base font-medium mb-4 ml-3">User Details</h4>
-          <BaseTable
-            data={[{ fName: formData.fName, lName: formData.lName, email: formData.email, username: formData.email.split("@")[0], pwd: formData.pwd, forceMfa: formData.forceMfa }]}
-            columns={userDetailsColumns}
-          />
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                  {["First Name", "Last Name", "Email", "Username", "Password", "Access Type"].map((h) => (
+                    <TableCell key={h} sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>{h}</TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow sx={{ borderBottom: "1px solid #e5e7eb" }}>
+                  <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{formData.fName}</TableCell>
+                  <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{formData.lName}</TableCell>
+                  <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{formData.email}</TableCell>
+                  <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{formData.email?.split("@")[0]}</TableCell>
+                  <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>
+                    <div className="flex items-center gap-1">
+                      {showPassword ? pwd : "•".repeat(pwd.length)}
+                      <button type="button" className="ml-2 text-gray-500" onClick={() => setShowPassword((p) => !p)}>
+                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
+                  </TableCell>
+                  <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>
+                    <div className="flex items-center gap-1">
+                      {formData.forceMfa ? "MFA Authentication Access" : "Standard Access"}
+                      <HelpCircle size={12} className="text-gray-500" />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
 
+        {/* Permissions Summary */}
         <div className="bg-white rounded-lg border border-gray-200 p-5">
           <h4 className="text-lg font-semibold mb-4">Permissions Summary</h4>
           <div className="flex items-center gap-6 mb-5">
@@ -142,19 +114,85 @@ export default function IamReviewUser({ setView, formData }: IamStepProps) {
           </div>
 
           {activeTab === "policies" && (
-            policiesData.length > 0
-              ? <BaseTable data={policiesData} columns={policiesColumns} />
-              : <p className="py-5 text-center text-gray-500 text-sm">No policies selected</p>
+            policiesData.length > 0 ? (
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                      <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Policy Name</TableCell>
+                      <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {policiesData.map((p: any) => (
+                      <TableRow key={p.name} sx={{ borderBottom: "1px solid #e5e7eb", "&:hover": { backgroundColor: "#f9fafb" } }}>
+                        <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{p.name}</TableCell>
+                        <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{p.description}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : <p className="py-5 text-center text-gray-500 text-sm">No policies selected</p>
           )}
+
           {activeTab === "groups" && (
-            groupsData.length > 0
-              ? <BaseTable data={groupsData} columns={groupsColumns} />
-              : <p className="py-5 text-center text-gray-500 text-sm">No groups selected</p>
+            groupsData.length > 0 ? (
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                      <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Group Name</TableCell>
+                      <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {groupsData.map((g: any) => (
+                      <TableRow key={g.name} sx={{ borderBottom: "1px solid #e5e7eb", "&:hover": { backgroundColor: "#f9fafb" } }}>
+                        <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{g.name}</TableCell>
+                        <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{g.description}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : <p className="py-5 text-center text-gray-500 text-sm">No groups selected</p>
           )}
+
           {activeTab === "roles" && (
-            rolesData.length > 0
-              ? <BaseTable data={rolesData} columns={rolesColumns} />
-              : <p className="py-5 text-center text-gray-500 text-sm">No roles selected</p>
+            rolesData.length > 0 ? (
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                      <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Role Name</TableCell>
+                      <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rolesData.map((role: any) => (
+                      <Fragment key={role.name}>
+                        <TableRow sx={{ borderBottom: "1px solid #e5e7eb", cursor: "pointer", "&:hover": { backgroundColor: "#f9fafb" } }} onClick={() => setExpandedRole((p) => (p === role.name ? null : role.name))}>
+                          <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>
+                            <div className="flex items-center gap-1">
+                              {expandedRole === role.name ? <ChevronUp size={16} /> : <ChevronRight size={16} />}
+                              {role.name}
+                            </div>
+                          </TableCell>
+                          <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{role.name} role permissions</TableCell>
+                        </TableRow>
+                        {expandedRole === role.name && role.policies.map((p: string) => (
+                          <TableRow key={p} sx={{ borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>
+                            <TableCell sx={{ pl: "3rem", fontSize: "0.875rem", color: "#6b7280" }}>{p}</TableCell>
+                            <TableCell />
+                          </TableRow>
+                        ))}
+                      </Fragment>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : <p className="py-5 text-center text-gray-500 text-sm">No roles selected</p>
           )}
         </div>
       </div>

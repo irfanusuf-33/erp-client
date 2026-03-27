@@ -62,8 +62,8 @@ export default function IamRolesDashboard({ searchTerm = "" }: { searchTerm: str
               {expandedRole === role.id && role.policies.map((perm: any) => (
                 <TableRow key={perm.id} sx={{ borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>
                   <TableCell />
-                  <TableCell sx={{ py: "0.5rem", pl: "3rem", fontSize: "0.875rem", color: "#1f2937" }}>{perm.label}</TableCell>
-                  <TableCell sx={{ py: "0.5rem", px: "0.75rem", fontSize: "0.875rem", color: "#6b7280" }}>{perm.description}</TableCell>
+                  <TableCell sx={{ py: "1rem", pl: "3rem", fontSize: "0.875rem", color: "#1f2937" }}>{perm.label}</TableCell>
+                  <TableCell sx={{ py: "1rem", px: "0.75rem", fontSize: "0.875rem", color: "#6b7280" }}>{perm.description}</TableCell>
                 </TableRow>
               ))}
             </Fragment>

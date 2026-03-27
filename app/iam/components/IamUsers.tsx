@@ -4,13 +4,14 @@ import Link from "next/link";
 import { XCircle, CheckCircle, Info } from "lucide-react";
 import { useGlobalStore } from "@/store";
 import BaseTable from "@/components/ui/table/BaseTable";
-import type { MRT_ColumnDef, MRT_PaginationState } from "material-react-table";
 import type { IamUserRow } from "@/types/iam.types";
+
+type PaginationState = { pageIndex: number; pageSize: number };
 
 export default function IamUsers() {
   const { getUsers, users, iamLoading, toggleUserStatus } = useGlobalStore();
   const [rowCount, setRowCount] = useState(0);
-  const [pagination, setPagination] = useState<MRT_PaginationState>({ pageIndex: 0, pageSize: 10 });
+  const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
 
   useEffect(() => {
     getUsers(pagination.pageIndex + 1, pagination.pageSize).then((res) => {
@@ -18,7 +19,7 @@ export default function IamUsers() {
     });
   }, [pagination.pageIndex, pagination.pageSize]);
 
-  const columns: MRT_ColumnDef<IamUserRow>[] = [
+  const columns = [
     { accessorKey: "fName", header: "First Name", Cell: ({ cell }) => <span>{(cell.getValue() as string) || "-"}</span> },
     { accessorKey: "lName", header: "Last Name", Cell: ({ cell }) => <span>{(cell.getValue() as string) || "-"}</span> },
     {
@@ -67,9 +68,15 @@ export default function IamUsers() {
     <div className="px-6 py-7">
       <h2 className="text-2xl font-semibold text-gray-800 flex items-center mb-4">
         User Management
-        <span title="An Identity And Access Management User is an identity that manage employee profiles, roles and access permissions.">
-          <Info size={16} className="ml-2 cursor-pointer text-gray-500" />
-        </span>
+        <div className="relative group flex items-center ml-2">
+          <Info size={16} className="cursor-pointer text-gray-500" />
+          <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
+            <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
+            <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 leading-snug w-72">
+              An Identity And Access Management User is an identity that manage employee profiles, roles and access permissions.
+            </div>
+          </div>
+        </div>
       </h2>
 
       <BaseTable

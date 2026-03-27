@@ -11,9 +11,15 @@ export default function IamRoles() {
     <div className="px-6 py-7 overflow-y-auto">
       <h2 className="text-2xl font-semibold text-gray-800 flex items-center mb-4">
         Policies
-        <span title="Guide to viewing and understanding all user policies.">
-          <Info size={16} className="ml-2 cursor-pointer text-gray-500" />
-        </span>
+        <div className="relative group flex items-center ml-2">
+          <Info size={16} className="cursor-pointer text-gray-500" />
+          <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
+            <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
+            <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 leading-snug w-72">
+              Guide to viewing and understanding all user policies.
+            </div>
+          </div>
+        </div>
       </h2>
       <div className="mt-9 border border-gray-200 rounded-lg p-4 bg-white overflow-x-auto min-w-[900px]">
         <div className="relative flex justify-between items-center mb-3">

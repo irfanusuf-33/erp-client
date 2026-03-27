@@ -31,9 +31,15 @@ export default function IamUserRoles() {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
           User Roles
-          <span title="User roles define sets of permissions.">
-            <Info size={16} className="ml-2 cursor-pointer text-gray-500" />
-          </span>
+          <div className="relative group flex items-center ml-2">
+            <Info size={16} className="cursor-pointer text-gray-500" />
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
+              <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
+              <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 leading-snug w-72">
+                User roles define sets of permissions.
+              </div>
+            </div>
+          </div>
         </h2>
         <div className="flex items-center gap-2">
           <Input
