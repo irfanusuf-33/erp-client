@@ -1,9 +1,5 @@
-import React from 'react'
+import IamOverview from "./components/IamOverview";
 
-const IamDashboard = () => {
-  return (
-    <div>IamDashboard</div>
-  )
+export default function IamDashboardPage() {
+  return <IamOverview />;
 }
-
-export default IamDashboard
