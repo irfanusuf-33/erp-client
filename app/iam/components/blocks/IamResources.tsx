@@ -4,32 +4,28 @@ import { User, Users, FileText, Shield } from "lucide-react";
 import type { IamResourcesProps } from "@/types/iam.types";
 
 const cards = [
-  { href: "/iam/users",    label: "Users",    key: "totalUsers", colorLine: "bg-orange-400",  Icon: User },
-  { href: "/iam/groups",   label: "Groups",   key: "totalGroups", colorLine: "bg-green-700",  Icon: Users },
-  { href: "/iam/policies", label: "Policies", key: "policy",      colorLine: "bg-blue-600",   Icon: FileText },
-  { href: "/iam/roles",    label: "Roles",    key: "roles",       colorLine: "bg-red-500",    Icon: Shield },
+  { href: "/iam/users",    label: "Users",    key: "totalUsers",  color: "#f97316", Icon: User },
+  { href: "/iam/groups",   label: "Groups",   key: "totalGroups", color: "#15803d", Icon: Users },
+  { href: "/iam/policies", label: "Policies", key: "policy",      color: "#2563eb", Icon: FileText },
+  { href: "/iam/roles",    label: "Roles",    key: "roles",       color: "#ef4444", Icon: Shield },
 ] as const;
 
 export default function IamResources({ details }: IamResourcesProps) {
   return (
-    <div className="grid grid-cols-4 gap-5 mb-4">
-      {cards.map(({ href, label, key, colorLine, Icon }) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+      {cards.map(({ href, label, key, color, Icon }) => (
         <Link
           key={key}
           href={href}
-          className="bg-white rounded-lg p-5 flex flex-row gap-4 shadow-md h-[150px] no-underline hover:shadow-lg transition-shadow"
+          className="bg-white rounded-xl shadow-sm ring-1 ring-foreground/10 p-4 flex items-start gap-3 no-underline hover:shadow-md transition-shadow"
         >
-          <div className={`w-1 h-[83px] rounded-md flex-shrink-0 ${colorLine}`} />
-          <div className="flex justify-between flex-1">
-            <div className="flex flex-col gap-2">
-              <p className="text-lg text-gray-600 font-normal">{label}</p>
-              <p className="text-[22px] font-semibold text-gray-800">
-                {(details as any)?.[key] || 0}
-              </p>
+          <div className="w-1 self-stretch rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-2">
+              <h1 className="text-sm font-medium text-gray-600">{label}</h1>
+              <div className="text-gray-400"><Icon size={22} /></div>
             </div>
-            <div className="w-[35px] h-[35px] rounded bg-yellow-100/60 flex items-center justify-center flex-shrink-0">
-              <Icon size={22} className="text-yellow-500" />
-            </div>
+            <h1 className="text-2xl font-bold">{(details as any)?.[key] || 0}</h1>
           </div>
         </Link>
       ))}
