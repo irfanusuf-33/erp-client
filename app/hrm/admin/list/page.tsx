@@ -1,9 +1,8 @@
-import React from 'react'
-
-const page = () => {
+export default function EmployeeListPage() {
   return (
-    <div>page</div>
-  )
+    <div className="p-6">
+      <h1 className="text-2xl font-bold">Employee List</h1>
+      <p className="text-muted-foreground">Employee list coming soon...</p>
+    </div>
+  );
 }
-
-export default page
