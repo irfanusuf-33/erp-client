@@ -1,55 +1,80 @@
 "use client";
 
-// app/hrm/blocks/hrmdashboard/HrmOverview.tsx
-
 import { Users, Monitor, CalendarX, LogOut } from "lucide-react";
-import StatCard from "../../components/StatCard";
 
 const stats = [
   {
-    label: "Total Employees",
-    value: "100",
-    sub: "+ 12 this month",
-    subColor: "text-emerald-500",
+    heading: "Total Employees",
+    number: "100",
+    label: "+12 this month",
+    color: "#10B981",
     icon: Users,
-    iconBg: "bg-amber-50",
-    iconColor: "text-amber-500",
   },
   {
-    label: "Active Sessions",
-    value: "98",
-    sub: "99% online",
-    subColor: "text-emerald-500",
+    heading: "Active Sessions",
+    number: "98",
+    label: "99% online",
+    color: "#3B82F6",
     icon: Monitor,
-    iconBg: "bg-emerald-50",
-    iconColor: "text-emerald-500",
   },
   {
-    label: "Leaves Raised",
-    value: "08",
-    sub: "02 pending",
-    subColor: "text-orange-400",
+    heading: "Leaves Raised",
+    number: "08",
+    label: "02 pending",
+    color: "#F59E0B",
     icon: CalendarX,
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-500",
   },
   {
-    label: "Checkouts",
-    value: "05",
-    sub: "Today",
-    subColor: "text-slate-400",
+    heading: "Checkouts",
+    number: "05",
+    label: "Today",
+    color: "#EF4444",
     icon: LogOut,
-    iconBg: "bg-rose-50",
-    iconColor: "text-rose-500",
   },
 ];
 
 export default function HrmOverview() {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {stats.map((stat) => (
-        <StatCard key={stat.label} {...stat} />
-      ))}
+    <div>
+      <h1 className="text-xl font-semibold mb-4">Overview</h1>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat, i) => {
+          const Icon = stat.icon;
+
+          return (
+            <div
+              key={i}
+              className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex items-start gap-3"
+            >
+              {/* left color strip */}
+              <div
+                className="w-[3px] self-stretch rounded-full"
+                style={{ backgroundColor: stat.color }}
+              />
+
+              <div className="flex-1">
+                <div className="flex items-center justify-between mb-2">
+                  <h1 className="text-sm font-medium text-gray-600">
+                    {stat.heading}
+                  </h1>
+
+                  <Icon size={18} className="text-slate-400" />
+                </div>
+
+                <h1 className="text-2xl font-bold">{stat.number}</h1>
+
+                <p
+                  className="text-xs mt-1"
+                  style={{ color: stat.color }}
+                >
+                  {stat.label}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

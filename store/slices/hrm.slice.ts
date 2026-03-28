@@ -31,7 +31,7 @@ export const createHrmSlice: StateCreator<HrmSlice> = (set) => ({
     const employees = data?.data?.employees ?? [];
     set({ dailyArrivals: employees });
     return { success: true, data: employees };
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.log("Error:", error?.response?.status, error?.response?.data);
     return {
       success: false,
