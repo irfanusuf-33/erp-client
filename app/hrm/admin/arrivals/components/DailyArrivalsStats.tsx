@@ -1,91 +1,86 @@
 "use client";
 
-// app/hrm/admin/arrivals/_components/DailyArrivalsStats.tsx
-
 import { CheckCircle, CalendarX, LogOut } from "lucide-react";
 
 interface StatItem {
-  label: string;
+  heading: string;
   value: number;
   total: number;
-  sub?: string;
+  label?: string;
   color: string;
-  borderColor: string;
-  bgColor: string;
-  iconBg: string;
-  iconColor: string;
   icon: React.ElementType;
 }
 
 const stats: StatItem[] = [
   {
-    label: "On Time",
+    heading: "On Time",
     value: 45,
     total: 80,
-    color: "text-emerald-600",
-    borderColor: "border-l-emerald-500",
-    bgColor: "bg-white",
-    iconBg: "bg-emerald-50",
-    iconColor: "text-emerald-500",
+    label: "Arrived on schedule",
+    color: "#10B981",
     icon: CheckCircle,
   },
   {
-    label: "Late Arrivals",
+    heading: "Late Arrivals",
     value: 3,
     total: 80,
-    sub: "99% online",
-    color: "text-rose-500",
-    borderColor: "border-l-rose-500",
-    bgColor: "bg-white",
-    iconBg: "bg-rose-50",
-    iconColor: "text-rose-500",
+    label: "Employees arrived late",
+    color: "#EF4444",
     icon: CalendarX,
   },
   {
-    label: "Early Out",
+    heading: "Early Out",
     value: 8,
     total: 80,
-    sub: "02 pending",
-    color: "text-amber-500",
-    borderColor: "border-l-amber-500",
-    bgColor: "bg-white",
-    iconBg: "bg-amber-50",
-    iconColor: "text-amber-500",
+    label: "Left before time",
+    color: "#F59E0B",
     icon: LogOut,
   },
 ];
 
 export default function DailyArrivalsStats() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      {stats.map((stat) => {
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+      {stats.map((stat, i) => {
         const Icon = stat.icon;
+
         return (
           <div
-            key={stat.label}
-            className={`${stat.bgColor} rounded-xl border border-slate-100 border-l-4 ${stat.borderColor} shadow-sm p-5 flex items-center justify-between`}
+            key={i}
+            className="bg-white rounded-xl shadow-sm ring-1 ring-foreground/10 p-4 flex items-start gap-3"
           >
-            {/* Left */}
-            <div className="flex flex-col gap-1">
-              <span className={`text-sm font-medium ${stat.color}`}>
-                {stat.label}
-              </span>
-              <div className="flex items-baseline gap-1">
-                <span className={`text-2xl font-bold ${stat.color}`}>
-                  {stat.value}
-                </span>
-                <span className="text-sm text-slate-400">/ {stat.total}</span>
-              </div>
-              {stat.sub && (
-                <span className={`text-xs font-medium ${stat.color}`}>
-                  {stat.sub}
-                </span>
-              )}
-            </div>
+            {/* left colored strip */}
+            <div
+              className="w-1 self-stretch rounded-full"
+              style={{ backgroundColor: stat.color }}
+            />
 
-            {/* Icon */}
-            <div className={`p-2.5 rounded-lg ${stat.iconBg}`}>
-              <Icon size={20} className={stat.iconColor} />
+            {/* content */}
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-2">
+                <h1 className="text-sm font-medium text-gray-600">
+                  {stat.heading}
+                </h1>
+                <div className="text-gray-400">
+                  <Icon className="w-6 h-6" />
+                </div>
+              </div>
+
+              <h1 className="text-2xl font-bold">
+                {stat.value}
+                <span className="text-sm text-gray-400 ml-1">
+                  /{stat.total}
+                </span>
+              </h1>
+
+              {stat.label && (
+                <label
+                  className="text-xs"
+                  style={{ color: stat.color }}
+                >
+                  {stat.label}
+                </label>
+              )}
             </div>
           </div>
         );
