@@ -1,7 +1,7 @@
 "use client";
 import { Fragment, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { MoreVertical, Send, Plus, Trash2, ChevronRight, ChevronUp, Edit, Check, X, FileText } from "lucide-react";
+import { MoreVertical, Send, Plus, Minus, Trash2, Edit, Check, X, FileText, Info } from "lucide-react";
 import { useGlobalStore } from "@/store";
 import AddUserToGroupModal from "./modals/AddUserToGroupModal";
 import EditGroupSingleModal from "./modals/EditGroupSingleModal";
@@ -11,6 +11,12 @@ import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import BaseTable from "@/components/ui/table/BaseTable";
 import type { MRT_ColumnDef } from "material-react-table";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 export default function IamGroupDetails() {
   const { groupId } = useParams<{ groupId: string }>();
@@ -121,54 +127,12 @@ export default function IamGroupDetails() {
     ...(isEditing ? newFiles.map((f, i) => ({ name: f.name, type: f.type, size: f.size, isNew: true, _newIdx: i })) : []),
   ];
 
-  const policiesColumns: MRT_ColumnDef<any>[] = [
-    {
-      id: "expand", header: "",
-      Cell: ({ row }: any) => (
-        <div className="flex items-center gap-1 cursor-pointer" onClick={() => setExpandedModule((p) => (p === String(row.index) ? null : String(row.index)))}>
-          {expandedModule === String(row.index) ? <ChevronUp size={16} /> : <ChevronRight size={16} />}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "name", header: "Module Name",
-      Cell: ({ row }: any) => (
-        <div>
-          <div>{isEditing ? (row.original.module || row.original.name) : getModuleFullName(row.original.module || row.original.name || "")}</div>
-          {expandedModule === String(row.index) && row.original.policies?.map((policy: any) => (
-            <div key={policy.label || policy.name} className="pl-8 py-1 text-sm text-gray-700 flex items-center gap-2">
-              {isEditing && (
-                <input type="checkbox" checked={selectedPolicies.includes(policy.label || policy.name)}
-                  onChange={() => setSelectedPolicies((p) => p.includes(policy.label || policy.name) ? p.filter((x) => x !== (policy.label || policy.name)) : [...p, policy.label || policy.name])}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              )}
-              {policy.label || policy.name}
-            </div>
-          ))}
-        </div>
-      ),
-    },
-    { accessorKey: "description", header: "Description" },
-  ];
-
-  const policiesData = isEditing ? policies : group.policies || [];
-
   const groupPolicyNames: string[] = (group.policies || []).flatMap((pg: any) => pg.policies?.map((p: any) => p.label || p.name) || []);
 
   const usersColumns: MRT_ColumnDef<any>[] = [
     { accessorKey: "username", header: "Name" },
     { accessorKey: "email", header: "Email" },
     {
-      id: "actions", header: "Actions",
-      Cell: ({ row }: any) => (
-        <button className="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm" onClick={() => handleRemove([row.original.email])}>
-          <Trash2 size={14} />Remove
-        </button>
-      ),
-    },
-
-     {
       id: "assignedPolicies", header: "Assigned Policies",
       Cell: () => (
         <div className="flex flex-wrap gap-1">
@@ -178,13 +142,30 @@ export default function IamGroupDetails() {
         </div>
       ),
     },
+    {
+      id: "actions", header: "Actions",
+      Cell: ({ row }: any) => (
+        <button className="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm" onClick={() => handleRemove([row.original.email])}>
+          <Trash2 size={14} />Remove
+        </button>
+      ),
+    },
   ];
 
   return (
     <div className="p-9 bg-gray-50 min-h-screen">
 <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-5 mb-9">
         <div className="flex justify-between items-center">
-          <h1 className="text-xl font-semibold text-gray-800 pl-4">Group Details</h1>
+          <h1 className="text-xl font-semibold text-gray-800 pl-4 flex items-center">
+            Group Details
+            <div className="relative group flex items-center ml-2">
+              <Info size={16} className="cursor-pointer text-gray-500" />
+              <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
+                <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
+                <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 leading-snug w-72">View and manage the details of this group including name, description and code.</div>
+              </div>
+            </div>
+          </h1>
           <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon-sm"><MoreVertical size={20} className="text-gray-600" /></Button>
@@ -215,9 +196,25 @@ export default function IamGroupDetails() {
         </div>
       </div>
 
+      {isEditing && (
+        <div className="flex justify-end gap-2 mb-9">
+          <Button variant="outline" onClick={() => { setIsEditing(false); setEditedGroup({}); setEditedFiles([]); setNewFiles([]); }}><X size={16} />Cancel</Button>
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSaveEdit} disabled={loader}>{loader ? <span className="text-xs">Saving...</span> : <><Check size={16} />Save</>}</Button>
+        </div>
+      )}
+
       <div className="mt-9 rounded-lg bg-white shadow-sm p-8 mb-9">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xl font-semibold">Users</h2>
+          <h2 className="text-xl font-semibold flex items-center">
+            Users
+            <div className="relative group flex items-center ml-2">
+              <Info size={16} className="cursor-pointer text-gray-500" />
+              <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
+                <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
+                <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 leading-snug w-72">All users currently assigned to this group. You can add or remove users here.</div>
+              </div>
+            </div>
+          </h2>
           <div className="flex gap-2">
             <Button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => setIsAddUserModalOpen(true)}><Plus size={16} />Add User to Group</Button>
             <Button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => router.push(`/iam/send-bulk-email?groupId=${group._id}`)}><Send size={16} />Send Bulk Email</Button>
@@ -227,33 +224,85 @@ export default function IamGroupDetails() {
       </div>
 
       <div className="mt-9 rounded-lg bg-white shadow-sm p-8 mb-9">
-        <h2 className="text-xl font-semibold mb-5">Assigned Policies</h2>
-        <BaseTable data={policiesData} columns={policiesColumns} />
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-xl font-semibold flex items-center">
+            Assigned Policies
+            <div className="relative group flex items-center ml-2">
+              <Info size={16} className="cursor-pointer text-gray-500" />
+              <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
+                <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
+                <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 leading-snug w-72">Policies assigned to this group. All users in the group inherit these permissions.</div>
+              </div>
+            </div>
+          </h2>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon-sm"><MoreVertical size={20} className="text-gray-600" /></Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setIsEditPoliciesModalOpen(true)}><Edit size={14} />Update Policies</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="border border-gray-200 rounded-lg p-4 bg-white overflow-x-auto">
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ width: 32, borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }} />
+                  <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>Module Name</TableCell>
+                  <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>Policies</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {!(group.policies || []).length ? (
+                  <TableRow><TableCell colSpan={3} sx={{ fontSize: "0.875rem", color: "#6b7280" }}>No policies assigned</TableCell></TableRow>
+                ) : (group.policies || []).map((pg: any, i: number) => (
+                  <Fragment key={pg.module || pg.name || i}>
+                    <TableRow
+                      sx={{ borderBottom: "1px solid #e5e7eb", cursor: "pointer", backgroundColor: expandedModule === String(i) ? "#eff6ff" : "inherit", "&:hover": { backgroundColor: expandedModule === String(i) ? "#eff6ff" : "#f9fafb" } }}
+                      onClick={() => setExpandedModule((p) => (p === String(i) ? null : String(i)))}
+                    >
+                      <TableCell sx={{ width: 32, verticalAlign: "middle", height: 48 }}>{expandedModule === String(i) ? <Minus size={16} /> : <Plus size={16} />}</TableCell>
+                      <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937", verticalAlign: "middle", height: 48 }}>{getModuleFullName(pg.module || pg.name || "")}</TableCell>
+                      <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280", verticalAlign: "middle", height: 48 }}>{pg.policies?.length ?? 0} policies</TableCell>
+                    </TableRow>
+                    {expandedModule === String(i) && (pg.policies || []).map((policy: any) => (
+                      <TableRow key={policy.label || policy.name} sx={{ borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>
+                        <TableCell />
+                        <TableCell sx={{ py: "0.75rem", pl: "3rem", fontSize: "0.875rem", color: "#1f2937" }}>{policy.label || policy.name}</TableCell>
+                        <TableCell sx={{ py: "0.75rem", fontSize: "0.875rem", color: "#6b7280" }}>{policy.description || "-"}</TableCell>
+                      </TableRow>
+                    ))}
+                  </Fragment>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
 
       <div className="mt-9 rounded-lg bg-white shadow-sm p-8 mb-9">
-        <h2 className="text-xl font-semibold mb-5">AI Training Files</h2>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-xl font-semibold flex items-center">
+            AI Training Files
+            <div className="relative group flex items-center ml-2">
+              <Info size={16} className="cursor-pointer text-gray-500" />
+              <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
+                <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
+                <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 leading-snug w-72">Files uploaded to train the AI model for this group's context and permissions.</div>
+              </div>
+            </div>
+          </h2>
+          <Button className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white" onClick={() => document.getElementById("file-upload-input")?.click()}><Plus size={16} />Add New Training File</Button>
+        </div>
         {filesData.length > 0 ? (
           <BaseTable data={filesData} columns={filesColumns} />
         ) : (
           <div className="py-5 text-center text-gray-500 text-sm">No AI training files uploaded for this group.</div>
         )}
-        {isEditing && (
-          <div className="mt-3">
-            <input type="file" multiple onChange={(e) => { if (e.target.files) setNewFiles([...newFiles, ...Array.from(e.target.files)]); }} className="hidden" id="file-upload-input" />
-            <Button type="button" variant="outline" onClick={() => document.getElementById("file-upload-input")?.click()}>
-              <Plus size={16} />Add Files
-            </Button>
-          </div>
-        )}
+        <input type="file" multiple onChange={(e) => { if (e.target.files) setNewFiles([...newFiles, ...Array.from(e.target.files)]); }} className="hidden" id="file-upload-input" />
       </div>
-
-      {isEditing && (
-        <div className="flex justify-end gap-3 my-4">
-          <Button variant="outline" onClick={() => { setIsEditing(false); setEditedGroup({}); setEditedFiles([]); setNewFiles([]); }}><X size={16} />Cancel</Button>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSaveEdit} disabled={loader}>{loader ? <span className="text-xs">Saving...</span> : <><Check size={16} />Save</>}</Button>
-        </div>
-      )}
 
       <AddUserToGroupModal isOpen={isAddUserModalOpen} onClose={() => setIsAddUserModalOpen(false)} groupId={group._id || ""} onUserAdded={(users) => setGroup({ ...group, users: [...(group.users || []), ...users] })} />
       <EditGroupSingleModal isOpen={isEditGroupModalOpen} onClose={() => setIsEditGroupModalOpen(false)} onNext={() => { setIsEditGroupModalOpen(false); fetchGroup(); }} groupData={editGroupData} setGroupData={setEditGroupData} />

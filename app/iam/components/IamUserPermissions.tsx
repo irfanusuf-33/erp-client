@@ -32,7 +32,7 @@ export default function IamUserPermissions({ setView, formData, setFormData }: I
           </Fragment>
         ))}
       </div>
-      <div className="border border-gray-200 rounded-lg p-4 bg-white pb-12">
+      <div className="border border-gray-200 rounded-lg p-4 bg-white pb-12 min-h-[450px]">
         {activeTab === "policies" && <RolesTable selectedPermissions={formData.policies} onTogglePermission={handleTogglePermission} />}
         {activeTab === "groups" && <IamGroups selectionMode selectedGroups={formData.groups || []} onToggleGroup={handleToggleGroup} />}
         {activeTab === "roles" && <IamUserRolesDashboard selectedRoles={formData.roles || []} onToggleRole={handleToggleRole} selectionEnabled />}

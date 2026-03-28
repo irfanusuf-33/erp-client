@@ -21,10 +21,11 @@ interface Props {
 export default function IamUserRolesDashboard({ searchTerm = "", selectedRoles, onToggleRole, selectedPermissions, onTogglePermission, selectionEnabled = false }: Props) {
   const [expandedRole, setExpandedRole] = useState<string | null>(null);
   const { roles: storeRoles, fetchRoles } = useGlobalStore();
+  const [loading, setLoading] = useState(false);
   const lowerSearch = searchTerm.toLowerCase();
 
   useEffect(() => {
-    if (!storeRoles.length) fetchRoles();
+    if (!storeRoles.length) { setLoading(true); fetchRoles().finally(() => setLoading(false)); }
   }, []);
 
   const roles = storeRoles.flatMap((cat) =>
@@ -52,7 +53,7 @@ export default function IamUserRolesDashboard({ searchTerm = "", selectedRoles, 
   }, [searchTerm]);
 
   return (
-    <TableContainer>
+    <TableContainer sx={{ minHeight: 400 }}>
       <Table>
         <TableHead>
           <TableRow sx={{ backgroundColor: "#f9fafb" }}>
@@ -62,7 +63,9 @@ export default function IamUserRolesDashboard({ searchTerm = "", selectedRoles, 
           </TableRow>
         </TableHead>
         <TableBody>
-          {!filteredRoles.length ? (
+          {loading ? (
+            <TableRow><TableCell colSpan={3} sx={{ textAlign: "center", py: 6 }}><span className="text-sm text-gray-400 animate-pulse">Loading...</span></TableCell></TableRow>
+          ) : !filteredRoles.length ? (
             <TableRow><TableCell colSpan={3} sx={{ fontSize: "0.875rem", color: "#6b7280" }}>No Results Found</TableCell></TableRow>
           ) : filteredRoles.map((role: any) => (
             <Fragment key={role.id}>
