@@ -10,64 +10,59 @@ export default function GlobalNavbar() {
 
   return (
     <>
-      <div className="w-full h-14 bg-slate-500 flex items-center justify-between px-6">
+      <div className="fixed top-0 left-0 right-0 z-50 w-full h-16 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+        
+        {/* Container for alignment */}
+        <div className="h-full mx-auto flex items-center justify-between px-10 py-3">
+          {/* Left - Logo and Grid Button */}
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center justify-center">
+              <Image src="/Logo.png" alt="Voctrum" width={70} height={45} className="object-contain" />
+            </Link>
 
-        {/* Left */}
-        <div className="flex items-center gap-3">
-          <Link href="/" className="bg-white rounded-md px-2 py-1 flex items-center justify-center w-[58px] h-[39px]">
-            <Image src="/Logo.png" alt="Voctrum" width={54} height={35} className="object-contain" />
-          </Link>
+            {/* Grid / modules toggle button */}
+            <button
+              type="button"
+              aria-label="Open modules"
+              onClick={() => setShowModules((prev) => !prev)}
+              className="text-gray-700 dark:text-slate-300 hover:text-gray-900 dark:hover:text-slate-100 transition-colors w-10 h-10 flex items-center justify-center rounded-md focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-blue-500"
+            >
+              <svg width="24" height="24" viewBox="0 0 30 30" fill="currentColor">
+                <rect x="1" y="1" width="8" height="8" rx="2" />
+                <rect x="11" y="1" width="8" height="8" rx="2" />
+                <rect x="21" y="1" width="8" height="8" rx="2" />
+                <rect x="1" y="11" width="8" height="8" rx="2" />
+                <rect x="11" y="11" width="8" height="8" rx="2" />
+                <rect x="21" y="11" width="8" height="8" rx="2" />
+                <rect x="1" y="21" width="8" height="8" rx="2" />
+                <rect x="11" y="21" width="8" height="8" rx="2" />
+                <rect x="21" y="21" width="8" height="8" rx="2" />
+              </svg>
+            </button>
+          </div>
 
-          {/* Grid / modules toggle button */}
-          <button
-            type="button"
-            aria-label="Open modules"
-            onClick={() => setShowModules((prev) => !prev)}
-            className="text-white hover:opacity-80 transition-opacity"
-          >
-            <svg width="28" height="28" viewBox="0 0 30 30" fill="white">
-              <rect x="1" y="1" width="8" height="8" rx="2" />
-              <rect x="11" y="1" width="8" height="8" rx="2" />
-              <rect x="21" y="1" width="8" height="8" rx="2" />
-              <rect x="1" y="11" width="8" height="8" rx="2" />
-              <rect x="11" y="11" width="8" height="8" rx="2" />
-              <rect x="21" y="11" width="8" height="8" rx="2" />
-              <rect x="1" y="21" width="8" height="8" rx="2" />
-              <rect x="11" y="21" width="8" height="8" rx="2" />
-              <rect x="21" y="21" width="8" height="8" rx="2" />
-            </svg>
-          </button>
+          {/* Right - Search and Profile */}
+          <div className="flex items-center gap-3">
+            {/* Search Bar */}
+            <div className="flex items-center gap-2 bg-gray-100 dark:bg-slate-700 rounded-lg px-3 py-2 w-64">
+              <svg className="w-4 h-4 text-gray-500 dark:text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search..."
+                className="text-gray-700 dark:text-slate-300 text-sm bg-transparent outline-none w-full placeholder:text-gray-500 dark:placeholder:text-slate-500"
+              />
+            </div>
 
-          <div className="flex items-center gap-2 bg-white rounded-lg px-3 py-3 w-64 ml-3">
-            <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search..."
-              className="text-gray-400 text-sm bg-transparent outline-none w-full"
-            />
+            <ProfileDropdown />
           </div>
         </div>
 
-        {/* Right */}
-        <div className="flex items-center gap-4">
-          <button type="button" aria-label="Notifications">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0 1 18 14.158V11a6 6 0 1 0-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 1 1-6 0v-1m6 0H9" />
-            </svg>
-          </button>
-
-          <button type="button" aria-label="Messages">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z" />
-            </svg>
-          </button>
-
-          <ProfileDropdown />
-        </div>
-
       </div>
+
+      {/* Spacer to prevent content from going under fixed navbar */}
+      <div className="h-16" />
 
       {/* Module overlay — rendered outside the navbar div so it covers the full page */}
       {showModules && (

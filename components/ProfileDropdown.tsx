@@ -3,7 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGlobalStore } from "@/store";
 import SettingsPanel from "@/components/SettingsPanel";
-import { Settings, LogOut, User } from "lucide-react";
+import NotificationsPanel from "@/components/NotificationsPanel";
+import { Settings, LogOut, User, Bell } from "lucide-react";
 
 export default function ProfileDropdown() {
   const user = useGlobalStore((s) => s.user);
@@ -11,6 +12,7 @@ export default function ProfileDropdown() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,11 +49,11 @@ export default function ProfileDropdown() {
           className="flex items-center gap-1 focus:outline-none"
           aria-label="User menu"
         >
-          <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-primary text-sm font-bold select-none">
+          <div className="w-9 h-9 rounded-full bg-primary dark:bg-blue-600 flex items-center justify-center text-white text-sm font-bold select-none">
             {initials}
           </div>
           <svg
-            className={`w-4 h-4 text-white transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            className={`w-4 h-4 text-gray-700 dark:text-slate-300 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
             fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -60,46 +62,58 @@ export default function ProfileDropdown() {
 
         {open && (
           <div
-            className="absolute right-0 top-full mt-2 w-64 bg-popover rounded-xl shadow-xl z-[9999] overflow-hidden ring-1 ring-foreground/10"
+            className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-xl z-[9999] overflow-hidden ring-1 ring-gray-200 dark:ring-slate-700"
             style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}
           >
             {/* Profile header */}
-            <div className="bg-muted px-5 py-5 flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-full bg-background border-2 border-border flex items-center justify-center text-xl font-bold text-primary">
+            <div className="bg-gray-50 dark:bg-slate-900 px-5 py-5 flex flex-col items-center gap-2">
+              <div className="w-14 h-14 rounded-full bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-slate-700 flex items-center justify-center text-xl font-bold text-primary dark:text-blue-500">
                 {initials}
               </div>
-              <p className="text-sm font-semibold text-foreground">{displayName}</p>
-              <p className="text-xs text-muted-foreground -mt-1">{email}</p>
+              <p className="text-sm font-semibold text-gray-900 dark:text-slate-100">{displayName}</p>
+              <p className="text-xs text-gray-600 dark:text-slate-400 -mt-1">{email}</p>
             </div>
 
             {/* View Profile */}
             <div className="px-4 py-3">
               <button
                 onClick={() => { setOpen(false); router.push("/profile"); }}
-                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/80 text-primary-foreground text-sm font-semibold py-2 rounded-lg transition-colors"
+                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/80 text-white text-sm font-semibold py-2 rounded-lg transition-colors"
               >
                 <User className="w-4 h-4" />
                 View Profile
               </button>
             </div>
 
-            <div className="border-t border-border mx-4" />
+            <div className="border-t border-gray-200 dark:border-slate-700 mx-4" />
+
+            {/* Notifications */}
+            <button
+              onClick={() => { setOpen(false); setNotificationsOpen(true); }}
+              className="w-full flex items-center gap-3 px-5 py-3 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-900 transition-colors"
+            >
+              <Bell className="w-4 h-4 text-gray-500 dark:text-slate-400" />
+              Notifications
+              <span className="ml-auto px-2 py-0.5 text-xs font-medium bg-blue-500 text-white rounded-full">
+                3
+              </span>
+            </button>
 
             {/* Settings */}
             <button
               onClick={() => { setOpen(false); setSettingsOpen(true); }}
-              className="w-full flex items-center gap-3 px-5 py-3 text-sm text-foreground hover:bg-muted transition-colors"
+              className="w-full flex items-center gap-3 px-5 py-3 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-900 transition-colors"
             >
-              <Settings className="w-4 h-4 text-muted-foreground" />
+              <Settings className="w-4 h-4 text-gray-500 dark:text-slate-400" />
               Settings
             </button>
 
-            <div className="border-t border-border mx-4" />
+            <div className="border-t border-gray-200 dark:border-slate-700 mx-4" />
 
             {/* Sign out */}
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-5 py-3 text-sm text-destructive hover:bg-destructive/5 transition-colors"
+              className="w-full flex items-center gap-3 px-5 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
             >
               <LogOut className="w-4 h-4" />
               Sign out
@@ -109,6 +123,7 @@ export default function ProfileDropdown() {
       </div>
 
       <SettingsPanel open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <NotificationsPanel open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
     </>
   );
 }
