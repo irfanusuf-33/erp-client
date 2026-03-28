@@ -71,7 +71,7 @@ export default function DashboardPage() {
         
         setModules(modulesWithIcons);
       } catch (error) {
-        console.error('Error loading dashboard:', error);
+        // Error loading dashboard data
       } finally {
         setLoading(false);
       }
@@ -121,7 +121,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-4 md:px-6 py-4 sticky top-0 z-10">
+      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-4 md:px-9 py-4">
         <h1 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100">
           Hi, {userName}!
         </h1>
