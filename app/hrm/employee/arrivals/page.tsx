@@ -1,9 +1,9 @@
-import React from 'react'
+// app/hrm/employee/arrivals/page.tsx
 
-const page = () => {
+export default function EmployeeArrivalsPage() {
   return (
-    <div>page</div>
-  )
+    <div className="p-6">
+      <h1 className="text-xl font-semibold text-slate-800">My Arrivals</h1>
+    </div>
+  );
 }
-
-export default page

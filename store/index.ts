@@ -1,13 +1,19 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+
 import { AuthSlice, createAuthSlice } from "./slices/auth.slice";
 import { createIamSlice, IamSlice } from "./slices/iam.slice";
 import { createInventorySlice, InventorySlice } from "./slices/inventory.slice";
+import { createHrmSlice, HrmSlice } from "./slices/hrm.slice"; // ✅ add this
 
-export type AppStoreSlices = AuthSlice & IamSlice & InventorySlice & {
+export type AppStoreSlices =
+  AuthSlice &
+  IamSlice &
+  InventorySlice &
+  HrmSlice & { // ✅ add HRM slice to store type
     hasHydrated: boolean;
     setHasHydrated: (state: boolean) => void;
-};
+  };
 
 export const useGlobalStore = create<AppStoreSlices>()(
     persist(
@@ -15,6 +21,7 @@ export const useGlobalStore = create<AppStoreSlices>()(
             ...createAuthSlice(...a),
             ...createIamSlice(...a),
             ...createInventorySlice(...a),
+            ...createHrmSlice(...a),
 
             hasHydrated: false,
             setHasHydrated: (state: boolean) => a[0]({ hasHydrated: state }),
