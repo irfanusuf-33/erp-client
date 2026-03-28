@@ -202,3 +202,14 @@ export interface CheckInPayload {
   employeeId: string;
   location?: string;
 }
+// types/hrm.types.ts
+export interface Attendance {
+  _id: string;
+  name: string;
+  session: string;
+  tasks: string[];           // ← was string, should be string[]
+  totalHours: string;
+  breaks: string[];
+  status: "In a meeting" | "On call" | "Working" | "On Break";
+  arrival: "On Time" | "Late" | "Early Out" | "NA";  // ← added "Early Out"
+}
