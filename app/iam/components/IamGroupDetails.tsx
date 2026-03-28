@@ -98,14 +98,14 @@ export default function IamGroupDetails() {
   const filesColumns: MRT_ColumnDef<any>[] = [
     {
       accessorKey: "name", header: "File Name",
-      Cell: ({ row }) => (
+      Cell: ({ row }: { row: any }) => (
         <a href={row.original.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-600 hover:underline">
           <FileText size={18} />{row.original.name}{row.original.isNew ? " (New)" : ""}
         </a>
       ),
     },
     { accessorKey: "type", header: "Type" },
-    { accessorKey: "size", header: "Size", Cell: ({ row }) => <span>{`${(row.original.size / 1024).toFixed(2)} KB`}</span> },
+    { accessorKey: "size", header: "Size", Cell: ({ row }: { row: any }) => <span>{`${(row.original.size / 1024).toFixed(2)} KB`}</span> },
     ...(isEditing ? [{
       id: "action", header: "Action",
       Cell: ({ row }: any) => (
