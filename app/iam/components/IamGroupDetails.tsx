@@ -154,6 +154,8 @@ export default function IamGroupDetails() {
 
   const policiesData = isEditing ? policies : group.policies || [];
 
+  const groupPolicyNames: string[] = (group.policies || []).flatMap((pg: any) => pg.policies?.map((p: any) => p.label || p.name) || []);
+
   const usersColumns: MRT_ColumnDef<any>[] = [
     { accessorKey: "username", header: "Name" },
     { accessorKey: "email", header: "Email" },
@@ -163,6 +165,17 @@ export default function IamGroupDetails() {
         <button className="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm" onClick={() => handleRemove([row.original.email])}>
           <Trash2 size={14} />Remove
         </button>
+      ),
+    },
+
+     {
+      id: "assignedPolicies", header: "Assigned Policies",
+      Cell: () => (
+        <div className="flex flex-wrap gap-1">
+          {groupPolicyNames.length ? groupPolicyNames.map((p) => (
+            <span key={p} className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">{p}</span>
+          )) : <span className="text-gray-400 text-md">None</span>}
+        </div>
       ),
     },
   ];

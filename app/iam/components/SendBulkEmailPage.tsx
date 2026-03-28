@@ -6,6 +6,9 @@ import { axiosInstance } from "@/lib/axiosInstance";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import dynamic from "next/dynamic";
+
+const CKEditorWrapper = dynamic(() => import("./CKEditorWrapper"), { ssr: false });
 
 export default function SendBulkEmailPage() {
   const router = useRouter();
@@ -127,7 +130,9 @@ export default function SendBulkEmailPage() {
           )}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium">Body</label>
-            <textarea className="w-full border border-input rounded-md px-3 py-2 text-sm focus:outline-none focus:border-ring resize-none" rows={8} placeholder="Write your email content here..." value={body} onChange={(e) => setBody(e.target.value)} />
+            <div className="border border-input rounded-md overflow-hidden [&_.ck-editor__editable]:min-h-64">
+              <CKEditorWrapper value={body} onChange={setBody} />
+            </div>
           </div>
           {showHeaderFooter && (
             <div className="flex flex-col gap-1">

@@ -4,9 +4,43 @@ import Link from "next/link";
 import { XCircle, CheckCircle, Info } from "lucide-react";
 import { useGlobalStore } from "@/store";
 import BaseTable from "@/components/ui/table/BaseTable";
+import type { MRT_ColumnDef } from "material-react-table";
 import type { IamUserRow } from "@/types/iam.types";
 
 type PaginationState = { pageIndex: number; pageSize: number };
+
+const columns: MRT_ColumnDef<IamUserRow, any>[] = [
+  { accessorKey: "fName", header: "First Name", Cell: ({ cell }) => <span>{(cell.getValue() as string) || "-"}</span> },
+  { accessorKey: "lName", header: "Last Name", Cell: ({ cell }) => <span>{(cell.getValue() as string) || "-"}</span> },
+  {
+    accessorKey: "email",
+    header: "Username",
+    Cell: ({ row }) => (
+      <Link href={`/iam/users/${row.original.email}`} className="text-blue-600 hover:underline cursor-pointer">
+        {row.original.email}
+      </Link>
+    ),
+  },
+  { accessorKey: "passwordAge", header: "Password Age", Cell: ({ cell }) => <span>{(cell.getValue() as string) || "-"}</span> },
+  {
+    accessorKey: "lastLogin",
+    header: "Last Login",
+    Cell: ({ cell }) => {
+      const value = cell.getValue<string>();
+      return value ? new Date(value).toLocaleString("en-GB") : "-";
+    },
+  },
+  {
+    accessorKey: "disabled",
+    header: "Status",
+    Cell: ({ cell }) =>
+      cell.getValue() ? (
+        <div className="flex items-center gap-1.5"><XCircle size={16} className="text-red-600" /><span className="text-red-600">Disabled</span></div>
+      ) : (
+        <div className="flex items-center gap-1.5"><CheckCircle size={16} className="text-green-700" /><span className="text-green-700">Active</span></div>
+      ),
+  },
+];
 
 export default function IamUsers() {
   const { getUsers, users, iamLoading, toggleUserStatus } = useGlobalStore();
@@ -19,44 +53,11 @@ export default function IamUsers() {
     });
   }, [pagination.pageIndex, pagination.pageSize]);
 
-  const columns = [
-    { accessorKey: "fName", header: "First Name", Cell: ({ cell }) => <span>{(cell.getValue() as string) || "-"}</span> },
-    { accessorKey: "lName", header: "Last Name", Cell: ({ cell }) => <span>{(cell.getValue() as string) || "-"}</span> },
-    {
-      accessorKey: "email",
-      header: "Username",
-      Cell: ({ row }) => (
-        <Link href={`/iam/users/${row.original.email}`} className="text-blue-600 hover:underline cursor-pointer">
-          {row.original.email}
-        </Link>
-      ),
-    },
-    { accessorKey: "passwordAge", header: "Password Age", Cell: ({ cell }) => <span>{(cell.getValue() as string) || "-"}</span> },
-    {
-      accessorKey: "lastLogin",
-      header: "Last Login",
-      Cell: ({ cell }) => {
-        const value = cell.getValue<string>();
-        return value ? new Date(value).toLocaleString("en-GB") : "-";
-      },
-    },
-    {
-      accessorKey: "disabled",
-      header: "Status",
-      Cell: ({ cell }) =>
-        cell.getValue() ? (
-          <div className="flex items-center gap-1.5"><XCircle size={16} className="text-red-600" /><span className="text-red-600">Disabled</span></div>
-        ) : (
-          <div className="flex items-center gap-1.5"><CheckCircle size={16} className="text-green-700" /><span className="text-green-700">Active</span></div>
-        ),
-    },
-  ];
-
   const toolbarActions = [
     {
       label: (selectedUsers: IamUserRow[]) => selectedUsers.every((u) => u.disabled) ? "Enable" : "Disable",
       onClick: async (selectedUsers: IamUserRow[]) => {
-        for (const user of selectedUsers) await toggleUserStatus(user._id);
+        for (const user of selectedUsers) await toggleUserStatus(user._id as any);
         getUsers(pagination.pageIndex + 1, pagination.pageSize).then((res) => {
           if (res?.count) setRowCount(res.count);
         });

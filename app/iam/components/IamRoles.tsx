@@ -9,27 +9,27 @@ export default function IamRoles() {
 
   return (
     <div className="px-6 py-7 overflow-y-auto">
-      <h2 className="text-2xl font-semibold text-gray-800 flex items-center mb-4">
-        Policies
-        <div className="relative group flex items-center ml-2">
-          <Info size={16} className="cursor-pointer text-gray-500" />
-          <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
-            <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
-            <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 leading-snug w-72">
-              Guide to viewing and understanding all user policies.
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
+          Policies
+          <div className="relative group flex items-center ml-2">
+            <Info size={16} className="cursor-pointer text-gray-500" />
+            <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
+              <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
+              <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 leading-snug w-72">
+                Guide to viewing and understanding all user policies.
+              </div>
             </div>
           </div>
-        </div>
-      </h2>
-      <div className="mt-9 border border-gray-200 rounded-lg p-4 bg-white overflow-x-auto min-w-[900px]">
-        <div className="relative flex justify-between items-center mb-3">
-          <Input
-            placeholder="Search policies"
-            className="w-96"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        </h2>
+        <Input
+          placeholder="Search policies"
+          className="w-70"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+      <div className="border border-gray-200 rounded-lg p-4 bg-white overflow-x-auto min-w-[900px]">
         <IamRolesDashboard searchTerm={searchTerm} />
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 import { Fragment, useEffect, useState } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 import { useGlobalStore } from "@/store";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -71,9 +71,7 @@ export default function IamUserRolesDashboard({ searchTerm = "", selectedRoles, 
                 onClick={() => setExpandedRole((p) => (p === role.id ? null : role.id))}
               >
                 <TableCell sx={{ width: 48 }}>
-                  <div className="flex items-center gap-1">
-                    {expandedRole === role.id ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                  </div>
+                  {expandedRole === role.id ? <Minus size={16} /> : <Plus size={16} />}
                 </TableCell>
                 <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{role.name}</TableCell>
                 <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{role.description}</TableCell>
