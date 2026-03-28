@@ -52,7 +52,7 @@ export default function IamUserRoles() {
         </div>
       </div>
 
-      <div className="border border-gray-200 rounded-lg bg-white overflow-x-auto">
+      <div className="border border-gray-200 rounded-lg bg-white overflow-x-auto min-h-[450px]">
         <IamUserRolesDashboard searchTerm={searchTerm} />
       </div>
 

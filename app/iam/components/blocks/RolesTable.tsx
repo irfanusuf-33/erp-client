@@ -17,9 +17,10 @@ type RolesTableProps = {
 export default function RolesTable({ selectedPermissions, onTogglePermission }: RolesTableProps) {
   const [expandedRole, setExpandedRole] = useState<string | null>(null);
   const { policies: storePolicies, fetchPolicies } = useGlobalStore();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!storePolicies.length) fetchPolicies();
+    if (!storePolicies.length) { setLoading(true); fetchPolicies().finally(() => setLoading(false)); }
   }, []);
 
   const policies = storePolicies.map((cat) => ({
@@ -30,7 +31,7 @@ export default function RolesTable({ selectedPermissions, onTogglePermission }: 
   }));
 
   return (
-    <TableContainer>
+    <TableContainer sx={{ minHeight: 400 }}>
       <Table>
         <TableHead>
           <TableRow sx={{ backgroundColor: "#f9fafb" }}>
@@ -41,7 +42,9 @@ export default function RolesTable({ selectedPermissions, onTogglePermission }: 
           </TableRow>
         </TableHead>
         <TableBody>
-          {policies.map((role) => (
+          {loading ? (
+            <TableRow><TableCell colSpan={4} sx={{ textAlign: "center", py: 6 }}><span className="text-sm text-gray-400 animate-pulse">Loading...</span></TableCell></TableRow>
+          ) : policies.map((role) => (
             <Fragment key={role.id}>
               <TableRow sx={{ borderBottom: "1px solid #e5e7eb", backgroundColor: expandedRole === role.id ? "#eff6ff" : "inherit", "&:hover": { backgroundColor: expandedRole === role.id ? "#eff6ff" : "#f9fafb" } }}>
                 <TableCell sx={{ width: 32 }}>

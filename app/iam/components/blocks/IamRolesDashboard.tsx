@@ -12,10 +12,12 @@ import TableRow from "@mui/material/TableRow";
 export default function IamRolesDashboard({ searchTerm = "" }: { searchTerm: string }) {
   const [expandedRole, setExpandedRole] = useState<string | null>(null);
   const { policies: storePolicies, fetchPolicies } = useGlobalStore();
+  const [loading, setLoading] = useState(true);
   const lowerSearch = searchTerm.toLowerCase();
 
   useEffect(() => {
-    if (!storePolicies.length) fetchPolicies();
+    if (!storePolicies.length) { fetchPolicies().finally(() => setLoading(false)); }
+    else { setLoading(false); }
   }, []);
 
   const policies = storePolicies.map((cat) => ({
@@ -37,7 +39,7 @@ export default function IamRolesDashboard({ searchTerm = "" }: { searchTerm: str
   }, [searchTerm]);
 
   return (
-    <TableContainer>
+    <TableContainer sx={{ minHeight: 400 }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -47,7 +49,9 @@ export default function IamRolesDashboard({ searchTerm = "" }: { searchTerm: str
           </TableRow>
         </TableHead>
         <TableBody>
-          {!filteredRoles.length ? (
+          {loading ? (
+            <TableRow><TableCell colSpan={3} sx={{ textAlign: "center", py: 6 }}><span className="text-sm text-gray-400 animate-pulse">Loading...</span></TableCell></TableRow>
+          ) : !filteredRoles.length ? (
             <TableRow><TableCell colSpan={3} sx={{ fontSize: "0.875rem", color: "#6b7280" }}>No Results Found</TableCell></TableRow>
           ) : filteredRoles.map((role: any) => (
             <Fragment key={role.id}>
