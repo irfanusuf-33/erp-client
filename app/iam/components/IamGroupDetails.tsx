@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { MoreVertical, Send, Plus, Minus, Trash2, Edit, Check, X, FileText, Info } from "lucide-react";
 import { useGlobalStore } from "@/store";
+import { createPortal } from "react-dom";
 import AddUserToGroupModal from "./modals/AddUserToGroupModal";
 import EditGroupSingleModal from "./modals/EditGroupSingleModal";
 import EditUserPoliciesModal from "./modals/EditUserPoliciesModal";
@@ -39,6 +40,39 @@ export default function IamGroupDetails() {
   const [policies, setPolicies] = useState<any[]>([]);
 
   const userData = (group?.users || []).map((email: string) => ({ email, username: email.split("@")[0] }));
+
+  function PoliciesCell({ policies }: { policies: string[] }) {
+    const [open, setOpen] = useState(false);
+    if (!policies?.length) return <span className="text-gray-400">None</span>;
+    const visible = policies.slice(0, 3);
+    const extra = policies.length - 3;
+    return (
+      <>
+        <div className="flex flex-wrap gap-1 items-center">
+          {visible.map((p) => <span key={p} className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">{p}</span>)}
+          {extra > 0 && (
+            <button onClick={() => setOpen(true)} className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs hover:bg-gray-200">+{extra} more</button>
+          )}
+        </div>
+        {open && createPortal(
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40" onClick={() => setOpen(false)}>
+            <div className="bg-white rounded-lg shadow-xl w-96" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between px-6 pt-5 pb-3">
+                <h3 className="text-sm font-semibold text-gray-800">All Policies</h3>
+                <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600">✕</button>
+              </div>
+              <div className="overflow-y-auto max-h-80 px-6 pb-5">
+                <div className="flex flex-wrap gap-2">
+                  {policies.map((p) => <span key={p} className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">{p}</span>)}
+                </div>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+      </>
+    );
+  }
 
   const fetchGroup = async () => {
     if (!groupId) return;
@@ -134,13 +168,7 @@ export default function IamGroupDetails() {
     { accessorKey: "email", header: "Email" },
     {
       id: "assignedPolicies", header: "Assigned Policies",
-      Cell: () => (
-        <div className="flex flex-wrap gap-1">
-          {groupPolicyNames.length ? groupPolicyNames.map((p) => (
-            <span key={p} className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs">{p}</span>
-          )) : <span className="text-gray-400 text-md">None</span>}
-        </div>
-      ),
+      Cell: () => <PoliciesCell policies={groupPolicyNames} />,
     },
     {
       id: "actions", header: "Actions",
@@ -172,7 +200,7 @@ export default function IamGroupDetails() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={handleEdit}><Edit size={14} />Edit</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => { handledisable(); setDropdownOpen(false); }}><Trash2 size={14} />Disable Group</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => { handledisable(); setDropdownOpen(false); }}><Trash2 size={14} />Disable</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -244,14 +272,14 @@ export default function IamGroupDetails() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="border border-gray-200 rounded-lg p-4 bg-white overflow-x-auto">
+        <div className="border border-gray-200 rounded-lg bg-white overflow-x-auto">
           <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ width: 32, borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }} />
                   <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>Module Name</TableCell>
-                  <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>Policies</TableCell>
+                  <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb", width:"60%" }}>Policies</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

@@ -20,24 +20,24 @@ interface Props {
 
 export default function IamUserRolesDashboard({ searchTerm = "", selectedRoles, onToggleRole, selectedPermissions, onTogglePermission, selectionEnabled = false }: Props) {
   const [expandedRole, setExpandedRole] = useState<string | null>(null);
-  const { roles: storeRoles, fetchRoles } = useGlobalStore();
+  const { roles: storeRoles, fetchRoles, policies: storePolicies, fetchPolicies } = useGlobalStore();
   const [loading, setLoading] = useState(false);
   const lowerSearch = searchTerm.toLowerCase();
 
   useEffect(() => {
     if (!storeRoles.length) { setLoading(true); fetchRoles().finally(() => setLoading(false)); }
+    if (!storePolicies.length) { fetchPolicies(); }
   }, []);
 
   const roles = storeRoles.flatMap((cat) =>
     cat.policies.map((p) => ({
       id: p.id,
       name: p.name,
-      description: p.description || `${p.name} role permissions`,
-      permissions: (p.description?.replace("Policies: ", "").split(", ").filter(Boolean) || []).map((perm) => ({
-        id: perm,
-        label: perm,
-        description: `Permission: ${perm}`,
-      })),
+      description: p.description?.startsWith("Policies:") ? "N/A" : (p.description || "N/A"),
+      permissions: (p.description?.replace("Policies: ", "").split(", ").filter(Boolean) || []).map((perm) => {
+        const found = storePolicies.flatMap((cat) => cat.policies).find((sp) => sp.id === perm || sp.name === perm);
+        return { id: perm, label: perm, description: found?.description ?? "" };
+      }),
     }))
   );
 
@@ -58,7 +58,7 @@ export default function IamUserRolesDashboard({ searchTerm = "", selectedRoles, 
         <TableHead>
           <TableRow sx={{ backgroundColor: "#f9fafb" }}>
             <TableCell sx={{ width: 48, borderBottom: "1px solid #e5e7eb" }} />
-            <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Role Name</TableCell>
+            <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb", width: "30%" }}>Role Name</TableCell>
             <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
           </TableRow>
         </TableHead>
@@ -91,7 +91,7 @@ export default function IamUserRolesDashboard({ searchTerm = "", selectedRoles, 
                       />
                     )}
                   </TableCell>
-                  <TableCell sx={{ py: "1rem", pl: "3rem", fontSize: "0.875rem", color: "#1f2937" }}>{perm.label}</TableCell>
+                  <TableCell sx={{ py: "1rem", pl: "0.75rem", fontSize: "0.875rem", color: "#1f2937" }}>{perm.label}</TableCell>
                   <TableCell sx={{ py: "1rem", px: "0.75rem", fontSize: "0.875rem", color: "#6b7280" }}>{perm.description}</TableCell>
                 </TableRow>
               ))}

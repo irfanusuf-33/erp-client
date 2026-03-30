@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Paperclip, Info } from "lucide-react";
+import { Paperclip, Info, Plus } from "lucide-react";
 import { axiosInstance } from "@/lib/axiosInstance";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -10,12 +10,17 @@ import dynamic from "next/dynamic";
 
 const CKEditorWrapper = dynamic(() => import("./CKEditorWrapper"), { ssr: false });
 
+interface Template {
+  id: string; name: string; subject: string; content: string; header: string; footer: string;
+}
+
 export default function SendBulkEmailPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const groupId = searchParams.get("groupId");
 
-  const [templates, setTemplates] = useState<any[]>([]);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [header, setHeader] = useState("");
@@ -29,6 +34,16 @@ export default function SendBulkEmailPage() {
   const [newTemplateName, setNewTemplateName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showCustomFieldModal, setShowCustomFieldModal] = useState(false);
+  const [customFieldName, setCustomFieldName] = useState("");
+  const [customFieldValue, setCustomFieldValue] = useState("");
+  const [customFields, setCustomFields] = useState<{ name: string; value: string }[]>([]);
+
+  const displayVariables = [...customFields];
+
+  const filteredVariables = displayVariables.filter((v) =>
+    v.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   useEffect(() => {
     axiosInstance.get("/iam/email-templates").then((res) => {
@@ -49,8 +64,12 @@ export default function SendBulkEmailPage() {
     );
   }
 
-  const loadTemplate = (tmpl: any) => {
-    setSubject(tmpl.subject); setBody(tmpl.content); setHeader(tmpl.header || ""); setFooter(tmpl.footer || "");
+  const loadTemplate = (tmpl: Template) => {
+    setSelectedTemplate(tmpl);
+    setSubject(tmpl.subject);
+    setBody(tmpl.content);
+    setHeader(tmpl.header || "");
+    setFooter(tmpl.footer || "");
   };
 
   const handleSend = async () => {
@@ -73,27 +92,51 @@ export default function SendBulkEmailPage() {
     setIsSavingTemplate(false);
   };
 
-  const previewHtml = [showHeaderFooter && header, body, showHeaderFooter && footer].filter(Boolean).join("<br/>");
+  const handleSaveCustomField = () => {
+    if (!customFieldName.trim() || !customFieldValue.trim()) return;
+    setCustomFields((p) => [...p, { name: customFieldName, value: `{{${customFieldValue}}}` }]);
+    setCustomFieldName(""); setCustomFieldValue(""); setShowCustomFieldModal(false);
+  };
+
+  const handleDragStart = (e: React.DragEvent, variable: { name: string; value: string }) => {
+    e.dataTransfer.effectAllowed = "copy";
+    e.dataTransfer.setData("variable", variable.value);
+  };
+
+  const handleDrop = (e: React.DragEvent, target: "header" | "body" | "footer") => {
+    e.preventDefault();
+    const variable = e.dataTransfer.getData("variable");
+    if (!variable) return;
+    if (target === "header") setHeader((p) => p + variable);
+    else if (target === "body") setBody((p) => p + variable);
+    else setFooter((p) => p + variable);
+  };
+
+  const previewHtml = `<!doctype html><html><head><meta charset="utf-8"/><style>html,body{margin:0;padding:0;background:#f6f8fb;font-family:Arial,sans-serif;color:#0f172a;}.wrap{max-width:980px;margin:16px auto;background:#fff;border:1px solid #dbe3ef;border-radius:8px;overflow:hidden;}.content{padding:16px;overflow-wrap:anywhere;word-break:break-word;}.content img,.content table{max-width:100%!important;height:auto!important;}</style></head><body><div class="wrap"><div class="content">${[showHeaderFooter && header, body, showHeaderFooter && footer].filter(Boolean).join("<br/>")}</div></div></body></html>`;
 
   return (
     <div className="p-6">
       <h1 className="text-xl font-semibold mb-6">Send Bulk Email</h1>
       <div className="flex gap-6">
-        <div className="flex-1 flex flex-col gap-4">
+        {/* Left Panel */}
+        <div className="flex-1 flex flex-col gap-4 border border-gray-200 rounded-lg bg-white p-6">
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium">Template Name</label>
             <select
               className="h-9 w-full rounded-md border border-input bg-transparent px-2.5 py-1 text-sm focus:outline-none focus:border-ring"
               onChange={(e) => { const t = templates.find((x) => x.id === e.target.value); if (t) loadTemplate(t); }}
+              value={selectedTemplate?.id || ""}
             >
               <option value="">Select Template</option>
               {templates.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
             </select>
           </div>
+
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium">Subject</label>
             <Input placeholder="Default email subject" value={subject} onChange={(e) => setSubject(e.target.value)} />
           </div>
+
           <div className="flex gap-4">
             <label className="flex items-center gap-2 text-sm cursor-pointer">
               <input type="checkbox" checked={showHeaderFooter} onChange={(e) => setShowHeaderFooter(e.target.checked)} />
@@ -104,14 +147,11 @@ export default function SendBulkEmailPage() {
               Attach Files
             </label>
           </div>
+
           {attachPdf && (
             <div className="flex flex-col gap-1">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-fit flex items-center gap-1"
-                onClick={() => { const i = document.createElement("input"); i.type = "file"; i.accept = ".pdf"; i.multiple = true; i.onchange = (e: any) => setPdfFiles((p) => [...p, ...Array.from<File>(e.target.files || [])]); i.click(); }}
-              >
+              <Button type="button" variant="outline" className="w-fit flex items-center gap-1"
+                onClick={() => { const i = document.createElement("input"); i.type = "file"; i.accept = ".pdf"; i.multiple = true; i.onchange = (e: any) => setPdfFiles((p) => [...p, ...Array.from<File>(e.target.files || [])]); i.click(); }}>
                 <Paperclip size={16} />Select Files
               </Button>
               {pdfFiles.map((f, i) => (
@@ -122,24 +162,32 @@ export default function SendBulkEmailPage() {
               ))}
             </div>
           )}
+
           {showHeaderFooter && (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium">Headers</label>
-              <textarea className="w-full border border-input rounded-md px-3 py-2 text-sm focus:outline-none focus:border-ring resize-none" rows={3} placeholder="Email header..." value={header} onChange={(e) => setHeader(e.target.value)} />
+            <div className="flex flex-col gap-1" onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "header")}>
+              <label className="text-sm font-medium">Header</label>
+              <div className="border border-input rounded-md overflow-hidden [&_.ck-editor__editable]:min-h-[120px]">
+                <CKEditorWrapper value={header} onChange={setHeader} />
+              </div>
             </div>
           )}
-          <div className="flex flex-col gap-1">
+
+          <div className="flex flex-col gap-1" onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "body")}>
             <label className="text-sm font-medium">Body</label>
             <div className="border border-input rounded-md overflow-hidden [&_.ck-editor__editable]:min-h-64">
               <CKEditorWrapper value={body} onChange={setBody} />
             </div>
           </div>
+
           {showHeaderFooter && (
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1" onDragOver={(e) => e.preventDefault()} onDrop={(e) => handleDrop(e, "footer")}>
               <label className="text-sm font-medium">Footer</label>
-              <textarea className="w-full border border-input rounded-md px-3 py-2 text-sm focus:outline-none focus:border-ring resize-none" rows={3} placeholder="Email footer..." value={footer} onChange={(e) => setFooter(e.target.value)} />
+              <div className="border border-input rounded-md overflow-hidden [&_.ck-editor__editable]:min-h-[120px]">
+                <CKEditorWrapper value={footer} onChange={setFooter} />
+              </div>
             </div>
           )}
+
           <div className="flex gap-3">
             <Button variant="outline" onClick={() => setShowTemplateModal(true)}>Save as template</Button>
             <Button variant="outline" onClick={() => setShowPreviewModal(true)} disabled={!subject.trim() || !body.trim()}>Preview</Button>
@@ -147,12 +195,43 @@ export default function SendBulkEmailPage() {
           </div>
         </div>
 
-        <div className="w-64 flex flex-col gap-3">
-          <h2 className="font-semibold">Template Fields</h2>
-          <Input placeholder="Search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-          <div className="flex gap-2 text-xs text-gray-500 mt-2">
-            <Info size={14} className="flex-shrink-0 mt-0.5" />
-            <p>Drag and drop fields into your template editor to include dynamic content.</p>
+        {/* Right Panel - Template Fields */}
+        <div className="w-80 flex flex-col gap-4 border border-gray-200 rounded-lg bg-white p-5 self-start">
+          <h2 className="font-semibold text-base">Template Fields</h2>
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:outline-none focus:border-gray-300"
+          />
+
+          <div className="flex flex-col gap-1 min-h-[40px]">
+            {filteredVariables.length > 0 ? filteredVariables.map((v, i) => (
+              <div key={i} draggable onDragStart={(e) => handleDragStart(e, v)}
+                className="flex items-center justify-between px-3 py-2 rounded border border-gray-200 bg-white cursor-grab hover:bg-gray-50 text-sm">
+                <span>{v.name}</span>
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            )) : (
+              <p className="text-sm text-amber-600 text-center py-1">No fields found</p>
+            )}
+          </div>
+
+          <hr className="border-gray-200" />
+
+          <button
+            onClick={() => setShowCustomFieldModal(true)}
+            className="w-full rounded-lg border border-blue-500 text-blue-600 text-sm font-medium py-2.5 hover:bg-blue-50 transition-colors"
+          >
+            + Create Custom Field
+          </button>
+
+          <div className="flex gap-2 rounded-lg bg-amber-50 border border-amber-100 px-3 py-3">
+            <Info size={16} className="flex-shrink-0 mt-0.5 text-blue-500" />
+            <p className="text-xs text-blue-600 leading-snug">Drag and drop fields into your template editor to include dynamic content.</p>
           </div>
         </div>
       </div>
@@ -160,25 +239,20 @@ export default function SendBulkEmailPage() {
       {/* Preview Modal */}
       <Dialog open={showPreviewModal} onOpenChange={(open) => { if (!open) setShowPreviewModal(false); }}>
         <DialogContent className="max-w-3xl max-h-[80vh] flex flex-col">
-          <DialogHeader>
-            <DialogTitle>Email Preview</DialogTitle>
-          </DialogHeader>
-          <div className="overflow-auto flex-1">
-            <div className="mb-2 text-sm"><span className="font-medium">Subject:</span> {subject || "-"}</div>
-            <div className="border rounded p-4 bg-gray-50" dangerouslySetInnerHTML={{ __html: previewHtml }} />
+          <DialogHeader><DialogTitle>Email Preview</DialogTitle></DialogHeader>
+          <div className="overflow-auto flex-1 flex flex-col gap-2">
+            <div className="text-sm"><span className="font-medium">Subject:</span> {subject || "-"}</div>
+            <div className="text-sm"><span className="font-medium">Attachments:</span> {pdfFiles.length > 0 ? pdfFiles.map((f) => f.name).join(", ") : "None"}</div>
+            <iframe title="Email Preview" className="w-full flex-1 min-h-[400px] border rounded" srcDoc={previewHtml} />
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPreviewModal(false)}>Close</Button>
-          </DialogFooter>
+          <DialogFooter><Button variant="outline" onClick={() => setShowPreviewModal(false)}>Close</Button></DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Save Template Modal */}
       <Dialog open={showTemplateModal} onOpenChange={(open) => { if (!open) setShowTemplateModal(false); }}>
         <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Name Your Template</DialogTitle>
-          </DialogHeader>
+          <DialogHeader><DialogTitle>Name Your Template</DialogTitle></DialogHeader>
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium">Template name</label>
             <Input placeholder="Enter template name" value={newTemplateName} onChange={(e) => setNewTemplateName(e.target.value)} />
@@ -186,6 +260,28 @@ export default function SendBulkEmailPage() {
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowTemplateModal(false)} disabled={isSavingTemplate}>Cancel</Button>
             <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSaveTemplate} disabled={isSavingTemplate || !newTemplateName.trim()}>{isSavingTemplate ? "Saving..." : "Save"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Custom Field Modal */}
+      <Dialog open={showCustomFieldModal} onOpenChange={(open) => { if (!open) setShowCustomFieldModal(false); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle>Create Custom Field</DialogTitle></DialogHeader>
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium">Field Name</label>
+              <Input placeholder="e.g., Company Name" value={customFieldName} onChange={(e) => setCustomFieldName(e.target.value)} />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium">Field Value</label>
+              <Input placeholder="e.g., companyName" value={customFieldValue} onChange={(e) => setCustomFieldValue(e.target.value)} />
+            </div>
+            <p className="text-xs text-gray-500">The field will be available as {`{{${customFieldValue || "fieldValue"}}}`}</p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowCustomFieldModal(false)}>Cancel</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={handleSaveCustomField} disabled={!customFieldName.trim() || !customFieldValue.trim()}>Create</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

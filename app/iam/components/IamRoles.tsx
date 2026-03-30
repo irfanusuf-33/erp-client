@@ -29,7 +29,7 @@ export default function IamRoles() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <div className="border border-gray-200 rounded-lg p-4 bg-white overflow-x-auto min-w-[900px] min-h-[450px]">
+      <div className="border border-gray-200 rounded-lg bg-white overflow-x-auto min-w-[900px] min-h-[450px]">
         <IamRolesDashboard searchTerm={searchTerm} />
       </div>
     </div>
