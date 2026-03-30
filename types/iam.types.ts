@@ -15,6 +15,12 @@ export interface User {
   mfaEnabled?: boolean;
 }
 
+export interface SearchUser {
+    _id: string;
+    fName: string;
+    lName: string;
+    email: string;
+}
 
 
 export type TabType = 'policies' | 'groups' | 'roles';

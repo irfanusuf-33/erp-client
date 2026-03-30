@@ -84,6 +84,8 @@ export type IamSlice = {
         groupId: string,
         selectedUsers: string[]
     ) => Promise<any>;
+    fetchTicketingDepartmentGroups: () => Promise<any>;
+    searchUsersService: (searchTerm: string) => Promise<any>;
 
 
     // bulk email 
@@ -758,6 +760,38 @@ export const createIamSlice: StateCreator<IamSlice> = ((set, get) => ({
             return res.data;
         } catch (error: any) {
             return { success: false, msg: error?.response?.data?.msg || "Failed to remove policies" };
+        }
+    },
+
+    fetchTicketingDepartmentGroups : async () => {
+        try {
+            const res = await axiosInstance.get("/iam/groups/deparments/ticketing");
+
+            const payload = res.data;
+            const rows = Array.isArray(payload)
+            ? payload
+            : Array.isArray(payload?.departments)
+                ? payload.departments
+                : Array.isArray(payload?.data)
+                ? payload.data
+                : Array.isArray(payload?.groups)
+                    ? payload.groups
+                    : [];
+
+            return { success: true, data: rows };
+        } catch (e: any) {
+            return { success: false, msg: e?.response?.data?.msg || "Failed to fetch ticketing department groups" };
+        }
+    },
+
+    searchUsersService : async (searchTerm: string) => {
+        try {
+            const res = await axiosInstance.get(`/iam/users/search`, {
+            params: { search: searchTerm },
+            });
+            return { success: true, users: res.data.users, count: res.data.count, msg: res.data.msg };
+        } catch (e: any) {
+            return { success: false, msg: e?.response?.data?.msg || 'Failed to search users' };
         }
     },
 
