@@ -1,5 +1,6 @@
 "use client";
 import { Fragment, useState, useEffect, useRef, type ChangeEvent } from "react";
+import * as Tabs from "@radix-ui/react-tabs";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ChevronUp, ChevronDown, HelpCircle, ChevronRight } from "lucide-react";
 import { axiosInstance } from "@/lib/axiosInstance";
@@ -7,8 +8,7 @@ import { useGlobalStore } from "@/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import RolesTable from "@/app/iam/components/blocks/RolesTable";
-import IamUserRolesDashboard from "@/app/iam/components/blocks/IamUserRolesDashboard";
-import IamGroups from "@/app/iam/groups/page";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -143,8 +143,14 @@ function StepUserDetails({ formData, setFormData, onNext }: { formData: any; set
 
 // ── Step 2: Attach Permissions ────────────────────────────────────────────────
 function StepPermissions({ formData, setFormData, onBack, onNext }: { formData: any; setFormData: any; onBack: () => void; onNext: () => void }) {
-  const [activeTab, setActiveTab] = useState("policies");
   const [error, setError] = useState("");
+  const [modalPolicies, setModalPolicies] = useState<string[] | null>(null);
+  const { groups, fetchGroups, roles, fetchRoles, iamLoading } = useGlobalStore();
+
+  useEffect(() => {
+    if (!groups.length) fetchGroups(1, 100);
+    if (!roles.length) fetchRoles();
+  }, []);
 
   const handleTogglePermission = (id: string) => setFormData((p: any) => ({ ...p, policies: p.policies.includes(id) ? p.policies.filter((x: string) => x !== id) : [...p.policies, id] }));
   const handleToggleRole = (id: string) => setFormData((p: any) => { const r = p.roles || []; return { ...p, roles: r.includes(id) ? r.filter((x: string) => x !== id) : [...r, id] }; });
@@ -158,22 +164,113 @@ function StepPermissions({ formData, setFormData, onBack, onNext }: { formData: 
           <p className="text-sm text-gray-500">Attach permissions to users to control access.</p>
         </div>
       </div>
-      <div className="flex items-center gap-6 mb-5">
-        {["policies", "groups", "roles"].map((tab, i, arr) => (
-          <Fragment key={tab}>
-            <button onClick={() => setActiveTab(tab)} className="py-3 px-1 text-sm" style={{ textDecorationLine: "underline", textDecorationColor: activeTab === tab ? "#2563eb" : "transparent", textDecorationThickness: "2px", color: activeTab === tab ? "#2563eb" : "#111" }}>
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-            {i < arr.length - 1 && <span className="text-gray-400">|</span>}
-          </Fragment>
-        ))}
-      </div>
-      <div className="border border-gray-200 rounded-lg p-4 bg-white pb-12 min-h-[450px]">
-        {activeTab === "policies" && <RolesTable selectedPermissions={formData.policies} onTogglePermission={handleTogglePermission} />}
-        {activeTab === "groups" && <IamGroups selectionMode selectedGroups={formData.groups || []} onToggleGroup={handleToggleGroup} />}
-        {activeTab === "roles" && <IamUserRolesDashboard selectedRoles={formData.roles || []} onToggleRole={handleToggleRole} selectionEnabled />}
-        {error && <p className="text-red-500 text-center mt-2.5 text-sm">{error}</p>}
-      </div>
+      <Tabs.Root defaultValue="policies">
+        <Tabs.List className="flex items-center gap-6 mb-5">
+          {["policies", "groups", "roles"].map((tab, i, arr) => (
+            <Fragment key={tab}>
+              <Tabs.Trigger
+                value={tab}
+                className="py-3 px-1 text-sm text-[#111] data-active:text-blue-600 data-active:underline data-active:underline-offset-4 data-active:decoration-blue-600 data-active:decoration-2"
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </Tabs.Trigger>
+              {i < arr.length - 1 && <span className="text-gray-400">|</span>}
+            </Fragment>
+          ))}
+        </Tabs.List>
+        <div className="border border-gray-200 rounded-lg bg-white pb-12 min-h-[450px]">
+          <Tabs.Content value="policies"><RolesTable selectedPermissions={formData.policies} onTogglePermission={handleTogglePermission} /></Tabs.Content>
+          <Tabs.Content value="groups">
+            <TableContainer sx={{ minHeight: 400 }}>
+              <Table>
+                <TableHead>
+                  <TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                    <TableCell sx={{ width: 32, borderBottom: "1px solid #e5e7eb" }} />
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Group Name</TableCell>
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {iamLoading ? (
+                    <TableRow><TableCell colSpan={3} sx={{ textAlign: "center", py: 6 }}><span className="text-sm text-gray-400 animate-pulse">Loading...</span></TableCell></TableRow>
+                  ) : groups.map((g) => (
+                    <TableRow key={g.groupName} sx={{ borderBottom: "1px solid #e5e7eb", "&:hover": { backgroundColor: "#f9fafb" } }}>
+                      <TableCell sx={{ width: 32 }}><input type="checkbox" checked={(formData.groups || []).includes(g.groupName)} onChange={() => handleToggleGroup(g.groupName)} /></TableCell>
+                      <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{g.groupName}</TableCell>
+                      <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{g.groupDescription || "-"}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Tabs.Content>
+          <Tabs.Content value="roles">
+            <TableContainer sx={{ minHeight: 400 }}>
+              <Table>
+                <TableHead>
+                  <TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                    <TableCell sx={{ width: 32, borderBottom: "1px solid #e5e7eb" }}>
+                      <input
+                        type="checkbox"
+                        checked={roles.flatMap((c) => c.policies).length > 0 && roles.flatMap((c) => c.policies).every((r) => (formData.roles || []).includes(r.id))}
+                        onChange={(e) => {
+                          const allIds = roles.flatMap((c) => c.policies).map((r) => r.id);
+                          setFormData((p: any) => ({ ...p, roles: e.target.checked ? allIds : [] }));
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Role Name</TableCell>
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Policies</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {iamLoading ? (
+                    <TableRow><TableCell colSpan={4} sx={{ textAlign: "center", py: 6 }}><span className="text-sm text-gray-400 animate-pulse">Loading...</span></TableCell></TableRow>
+                  ) : roles.flatMap((c) => c.policies).map((r) => {
+                    const policiesList = r.description?.replace("Policies: ", "").split(", ").filter(Boolean) || [];
+                    return (
+                      <TableRow key={r.id} sx={{ borderBottom: "1px solid #e5e7eb", "&:hover": { backgroundColor: "#f9fafb" } }}>
+                        <TableCell sx={{ width: 32 }}><input type="checkbox" checked={(formData.roles || []).includes(r.id)} onChange={() => handleToggleRole(r.id)} /></TableCell>
+                        <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{r.name}</TableCell>
+                        <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{r.description && !r.description.startsWith("Policies:") ? r.description : "N/A"}</TableCell>
+                        <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>
+                          {policiesList.length > 0 ? (
+                            <div className="flex flex-wrap gap-1 items-center">
+                              {policiesList.slice(0, 3).map((p: string) => (
+                                <span key={p} className="bg-blue-50 text-blue-700 text-xs px-2 py-0.5 rounded">{p}</span>
+                              ))}
+                              {policiesList.length > 3 && (
+                                <button type="button" className="text-xs text-blue-600 hover:underline" onClick={() => setModalPolicies(policiesList)}>+{policiesList.length - 3} more</button>
+                              )}
+                            </div>
+                          ) : "-"}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Tabs.Content>
+          {error && <p className="text-red-500 text-center mt-2.5 text-sm">{error}</p>}
+        </div>
+      </Tabs.Root>
+      {modalPolicies && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setModalPolicies(null)}>
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-4">
+              <p className="text-base font-semibold text-gray-800">All Policies</p>
+              <button type="button" className="text-gray-400 hover:text-gray-600 text-lg leading-none" onClick={() => setModalPolicies(null)}>✕</button>
+            </div>
+            <div className="flex flex-wrap gap-2 max-h-72 overflow-y-auto">
+              {modalPolicies.map((p) => (
+                <span key={p} className="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded">{p}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex justify-end gap-3 mt-6">
         <Button variant="outline" onClick={onBack}>Back</Button>
         <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => {
@@ -188,7 +285,6 @@ function StepPermissions({ formData, setFormData, onBack, onNext }: { formData: 
 // ── Step 3: Review & Create ───────────────────────────────────────────────────
 function StepReview({ formData, onBack }: { formData: any; onBack: () => void }) {
   const [isPending, setPending] = useState(false);
-  const [activeTab, setActiveTab] = useState("policies");
   const [expandedRole, setExpandedRole] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
@@ -272,80 +368,79 @@ function StepReview({ formData, onBack }: { formData: any; onBack: () => void })
 
         <div className="bg-white rounded-lg border border-gray-200 p-5">
           <h4 className="text-lg font-semibold mb-4">Permissions Summary</h4>
-          <div className="flex items-center gap-6 mb-5">
-            {["policies", "groups", "roles"].map((tab, i, arr) => (
-              <Fragment key={tab}>
-                <button onClick={() => setActiveTab(tab)} className={`text-base ${activeTab === tab ? "text-blue-600 underline decoration-blue-600 decoration-2" : "text-gray-900 no-underline"}`}>
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-                {i < arr.length - 1 && <span className="text-gray-400">|</span>}
-              </Fragment>
-            ))}
-          </div>
-
-          {activeTab === "policies" && (
-            policiesData.length > 0 ? (
-              <TableContainer><Table>
-                <TableHead><TableRow sx={{ backgroundColor: "#f9fafb" }}>
-                  <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Policy Name</TableCell>
-                  <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
-                </TableRow></TableHead>
-                <TableBody>{policiesData.map((p: any) => (
-                  <TableRow key={p.name} sx={{ borderBottom: "1px solid #e5e7eb", "&:hover": { backgroundColor: "#f9fafb" } }}>
-                    <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{p.name}</TableCell>
-                    <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{p.description}</TableCell>
-                  </TableRow>
-                ))}</TableBody>
-              </Table></TableContainer>
-            ) : <p className="py-5 text-center text-gray-500 text-sm">No policies selected</p>
-          )}
-
-          {activeTab === "groups" && (
-            groupsData.length > 0 ? (
-              <TableContainer><Table>
-                <TableHead><TableRow sx={{ backgroundColor: "#f9fafb" }}>
-                  <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Group Name</TableCell>
-                  <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
-                </TableRow></TableHead>
-                <TableBody>{groupsData.map((g: any) => (
-                  <TableRow key={g.name} sx={{ borderBottom: "1px solid #e5e7eb", "&:hover": { backgroundColor: "#f9fafb" } }}>
-                    <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{g.name}</TableCell>
-                    <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{g.description}</TableCell>
-                  </TableRow>
-                ))}</TableBody>
-              </Table></TableContainer>
-            ) : <p className="py-5 text-center text-gray-500 text-sm">No groups selected</p>
-          )}
-
-          {activeTab === "roles" && (
-            rolesData.length > 0 ? (
-              <TableContainer><Table>
-                <TableHead><TableRow sx={{ backgroundColor: "#f9fafb" }}>
-                  <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Role Name</TableCell>
-                  <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
-                </TableRow></TableHead>
-                <TableBody>{rolesData.map((role: any) => (
-                  <Fragment key={role.name}>
-                    <TableRow sx={{ borderBottom: "1px solid #e5e7eb", cursor: "pointer", "&:hover": { backgroundColor: "#f9fafb" } }} onClick={() => setExpandedRole((p) => (p === role.name ? null : role.name))}>
-                      <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>
-                        <div className="flex items-center gap-1">
-                          {expandedRole === role.name ? <ChevronUp size={16} /> : <ChevronRight size={16} />}
-                          {role.name}
-                        </div>
-                      </TableCell>
-                      <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{role.name} role permissions</TableCell>
+          <Tabs.Root defaultValue="policies">
+            <Tabs.List className="flex items-center gap-6 mb-5">
+              {["policies", "groups", "roles"].map((tab, i, arr) => (
+                <Fragment key={tab}>
+                  <Tabs.Trigger value={tab} className="text-base text-gray-900 data-active:text-blue-600 data-active:underline data-active:underline-offset-4 data-active:decoration-blue-600 data-active:decoration-2">
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </Tabs.Trigger>
+                  {i < arr.length - 1 && <span className="text-gray-400">|</span>}
+                </Fragment>
+              ))}
+            </Tabs.List>
+            <Tabs.Content value="policies">
+              {policiesData.length > 0 ? (
+                <TableContainer><Table>
+                  <TableHead><TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Policy Name</TableCell>
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
+                  </TableRow></TableHead>
+                  <TableBody>{policiesData.map((p: any) => (
+                    <TableRow key={p.name} sx={{ borderBottom: "1px solid #e5e7eb", "&:hover": { backgroundColor: "#f9fafb" } }}>
+                      <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{p.name}</TableCell>
+                      <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{p.description}</TableCell>
                     </TableRow>
-                    {expandedRole === role.name && role.policies.map((p: string) => (
-                      <TableRow key={p} sx={{ borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>
-                        <TableCell sx={{ pl: "3rem", fontSize: "0.875rem", color: "#6b7280" }}>{p}</TableCell>
-                        <TableCell />
+                  ))}</TableBody>
+                </Table></TableContainer>
+              ) : <p className="py-5 text-center text-gray-500 text-sm">No policies selected</p>}
+            </Tabs.Content>
+            <Tabs.Content value="groups">
+              {groupsData.length > 0 ? (
+                <TableContainer><Table>
+                  <TableHead><TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Group Name</TableCell>
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
+                  </TableRow></TableHead>
+                  <TableBody>{groupsData.map((g: any) => (
+                    <TableRow key={g.name} sx={{ borderBottom: "1px solid #e5e7eb", "&:hover": { backgroundColor: "#f9fafb" } }}>
+                      <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>{g.name}</TableCell>
+                      <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{g.description}</TableCell>
+                    </TableRow>
+                  ))}</TableBody>
+                </Table></TableContainer>
+              ) : <p className="py-5 text-center text-gray-500 text-sm">No groups selected</p>}
+            </Tabs.Content>
+            <Tabs.Content value="roles">
+              {rolesData.length > 0 ? (
+                <TableContainer><Table>
+                  <TableHead><TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Role Name</TableCell>
+                    <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>
+                  </TableRow></TableHead>
+                  <TableBody>{rolesData.map((role: any) => (
+                    <Fragment key={role.name}>
+                      <TableRow sx={{ borderBottom: "1px solid #e5e7eb", cursor: "pointer", "&:hover": { backgroundColor: "#f9fafb" } }} onClick={() => setExpandedRole((p) => (p === role.name ? null : role.name))}>
+                        <TableCell sx={{ fontSize: "0.875rem", color: "#1f2937" }}>
+                          <div className="flex items-center gap-1">
+                            {expandedRole === role.name ? <ChevronUp size={16} /> : <ChevronRight size={16} />}
+                            {role.name}
+                          </div>
+                        </TableCell>
+                        <TableCell sx={{ fontSize: "0.875rem", color: "#6b7280" }}>{role.name} role permissions</TableCell>
                       </TableRow>
-                    ))}
-                  </Fragment>
-                ))}</TableBody>
-              </Table></TableContainer>
-            ) : <p className="py-5 text-center text-gray-500 text-sm">No roles selected</p>
-          )}
+                      {expandedRole === role.name && role.policies.map((p: string) => (
+                        <TableRow key={p} sx={{ borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>
+                          <TableCell sx={{ pl: "3rem", fontSize: "0.875rem", color: "#6b7280" }}>{p}</TableCell>
+                          <TableCell />
+                        </TableRow>
+                      ))}
+                    </Fragment>
+                  ))}</TableBody>
+                </Table></TableContainer>
+              ) : <p className="py-5 text-center text-gray-500 text-sm">No roles selected</p>}
+            </Tabs.Content>
+          </Tabs.Root>
         </div>
       </div>
       <div className="flex justify-end gap-3 mt-6">
