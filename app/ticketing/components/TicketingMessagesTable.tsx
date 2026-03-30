@@ -4,7 +4,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import LanguageIcon from '@mui/icons-material/Language';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import SearchIcon from '@mui/icons-material/Search';
-import LightbulbOutlineIcon from '@mui/icons-material/LightbulbOutline';
+// import LightbulbOutlineIcon from '@mui/icons-material/LightbulbOutline';
 import {Button} from '../../../components/ui/button';
 import socket from "../../../lib/socket";
 import { useEffect, useMemo, useState } from 'react';
@@ -208,7 +208,7 @@ function TicketingMessagesTable() {
       <div className="tickets-list">
         {filteredMessages.length === 0 ? (
           <div className='no-message-ticket-box'>
-            <LightbulbOutlineIcon />
+            {/* <LightbulbOutlineIcon /> */}
             <div>
               <h1>Global Ticket Pool</h1>
               <p>Tickets from Email, WhatsApp, etc will appear here.</p>

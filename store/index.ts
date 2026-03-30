@@ -5,18 +5,20 @@ import { AuthSlice, createAuthSlice } from "./slices/auth.slice";
 import { createIamSlice, IamSlice } from "./slices/iam.slice";
 import { createInventorySlice, InventorySlice } from "./slices/inventory.slice";
 import { createTicketingSlice, TicketingSlice } from "./slices/ticketing.slice";
-
-export type AppStoreSlices = AuthSlice & IamSlice & InventorySlice & TicketingSlice & {
-
 import { createHrmSlice, HrmSlice } from "./slices/hrm.slice";
 import { createDashboardSlice, DashboardSlice } from "./slices/dashboard.slice";
+
+
+
+
 
 export type AppStoreSlices =
   AuthSlice &
   IamSlice &
   InventorySlice &
   HrmSlice &
-  DashboardSlice & {
+  DashboardSlice &
+  TicketingSlice& {
 
     hasHydrated: boolean;
     setHasHydrated: (state: boolean) => void;
