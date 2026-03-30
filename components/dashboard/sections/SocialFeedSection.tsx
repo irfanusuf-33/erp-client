@@ -23,7 +23,7 @@ const posts: Post[] = [
   {
     id: '1',
     author: {
-      name: 'Sarah Johnson',
+      name: 'Voctrum Employee',
       role: 'Marketing Manager',
       avatar: 'SJ'
     },
@@ -38,7 +38,7 @@ const posts: Post[] = [
   {
     id: '2',
     author: {
-      name: 'Michael Chen',
+      name: 'Marib Hamid',
       role: 'Product Lead',
       avatar: 'MC'
     },
@@ -52,7 +52,7 @@ const posts: Post[] = [
   {
     id: '3',
     author: {
-      name: 'Emily Davis',
+      name: 'Irfan Yousuf',
       role: 'HR Director',
       avatar: 'ED'
     },
@@ -66,7 +66,7 @@ const posts: Post[] = [
   {
     id: '4',
     author: {
-      name: 'James Wilson',
+      name: 'Simnan',
       role: 'Sales Director',
       avatar: 'JW'
     },
@@ -80,7 +80,7 @@ const posts: Post[] = [
   {
     id: '5',
     author: {
-      name: 'Lisa Anderson',
+      name: 'Uzair Bashir',
       role: 'Operations Manager',
       avatar: 'LA'
     },
