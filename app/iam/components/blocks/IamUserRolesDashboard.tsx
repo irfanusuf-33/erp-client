@@ -91,7 +91,7 @@ export default function IamUserRolesDashboard({ searchTerm = "", selectedRoles, 
                       />
                     )}
                   </TableCell>
-                  <TableCell sx={{ py: "1rem", pl: "0.75rem", fontSize: "0.875rem", color: "#1f2937" }}>{perm.label}</TableCell>
+                  <TableCell sx={{ py: "1rem", pl: "3rem", fontSize: "0.875rem", color: "#1f2937" }}>{perm.label}</TableCell>
                   <TableCell sx={{ py: "1rem", px: "0.75rem", fontSize: "0.875rem", color: "#6b7280" }}>{perm.description}</TableCell>
                 </TableRow>
               ))}
