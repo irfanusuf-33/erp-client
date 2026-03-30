@@ -25,7 +25,7 @@ const posts: Post[] = [
     author: {
       name: 'Voctrum Employee',
       role: 'Marketing Manager',
-      avatar: 'SJ'
+      avatar: 'VE'
     },
     content: 'Excited to announce that our Q1 campaign exceeded expectations by 25%! 🎉 Huge thanks to the entire marketing team for their dedication and creativity. Looking forward to an even better Q2!',
     image: undefined,
@@ -40,7 +40,7 @@ const posts: Post[] = [
     author: {
       name: 'Marib Hamid',
       role: 'Product Lead',
-      avatar: 'MC'
+      avatar: 'MH'
     },
     content: 'Just wrapped up an amazing product demo with a potential client. The new features we shipped last week really impressed them. Great work engineering team! 💪',
     timestamp: '4 hours ago',
@@ -54,7 +54,7 @@ const posts: Post[] = [
     author: {
       name: 'Irfan Yousuf',
       role: 'HR Director',
-      avatar: 'ED'
+      avatar: 'IY'
     },
     content: 'Reminder: Our annual team building event is scheduled for next Friday! 🎊 Please RSVP by Wednesday. It\'s going to be a fun day with activities, food, and prizes. See you all there!',
     timestamp: '6 hours ago',
@@ -68,7 +68,7 @@ const posts: Post[] = [
     author: {
       name: 'Simnan',
       role: 'Sales Director',
-      avatar: 'JW'
+      avatar: 'S'
     },
     content: 'Congratulations to our sales team for closing the biggest deal of the year! 🏆 This partnership will open up incredible opportunities for growth. Proud of everyone\'s hard work!',
     timestamp: '1 day ago',
@@ -82,7 +82,7 @@ const posts: Post[] = [
     author: {
       name: 'Uzair Bashir',
       role: 'Operations Manager',
-      avatar: 'LA'
+      avatar: 'UB'
     },
     content: 'We\'ve successfully implemented the new inventory management system across all warehouses. Efficiency has improved by 30% already! Thanks to the IT and operations teams for the smooth transition.',
     timestamp: '2 days ago',
@@ -112,7 +112,7 @@ export default function SocialFeedSection() {
         author: {
           name: 'You',
           role: 'Your Role',
-          avatar: 'YO'
+          avatar: 'YOU'
         },
         content: newPost,
         timestamp: 'Just now',
