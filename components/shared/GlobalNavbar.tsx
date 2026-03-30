@@ -2,8 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import ModuleOverlay from "@/components/ModuleOverlay";
-import ProfileDropdown from "@/components/ProfileDropdown";
+import ModuleOverlay from "@/components/shared/ModuleOverlay";
+import ProfileDropdown from "@/components/shared/ProfileDropdown";
 
 export default function GlobalNavbar() {
   const [showModules, setShowModules] = useState(false);

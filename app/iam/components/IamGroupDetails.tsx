@@ -9,7 +9,7 @@ import EditUserPoliciesModal from "./modals/EditUserPoliciesModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import BaseTable from "@/components/ui/table/BaseTable";
+
 import type { MRT_ColumnDef } from "material-react-table";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -17,6 +17,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import BaseTable from "@/components/shared/BaseTable";
 
 export default function IamGroupDetails() {
   const { groupId } = useParams<{ groupId: string }>();
@@ -89,13 +90,13 @@ export default function IamGroupDetails() {
         if (editedGroup.name !== group.name) { setGroup({ ...group, name: editedGroup.name, description: editedGroup.description }); router.replace(`/iam/groups/${editedGroup.name}`); }
         else fetchGroup();
       }
-    } catch {}
+    } catch { }
     setLoader(false);
   };
 
   const setNewPoliciesToGroup = async (selected: string[]) => {
     setLoader(true);
-    try { await removeGroupPolicies(groupId!, selected, group.name); setIsEditPoliciesModalOpen(false); fetchGroup(); } catch {}
+    try { await removeGroupPolicies(groupId!, selected, group.name); setIsEditPoliciesModalOpen(false); fetchGroup(); } catch { }
     setLoader(false);
   };
 
@@ -154,7 +155,7 @@ export default function IamGroupDetails() {
 
   return (
     <div className="p-9 bg-gray-50 min-h-screen">
-<div className="bg-white border border-gray-200 rounded-lg shadow-sm p-5 mb-9">
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-5 mb-9">
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-semibold text-gray-800 pl-4 flex items-center">
             Group Details

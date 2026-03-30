@@ -11,7 +11,7 @@ import WorkforceSection from '@/components/dashboard/sections/WorkforceSection';
 import ActivitySection from '@/components/dashboard/sections/ActivitySection';
 import InsightsSection from '@/components/dashboard/sections/InsightsSection';
 import SocialFeedSection from '@/components/dashboard/sections/SocialFeedSection';
-import NetworkSection from '@/components/dashboard/sections/NetworkSection';
+// import NetworkSection from '@/components/dashboard/sections/NetworkSection';
 import PlaceholderSection from '@/components/dashboard/sections/PlaceholderSection';
 import { ShoppingBag, CheckSquare, TrendingUp, Award } from 'lucide-react';
 
@@ -72,8 +72,8 @@ export default function DashboardPage() {
         return <InsightsSection />;
       case 'social':
         return <SocialFeedSection />;
-      case 'network':
-        return <NetworkSection />;
+      // case 'network':
+      //   return <NetworkSection />;
       default:
         return <AnnouncementsSection />;
     }

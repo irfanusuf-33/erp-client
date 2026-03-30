@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useGlobalStore } from "@/store";
-import SettingsPanel from "@/components/SettingsPanel";
-import NotificationsPanel from "@/components/NotificationsPanel";
-import ProfilePanel from "@/components/ProfilePanel";
+import SettingsPanel from "@/components/shared/SettingsPanel";
+import NotificationsPanel from "@/components/shared/NotificationsPanel";
+import ProfilePanel from "@/components/shared/ProfilePanel";
 
 export default function ProfileDropdown() {
   const user = useGlobalStore((s) => s.user);

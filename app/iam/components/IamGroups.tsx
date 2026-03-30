@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Info, XCircle, CheckCircle } from "lucide-react";
 import { useGlobalStore } from "@/store";
 import EditGroupModal from "./modals/EditGroupModal";
-import BaseTable from "@/components/ui/table/BaseTable";
+import BaseTable from "@/components/shared/BaseTable";
 import type { EditGroupModalProps } from "@/types/iam.types";
 
 type PaginationState = { pageIndex: number; pageSize: number };

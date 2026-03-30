@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { XCircle, CheckCircle, Info } from "lucide-react";
 import { useGlobalStore } from "@/store";
-import BaseTable from "@/components/ui/table/BaseTable";
+import BaseTable from "@/components/shared/BaseTable";
 import type { MRT_ColumnDef } from "material-react-table";
 import type { IamUserRow } from "@/types/iam.types";
 

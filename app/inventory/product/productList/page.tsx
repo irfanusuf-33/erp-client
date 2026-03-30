@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGlobalStore } from "@/store";
-import BaseTable from "@/components/ui/table/BaseTable";
+import BaseTable from "@/components/shared/BaseTable";
 import type { MRT_ColumnDef } from "material-react-table";
 import { CheckCircle, XCircle } from "lucide-react";
 
