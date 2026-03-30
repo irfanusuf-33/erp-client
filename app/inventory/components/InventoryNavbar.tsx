@@ -45,22 +45,22 @@ function DropdownItem({ item }: { item: (typeof navItems)[0] }) {
         type="button"
         className={`flex items-center gap-1 text-xs px-6 h-full font-semibold transition-colors border-t-4
           ${isActive
-            ? "text-blue-600 border-blue-600 bg-blue-50"
-            : "text-gray-700 border-transparent hover:text-blue-600 hover:border-blue-600 hover:bg-blue-50"
+            ? "text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20"
+            : "text-gray-700 dark:text-gray-200 border-transparent hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-600 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
           }`}
       >
         {item.label}
-        <span className={`text-[14px] ${isActive ? "text-blue-600" : "text-gray-500 group-hover:text-blue-600"}`}>▾</span>
+        <span className={`text-[14px] ${isActive ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400"}`}>▾</span>
       </button>
 
       <div className="absolute top-full left-0 z-50 hidden group-hover:block pt-0.5">
-        <div className="bg-white rounded-lg min-w-[180px] py-2 mt-0" style={{ boxShadow: "0 4px 20px rgba(43, 127, 255, 0.35)" }}>
+        <div className="bg-white dark:bg-slate-800 rounded-lg min-w-[180px] py-2 mt-0" style={{ boxShadow: "0 4px 20px rgba(43, 127, 255, 0.35)" }}>
           {item.links.map((link) => (
             <div key={link.href} className="relative group/item">
-              <span className="absolute left-2 top-3 bottom-3 w-0.5 bg-transparent group-hover/item:bg-blue-600" />
+              <span className="absolute left-2 top-3 bottom-3 w-0.5 bg-transparent group-hover/item:bg-blue-600 dark:group-hover/item:bg-blue-400" />
               <Link
                 href={link.href}
-                className="flex items-center px-4 py-2.5 text-sm text-gray-700 font-medium hover:text-blue-600"
+                className="flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 font-medium hover:text-blue-600 dark:hover:text-blue-400"
               >
                 {link.title}
               </Link>
@@ -74,7 +74,7 @@ function DropdownItem({ item }: { item: (typeof navItems)[0] }) {
 
 export default function InventoryNavbar() {
   return (
-    <div className="h-12 bg-white border-b border-gray-200 flex items-center px-5 shrink-0">
+    <div className="h-12 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 flex items-center px-5 shrink-0">
       <div className="flex items-center gap-3 mr-6">
         <Link
           href="/inventory"
@@ -83,7 +83,7 @@ export default function InventoryNavbar() {
         >
           Inventory
         </Link>
-        <span className="text-xs font-semibold" style={{ color: "#2B7FFF" }}>
+        <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">
           Inventory Management
         </span>
 
@@ -95,8 +95,8 @@ export default function InventoryNavbar() {
             i
           </span>
           <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:flex z-50 items-center">
-            <div className="w-2 h-2 bg-gray-800 rotate-45 -mr-1 flex-shrink-0" />
-            <div className="bg-gray-800 text-white text-sm rounded-lg px-4 py-3 text-center leading-snug w-80">
+            <div className="w-2 h-2 bg-gray-800 dark:bg-gray-700 rotate-45 -mr-1 flex-shrink-0" />
+            <div className="bg-gray-800 dark:bg-gray-700 text-white dark:text-gray-100 text-sm rounded-lg px-4 py-3 text-center leading-snug w-80">
               Manage products, categories, warehouses, and inventory across your organization
             </div>
           </div>

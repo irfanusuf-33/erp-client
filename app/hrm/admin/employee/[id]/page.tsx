@@ -1,9 +1,9 @@
-import React from 'react'
-
-const page = () => {
+export default function EmployeeDetailPage({ params }: { params: { id: string } }) {
   return (
-    <div>page</div>
-  )
+    <div className="p-6">
+      <h1 className="text-2xl font-bold">Employee Details</h1>
+      <p className="text-muted-foreground">Employee ID: {params.id}</p>
+      <p className="text-muted-foreground">Employee details coming soon...</p>
+    </div>
+  );
 }
-
-export default page
