@@ -132,7 +132,7 @@ export default function SocialFeedSection() {
       <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm">
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold flex-shrink-0">
-            YO
+            YOU
           </div>
           <div className="flex-1">
             <textarea

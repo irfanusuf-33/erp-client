@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { 
   Megaphone, BarChart3, ShoppingCart, Package, Users, 
   ShoppingBag, CheckSquare, TrendingUp, Activity, 
-  Award, Bell, Sparkles, ChevronDown
+  Award, Bell, Sparkles, ChevronDown, Globe
 } from 'lucide-react';
 
 export type DashboardTab = 
@@ -19,7 +19,8 @@ export type DashboardTab =
   | 'activity'
   | 'team'
   | 'insights'
-  | 'social';
+  | 'social'
+  | 'network';
 
 interface Tab {
   id: DashboardTab;
@@ -40,6 +41,7 @@ const tabs: Tab[] = [
   { id: 'team', label: 'Team', icon: <Award className="w-4 h-4" /> },
   { id: 'insights', label: 'Insights', icon: <Sparkles className="w-4 h-4" /> },
   { id: 'social', label: 'Social Feed', icon: <Bell className="w-4 h-4" /> },
+  { id: 'network', label: 'Network', icon: <Globe className="w-4 h-4" /> },
 ];
 
 interface DashboardTabsProps {

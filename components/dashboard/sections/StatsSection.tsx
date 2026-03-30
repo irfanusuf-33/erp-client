@@ -9,7 +9,7 @@ import KPICard from '@/components/dashboard/KPICard';
 import SalesChart from '@/components/dashboard/SalesChart';
 import CRMFunnel from '@/components/dashboard/CRMFunnel';
 import { Users, Shield, Package, Briefcase, DollarSign, Calendar, TrendingUp, UserCheck } from 'lucide-react';
-import { dashboardApi } from '@/lib/api/dashboard.api';
+import { useGlobalStore } from '@/store';
 
 const iconMap: Record<string, any> = {
   hrm: Users,
@@ -21,8 +21,8 @@ const iconMap: Record<string, any> = {
 };
 
 export default function StatsSection() {
+  const { getDashboardStats, dashboardData, dashboardLoading } = useGlobalStore();
   const [modules, setModules] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [width, setWidth] = useState(1200);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -41,7 +41,7 @@ export default function StatsSection() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const data = await dashboardApi.getDashboardStats();
+        const data = await getDashboardStats();
         const modulesWithIcons = data.modules.map(module => ({
           ...module,
           icon: iconMap[module.id] || Users
@@ -49,8 +49,6 @@ export default function StatsSection() {
         setModules(modulesWithIcons);
       } catch (error) {
         // Error loading dashboard data
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -74,7 +72,7 @@ export default function StatsSection() {
     { i: 'module-other', x: 8, y: 6.5, w: 4, h: 2.5, minW: 3, minH: 2.5, maxH: 3 },
   ];
 
-  if (loading) {
+  if (dashboardLoading) {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
