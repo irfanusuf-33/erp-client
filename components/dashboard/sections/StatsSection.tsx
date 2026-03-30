@@ -10,6 +10,7 @@ import SalesChart from '@/components/dashboard/SalesChart';
 import CRMFunnel from '@/components/dashboard/CRMFunnel';
 import { Users, Shield, Package, Briefcase, DollarSign, Calendar, TrendingUp, UserCheck } from 'lucide-react';
 import { useGlobalStore } from '@/store';
+import GlobalLoader from '@/components/shared/GlobalLoader';
 
 const iconMap: Record<string, any> = {
   hrm: Users,
@@ -74,16 +75,11 @@ export default function StatsSection() {
 
   if (dashboardLoading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Loading statistics...</p>
-        </div>
-      </div>
+     <GlobalLoader text="Statistics Loading....y"/>
     );
-  }
+  }else{
 
-  return (
+     return (
     <div>
       {isMobile ? (
         <div className="space-y-4">
@@ -144,4 +140,8 @@ export default function StatsSection() {
       )}
     </div>
   );
+
+  }
+
+ 
 }
