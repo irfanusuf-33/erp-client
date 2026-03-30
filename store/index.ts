@@ -3,8 +3,9 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import { AuthSlice, createAuthSlice } from "./slices/auth.slice";
 import { createIamSlice, IamSlice } from "./slices/iam.slice";
 import { createInventorySlice, InventorySlice } from "./slices/inventory.slice";
+import { createTicketingSlice, TicketingSlice } from "./slices/ticketing.slice";
 
-export type AppStoreSlices = AuthSlice & IamSlice & InventorySlice & {
+export type AppStoreSlices = AuthSlice & IamSlice & InventorySlice & TicketingSlice & {
     hasHydrated: boolean;
     setHasHydrated: (state: boolean) => void;
 };
@@ -15,6 +16,7 @@ export const useGlobalStore = create<AppStoreSlices>()(
             ...createAuthSlice(...a),
             ...createIamSlice(...a),
             ...createInventorySlice(...a),
+            ...createTicketingSlice(...a),
 
             hasHydrated: false,
             setHasHydrated: (state: boolean) => a[0]({ hasHydrated: state }),
@@ -28,6 +30,12 @@ export const useGlobalStore = create<AppStoreSlices>()(
                 token: state.token,
                 isAuthenticated: state.isAuthenticated,
             }),
+            onRehydrateStorage: () => (state) => {
+                // mark hydration as complete when rehydrate finishes
+                useGlobalStore.setState({ hasHydrated: true });
+                // optional: debug
+                // console.log("persist rehydrated", state);
+            },
         }
     )
 );
