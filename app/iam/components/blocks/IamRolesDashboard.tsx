@@ -45,7 +45,7 @@ export default function IamRolesDashboard({ searchTerm = "" }: { searchTerm: str
           <TableRow>
             <TableCell sx={{ width: 32, borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }} />
             <TableCell colSpan={expandedRole ? 1 : 2} sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>Policy Name</TableCell>
-            {expandedRole && <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb" }}>Description</TableCell>}
+            {expandedRole && <TableCell sx={{ fontWeight: 500, fontSize: "0.875rem", color: "#4b5563", borderBottom: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>Description</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
