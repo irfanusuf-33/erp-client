@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 export default function CreateEmployeePage() {
   return (
     <div className="p-6">
@@ -6,3 +7,16 @@ export default function CreateEmployeePage() {
     </div>
   );
 }
+=======
+"use client";
+
+import EmployeeCreationForm from "./EmployeeCreationForm";
+
+export default function CreateEmployeePage() {
+  return (
+    <div className="p-6">
+      <EmployeeCreationForm />
+    </div>
+  );
+}
+>>>>>>> Stashed changes

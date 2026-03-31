@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 export default function EmployeeDetailPage({ params }: { params: { id: string } }) {
   return (
     <div className="p-6">
@@ -7,3 +8,5 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
     </div>
   );
 }
+=======
+>>>>>>> Stashed changes
