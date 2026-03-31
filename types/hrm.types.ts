@@ -71,6 +71,19 @@ export interface Employee {
   disabled?: boolean;
 }
 
+export interface EmployeeListItem {
+  _id: string;
+  personalDetails: {
+    firstName: string;
+    lastName: string;
+  };
+  organizationalDetails: {
+    employeeId: string;
+    departmentName: string;
+    lineManager: string;
+  };
+}
+
 export interface EmployeeDetails extends Employee {
   personalDetails: {
     dateOfBirth: string;
@@ -212,4 +225,15 @@ export interface Attendance {
   breaks: string[];
   status: "In a meeting" | "On call" | "Working" | "On Break";
   arrival: "On Time" | "Late" | "Early Out" | "NA";  // ← added "Early Out"
+}
+// types/hrm.types.ts — add this
+export interface ApiEmployee {
+  employeeId: string;
+  employeeName: string;
+  date: string;
+  checkIn: string | null;
+  checkOut: string | null;
+  workHours: string;
+  breaks: { start?: string; end?: string; label?: string }[];
+  tasks: string[];
 }
