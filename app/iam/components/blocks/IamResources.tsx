@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import { User, Users, FileText, Shield } from "lucide-react";
 import type { IamResourcesProps } from "@/types/iam.types";

@@ -2,17 +2,13 @@
 import { Fragment, useEffect, useState } from "react";
 import { ChevronRight, ChevronUp } from "lucide-react";
 import { useGlobalStore } from "@/store";
+import type { RolesTableProps } from "@/types/iam.types";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-
-type RolesTableProps = {
-  selectedPermissions: string[];
-  onTogglePermission: (id: string) => void;
-};
 
 export default function RolesTable({ selectedPermissions, onTogglePermission }: RolesTableProps) {
   const [expandedRole, setExpandedRole] = useState<string | null>(null);

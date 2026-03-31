@@ -2,6 +2,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { Plus, Minus } from "lucide-react";
 import { useGlobalStore } from "@/store";
+import type { IamUserRolesDashboardProps } from "@/types/iam.types";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,16 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-interface Props {
-  searchTerm?: string;
-  selectedRoles?: string[];
-  onToggleRole?: (roleId: string) => void;
-  selectedPermissions?: string[];
-  onTogglePermission?: (permId: string) => void;
-  selectionEnabled?: boolean;
-}
-
-export default function IamUserRolesDashboard({ searchTerm = "", selectedRoles, onToggleRole, selectedPermissions, onTogglePermission, selectionEnabled = false }: Props) {
+export default function IamUserRolesDashboard({ searchTerm = "", selectedRoles, onToggleRole, selectedPermissions, onTogglePermission, selectionEnabled = false }: IamUserRolesDashboardProps) {
   const [expandedRole, setExpandedRole] = useState<string | null>(null);
   const { roles: storeRoles, fetchRoles, policies: storePolicies, fetchPolicies } = useGlobalStore();
   const [loading, setLoading] = useState(false);

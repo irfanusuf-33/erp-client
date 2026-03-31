@@ -213,6 +213,15 @@ export interface EditUserPoliciesModalProps {
   loader: boolean;
 }
 
+export interface Template {
+  id: string;
+  name: string;
+  subject: string;
+  content: string;
+  header: string;
+  footer: string;
+}
+
 export interface SendBulkEmailModalProps {
   isOpen: boolean;
   onClose: () => void;

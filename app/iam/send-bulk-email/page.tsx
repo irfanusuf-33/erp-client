@@ -7,12 +7,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import dynamic from "next/dynamic";
+import type { Template } from "@/types/iam.types";
 
 const CKEditorWrapper = dynamic(() => import("../components/CKEditorWrapper"), { ssr: false });
-
-interface Template {
-  id: string; name: string; subject: string; content: string; header: string; footer: string;
-}
 
 function SendBulkEmail() {
   const router = useRouter();
