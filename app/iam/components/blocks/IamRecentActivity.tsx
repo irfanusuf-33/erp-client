@@ -1,4 +1,3 @@
-"use client";
 import { Circle, GripVertical } from "lucide-react";
 
 const activities = [
