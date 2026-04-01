@@ -38,3 +38,14 @@ export interface AddClient {
     //notes
     notes:string
 }
+
+export interface AddGroupType {
+    name: string;
+    description: string;
+}
+
+export interface AddEnquiryType {
+    enquiryDate: string,
+    source: string,
+    note: string,
+}

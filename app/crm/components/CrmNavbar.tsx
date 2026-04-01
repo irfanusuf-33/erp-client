@@ -11,6 +11,9 @@ const navItems = [
     links: [
       { title: "Add Client", href: "/crm/add-client" },
       { title: "Manage Client", href: "/crm/manage-clients" },
+      { title: "Add Enquiry", href: "/crm/add-enquiry" },
+      { title: "View Enquiry", href: "/crm/view-enquiry" },
+      { title: "Manage Tickets", href: "/crm/manage-tickets" },
     ],
   },
   {
