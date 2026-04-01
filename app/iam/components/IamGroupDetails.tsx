@@ -9,7 +9,7 @@ import EditUserPoliciesModal from "./modals/EditUserPoliciesModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import BaseTable from "@/components/ui/table/BaseTable";
+import BaseTable from "@/components/shared/BaseTable";
 import { showSuccess, showError } from "@/lib/toast";
 import type { MRT_ColumnDef } from "material-react-table";
 import Table from "@mui/material/Table";

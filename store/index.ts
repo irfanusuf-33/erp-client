@@ -15,7 +15,8 @@ export type AppStoreSlices =
   InventorySlice &
   HrmSlice &
   DashboardSlice &
-  CalendarSlice & {
+  CalendarSlice &
+  TicketingSlice & {
     hasHydrated: boolean;
     setHasHydrated: (state: boolean) => void;
   };
