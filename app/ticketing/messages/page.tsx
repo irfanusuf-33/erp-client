@@ -164,15 +164,24 @@ function TicketingMessages() {
   if (!canAccessMessagePool) return null;
 
   return (
-    <div className="ticketing-messages-container">
-        <div className="ticketing-messages-header">
-            <div className="header">
-                <div className="header-text-container">
-                    <h2 className="header-title">Ticket pool</h2>
-                    <p className="header-description">The Ticket Pool provides a centralized view of all incoming support tickets from various channels such as email, web forms, chat, and system integrations. It allows support teams to efficiently review tickets, assign them to agents, or manage them to ensure timely and organized issue resolution.</p>
-                </div>
-            </div>
+    <div className="px-[2.25rem]">
+      <div className="py-[2.25rem]">
+        <div className="border border-[#d1d5db] rounded-[0.5rem] px-[0.75rem] py-[1.25rem] flex justify-between items-center">
+          <div className="flex flex-col gap-[1rem]">
+            <h2 className="text-[1.5rem] font-semibold text-[#0F141A]">
+              Ticket pool
+            </h2>
+            <p className="text-[0.875rem] text-[#424650]">
+              The Ticket Pool provides a centralized view of all incoming support
+              tickets from various channels such as email, web forms, chat, and
+              system integrations. It allows support teams to efficiently review
+              tickets, assign them to agents, or manage them to ensure timely and
+              organized issue resolution.
+            </p>
+          </div>
         </div>
+      </div>
+
       <TicketingMessagesTable />
     </div>
   );

@@ -180,12 +180,12 @@ export default function ModuleCard({ module }: ModuleCardProps) {
           </div>
           <div className="flex-1 min-w-0">
             <CardTitle className="text-base font-semibold leading-tight">{module.title}</CardTitle>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+            <p className="text-[10px] text-slate-500 dark:text-zinc-400 mt-0.5 line-clamp-1">
               {descriptions[module.id] || module.description}
             </p>
           </div>
         </div>
-        <div className="drag-handle cursor-move p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded flex-shrink-0">
+        <div className="drag-handle cursor-move p-1 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded flex-shrink-0">
           <GripVertical className="w-4 h-4 text-slate-400" />
         </div>
       </CardHeader>
@@ -200,7 +200,7 @@ export default function ModuleCard({ module }: ModuleCardProps) {
         <div className="grid grid-cols-3 gap-1.5 pt-2 border-t">
           {Object.entries(module.stats).map(([key, value]) => (
             <div key={key} className="text-center px-1">
-              <p className="text-[9px] text-slate-500 dark:text-slate-400 capitalize leading-tight">
+              <p className="text-[9px] text-slate-500 dark:text-zinc-400 capitalize leading-tight">
                 {key.replace(/([A-Z])/g, ' $1').trim()}
               </p>
               <p className="text-xs font-semibold mt-0.5 truncate" style={{ color: module.color }}>

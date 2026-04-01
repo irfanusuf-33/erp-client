@@ -6,7 +6,7 @@ import { Info, XCircle, CheckCircle } from "lucide-react";
 import { useGlobalStore } from "@/store";
 import EditGroupModal from "../components/modals/EditGroupModal";
 import BaseTable from "@/components/shared/BaseTable";
-import type { EditGroupModalProps } from "@/types/iam.types";
+import type { EditGroupModalProps, IamGroupsProps } from "@/types/iam.types";
 
 type PaginationState = { pageIndex: number; pageSize: number };
 
@@ -41,12 +41,6 @@ function PoliciesCell({ policies }: { policies: string[] }) {
       )}
     </>
   );
-}
-
-interface IamGroupsProps {
-  selectionMode?: boolean;
-  selectedGroups?: string[];
-  onToggleGroup?: (groupName: string) => void;
 }
 
 export default function GroupsPage({ selectionMode = false, selectedGroups = [], onToggleGroup }: IamGroupsProps) {

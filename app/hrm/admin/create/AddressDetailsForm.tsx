@@ -21,6 +21,7 @@ interface AddressFormData {
 interface AddressDetailsFormProps {
   formData: AddressFormData;
   onInputChange: (field: keyof AddressFormData, value: string) => void;
+  errors?: Record<string, string>;
 }
 
 export default function AddressDetailsForm({

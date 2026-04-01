@@ -472,226 +472,254 @@ export default function TicketingDepartmentDashboard() {
   }
 
   return (
-    <div className="ticketing-wireframe">
-      <div className="wireframe-filter-row">
-        <div className="department-select-wrap">
-          <button type="button" className="department-select" disabled>
-            {selectedDepartment}
-          </button>
+<div className="pt-[0.875rem] px-[1.25rem] pb-[1.5rem] bg-[#F7FAFC]">
+
+  {/* Filter Row */}
+  <div className="mb-[0.875rem]">
+    <div className="relative">
+      <button
+        type="button"
+        disabled
+        className="border border-[#d1d5db] rounded-[0.4375rem] bg-white text-[#0F141A] min-w-[11.25rem] h-[2.625rem] px-[0.75rem] text-[0.875rem] inline-flex items-center gap-[0.5rem]"
+      >
+        {selectedDepartment}
+      </button>
+    </div>
+  </div>
+
+  {/* Summary Grid */}
+  <div className="grid gap-[0.5rem] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 mb-[0.5rem]">
+    {summaryTiles.map((tile) => (
+      <div
+        key={tile.label}
+        className={`border border-[#d1d5db] border-l-[0.25rem] rounded-[0.5rem] px-[0.75rem] py-[0.625rem] min-h-[6.875rem] bg-white ${
+          tile.colorClass === "summary-blue"
+            ? "border-l-[#3259d6]"
+            : tile.colorClass === "summary-red"
+            ? "border-l-[#f44747]"
+            : tile.colorClass === "summary-amber"
+            ? "border-l-[#d99a33]"
+            : tile.colorClass === "summary-green"
+            ? "border-l-[#5da360]"
+            : tile.colorClass === "summary-yellow"
+            ? "border-l-[#f1ba22]"
+            : "border-l-[#5bc7ca]"
+        }`}
+      >
+        <div className="flex items-center justify-between text-[#929292] text-[0.875rem]">
+          <span>{tile.label}</span>
+
+          <span
+            className={`w-[1.375rem] h-[1.375rem] rounded-full flex items-center justify-center ${
+              tile.colorClass === "summary-blue"
+                ? "bg-[rgba(50,89,214,0.14)] text-[#3259d6]"
+                : tile.colorClass === "summary-red"
+                ? "bg-[rgba(244,71,71,0.13)] text-[#f44747]"
+                : tile.colorClass === "summary-amber"
+                ? "bg-[rgba(217,154,51,0.15)] text-[#d99a33]"
+                : tile.colorClass === "summary-green"
+                ? "bg-[rgba(93,163,96,0.17)] text-[#5da360]"
+                : tile.colorClass === "summary-yellow"
+                ? "bg-[rgba(241,186,34,0.15)] text-[#f1ba22]"
+                : "bg-[rgba(91,199,202,0.15)] text-[#5bc7ca]"
+            }`}
+          >
+            {tile.icon}
+          </span>
+        </div>
+
+        <div className="mt-[0.25rem] text-[1.375rem] text-[#0F141A] font-semibold">
+          {tile.value.toLocaleString()}
+        </div>
+
+        <div className="mt-[0.625rem] text-[#3B8AEC] text-[0.75rem]">
+          {tile.hint}
         </div>
       </div>
+    ))}
+  </div>
 
-      <div className="wireframe-summary-grid">
-        {summaryTiles.map((tile) => (
-          <div className={`wireframe-summary-card ${tile.colorClass}`} key={tile.label}>
-            <div className="card-header-row">
-              <span>{tile.label}</span>
-              <span className="tile-icon-wrap">{tile.icon}</span>
+  {/* Main Grid */}
+  <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.85fr] gap-[0.5rem] mb-[0.5rem]">
+
+    {/* Priority Panel */}
+    <section className="border border-[#d1d5db] rounded-[0.5rem] bg-white overflow-hidden">
+      <header className="h-[2.75rem] border-b border-[#d1d5db] px-[0.875rem] flex items-center text-[1.25rem] font-medium text-[#0F141A]">
+        Priority Metrics Overview
+      </header>
+
+      <div className="p-[0.875rem] flex items-center justify-center gap-[1.375rem] min-h-[17.5rem]">
+
+        <div className="relative w-[11.625rem] h-[11.625rem]">
+          <div
+            className="w-full h-full rounded-full relative"
+            style={priorityDonutStyle}
+          >
+            <div className="absolute w-[6.875rem] h-[6.875rem] rounded-full bg-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+
+            <div className="absolute z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+              <div className="text-[1.875rem] font-medium text-[#0F141A] leading-none">
+                {totalTickets}
+              </div>
+              <div className="text-[0.8125rem] text-[#424650] mt-[0.25rem]">
+                Total Tickets
+              </div>
             </div>
-            <div className="metric-value">{tile.value.toLocaleString()}</div>
-            <div className="metric-hint">{tile.hint}</div>
+
+            <span className="absolute w-[2.25rem] h-[2.25rem] rounded-full border border-[#d1d5db] bg-white text-[#424650] text-[0.625rem] flex items-center justify-center right-[-0.75rem] top-[6.125rem]">
+              {prioritySplit[1].value}%
+            </span>
+
+            <span className="absolute w-[2.25rem] h-[2.25rem] rounded-full border border-[#d1d5db] bg-white text-[#424650] text-[0.625rem] flex items-center justify-center top-[-0.5rem] left-1/2 -translate-x-1/2">
+              {prioritySplit[0].value}%
+            </span>
+
+            <span className="absolute w-[2.25rem] h-[2.25rem] rounded-full border border-[#d1d5db] bg-white text-[#424650] text-[0.625rem] flex items-center justify-center left-[-0.75rem] top-[6.125rem]">
+              {prioritySplit[2].value}%
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[0.875rem]">
+          {prioritySplit.map((item) => (
+            <div key={item.label} className="flex items-center gap-[0.5rem] text-[0.875rem] text-[#0F141A]">
+              <span
+                className={`w-[0.6875rem] h-[0.6875rem] rounded-full ${
+                  item.className === "legend-high"
+                    ? "bg-[#f44747]"
+                    : item.className === "legend-low"
+                    ? "bg-[#3fa652]"
+                    : "bg-[#dca53d]"
+                }`}
+              />
+              <span>{item.label}</span>
+              <span className="ml-auto text-[#3B8AEC] font-semibold">
+                {item.count} ({item.value}%)
+              </span>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+
+    {/* Agent Performance */}
+    <section className="border border-[#d1d5db] rounded-[0.5rem] bg-white overflow-hidden">
+      <header className="h-[2.75rem] border-b border-[#d1d5db] px-[0.875rem] flex items-center text-[1.25rem] font-medium text-[#0F141A]">
+        Agent Performance
+      </header>
+
+      <div className="px-[0.875rem] pr-[1rem] py-[0.875rem]">
+        <div className="grid grid-cols-[1.35fr_0.9fr_1.9fr_0.9fr] gap-[0.75rem] text-[#929292] text-[0.8125rem] mb-[0.625rem]">
+          <span>Agent Name</span>
+          <span>Assigned Tickets</span>
+          <span>Resolution Rate</span>
+          <span>Action</span>
+        </div>
+
+        {filteredAgentRows.length > 0 ? (
+          filteredAgentRows.map((agent, index) => (
+            <div key={index} className="grid grid-cols-[1.35fr_0.9fr_1.9fr_0.9fr] gap-[0.75rem] h-[2.125rem] items-center pr-[1rem]">
+              <div className="text-[#0F141A] text-[0.8125rem] font-medium">{agent.name}</div>
+              <div className="text-[#0F141A] text-[0.8125rem]">{agent.assignedTickets}</div>
+
+              <div className="relative w-full h-[0.5rem] bg-[#f3ebde] rounded-[6.25rem]">
+                <span className="block h-full bg-[#cf9332] rounded-[6.25rem]" style={{ width: `${agent.resolutionRate}%` }} />
+                <span className="absolute right-[-2rem] top-1/2 -translate-y-1/2 text-[0.75rem]">{agent.resolutionRate}%</span>
+              </div>
+
+              <button className="text-[#2d57d8] text-[0.75rem] flex items-center gap-[0.25rem]">
+                View Details <OpenInNewOutlinedIcon className="text-[0.75rem]" />
+              </button>
+            </div>
+          ))
+        ) : (
+          <div className="text-[0.8125rem] text-[#0F141A]">No agents found</div>
+        )}
+      </div>
+    </section>
+
+  </div>
+
+  {/* Bottom Section */}
+  <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.85fr] gap-[0.5rem]">
+
+    {/* Source */}
+    <section className="border border-[#d1d5db] rounded-[0.5rem] bg-white overflow-hidden">
+      <header className="h-[2.75rem] border-b border-[#d1d5db] px-[0.875rem] flex items-center text-[1.25rem] font-medium">
+        Tickets by Source
+      </header>
+
+      <div className="p-[0.875rem] flex flex-col gap-[1rem]">
+        {sourceBreakdown.map((item, index) => (
+          <div key={index} className="grid grid-cols-[5rem_1fr_2.5rem] items-center gap-[0.625rem]">
+            <span className="text-[0.875rem]">{item.source}</span>
+
+            <div className="w-full h-[0.75rem] rounded-full">
+              <span className="block h-full rounded-full bg-[#4f6fe0]" style={{ width: `${item.percent}%` }} />
+            </div>
+
+            <span className="text-[0.75rem] font-medium">{item.total}</span>
           </div>
         ))}
       </div>
+    </section>
 
-      <div className="wireframe-main-grid">
-        <section className="wireframe-panel">
-          <header className="wireframe-panel-header">Priority Metrics Overview</header>
-          <div className="priority-content">
-            <div className="priority-donut-wrap">
-              <div className="priority-donut" style={priorityDonutStyle}>
-                <div className="donut-label">
-                  <div className="donut-main">{totalTickets}</div>
-                  <div className="donut-sub">Total Tickets</div>
-                </div>
-                <span className="donut-badge donut-low">{prioritySplit[1].value}%</span>
-                <span className="donut-badge donut-high">{prioritySplit[0].value}%</span>
-                <span className="donut-badge donut-medium">{prioritySplit[2].value}%</span>
-              </div>
-            </div>
-            <div className="priority-legend">
-              {prioritySplit.map((item) => (
-                <div className="legend-item" key={item.label}>
-                  <span className={`legend-dot ${item.className}`} />
-                  <span>{item.label}</span>
-                  <span className="legend-value">{item.count} ({item.value}%)</span>
-                </div>
+    {/* Tickets Table */}
+    <section className="border border-[#d1d5db] rounded-[0.5rem] bg-white overflow-hidden">
+      <header className="h-[2.75rem] border-b border-[#d1d5db] px-[0.875rem] flex items-center justify-between text-[1.25rem]">
+        <span>Tickets</span>
+
+        <div className="flex items-center gap-[0.5rem]">
+          <button className="bg-[#2b57df] text-white h-[1.75rem] px-[0.625rem] rounded-[0.375rem] text-[0.75rem] flex items-center gap-[0.25rem]">
+            <AddIcon className="text-[0.875rem]" /> Add
+          </button>
+          <button className="border border-[#2b57df] text-[#2b57df] h-[1.75rem] px-[0.625rem] rounded-[0.375rem] text-[0.75rem]">
+            View All
+          </button>
+        </div>
+      </header>
+
+      <div className="overflow-x-auto pt-[0.625rem] pb-[0.75rem]">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr>
+              {["Ticket ID", "Priority", "Status", "Assigned to", "Due Date"].map((h) => (
+                <th key={h} className="text-[#929292] text-[0.8125rem] font-medium px-[0.875rem] py-[0.5rem] border-b border-[#e5e7eb] text-left">
+                  {h}
+                </th>
               ))}
-            </div>
-          </div>
-        </section>
-        <section className="wireframe-panel">
-          <header className="wireframe-panel-header">Agent Performance</header>
-          <div className="department-table">
-            <div className="department-head">
-              <span>Agent Name</span>
-              <span>Assigned Tickets</span>
-              <span>Resolution Rate</span>
-              <span>Action</span>
-            </div>
-            {filteredAgentRows.length > 0 ? (
-              filteredAgentRows.map((agent, index) => (
-                <div className="department-row" key={`${agent.name}-${index}`}>
-                  <div className="department-name">{agent.name}</div>
-                  <div className="department-total">{agent.assignedTickets}</div>
-                  <div className="progress-wrap">
-                    <span className="progress-fill" style={{ width: `${agent.resolutionRate}%` }} />
-                    <span className="progress-text">{agent.resolutionRate}%</span>
-                  </div>
-                  <button
-                    type="button"
-                    className="view-link"
-                    onClick={() => {
-                      const query = new URLSearchParams({
-                        agentId: agent.agentId ?? "",
-                        department: selectedDepartment,
-                        name: agent.name,
-                        assignedTickets: String(agent.assignedTickets),
-                        resolutionRate: String(agent.resolutionRate),
-                        designation: (agent as { designation?: string }).designation ?? "Support Executive",
-                      });
+            </tr>
+          </thead>
 
-                      router.push(`/ticketing/agent-performance?${query.toString()}`);
-                    }}
+          <tbody>
+            {ticketRows.map((row, idx) => (
+              <tr key={idx}>
+                <td className="px-[0.875rem] py-[0.5rem] border-b">{row.id}</td>
+                <td className="px-[0.875rem] py-[0.5rem] border-b">{row.priority}</td>
+                <td className="px-[0.875rem] py-[0.5rem] border-b">
+                  <span
+                    className={`inline-flex items-center justify-center min-w-[5.25rem] h-[1.5rem] rounded-[0.5rem] text-[0.75rem] font-medium ${
+                      row.statusClass === "status-open"
+                        ? "bg-[#dcfce7] text-[#22a447]"
+                        : row.statusClass === "status-pending"
+                        ? "bg-[#fef3c7] text-[#d19023]"
+                        : "bg-[#fee2e2] text-[#ef4444]"
+                    }`}
                   >
-                    View Details
-                    <OpenInNewOutlinedIcon className="view-link-icon" />
-                  </button>
-                </div>
-              ))
-            ) : (
-              <div className="department-row">
-                <div className="department-name">No agents found</div>
-              </div>
-            )}
-          </div>
-        </section>
-      </div>
-
-      <div className="wireframe-middle-grid single-panel">
-        <section className="wireframe-panel">
-          <header className="wireframe-panel-header panel-actions-header">
-            <span>Performance Trends</span>
-            <label className="year-btn">
-              <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(Number(e.target.value))}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  outline: "none",
-                  cursor: "pointer",
-                  appearance: "none",
-                  WebkitAppearance: "none",
-                  MozAppearance: "none",
-                  paddingRight: "14px",
-                }}
-              >
-                {yearOptions.map((year) => (
-                  <option key={year} value={year}>{year}</option>
-                ))}
-              </select>
-              <KeyboardArrowDownIcon className="year-btn-icon" />
-            </label>
-          </header>
-          <div className="trends-panel">
-            <div className="trends-legend">
-              <span className="legend-created">Created</span>
-              <span className="legend-resolved">Resolved</span>
-            </div>
-            <div className="trends-chart">
-              {performanceTrend.length > 0 ? (
-                <svg viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%">
-                  <polyline
-                    points={trendPoints.created}
-                    fill="none"
-                    stroke="#2f63ff"
-                    strokeWidth="1.8"
-                    vectorEffect="non-scaling-stroke"
-                  />
-                  <polyline
-                    points={trendPoints.resolved}
-                    fill="none"
-                    stroke="#dca53d"
-                    strokeWidth="1.8"
-                    vectorEffect="non-scaling-stroke"
-                  />
-                </svg>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-sm text-gray-400">
-                  No trend data
-                </div>
-              )}
-            </div>
-            <div className="month-axis">
-              {performanceTrend.map((item) => (
-                <span key={item.date}>{item.date.slice(5)}</span>
-              ))}
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div className="wireframe-bottom-grid">
-        <section className="wireframe-panel">
-          <header className="wireframe-panel-header">Tickets by Source</header>
-          <div className="source-list">
-            {sourceBreakdown.map((item, index) => (
-              <div className="source-row" key={`${item.source}-${index}`}>
-                <span className="source-name">{item.source}</span>
-                <div className="source-bar">
-                  <span className={`source-fill ${item.colorClass}`} style={{ width: `${item.percent}%` }} />
-                </div>
-                <span className="source-total">{item.total}</span>
-              </div>
+                    {row.status}
+                  </span>
+                </td>
+                <td className="px-[0.875rem] py-[0.5rem] border-b">{row.assignedTo}</td>
+                <td className="px-[0.875rem] py-[0.5rem] border-b">{row.dueDate}</td>
+              </tr>
             ))}
-          </div>
-        </section>
-
-        <section className="wireframe-panel">
-          <header className="wireframe-panel-header panel-actions-header">
-            <span>Tickets</span>
-            <div className="panel-actions">
-              <button type="button" className="mini-btn" onClick={() => router.push("/ticketing/create")}>
-                <AddIcon className="mini-btn-icon" /> Add New Ticket
-              </button>
-              <button type="button" className="text-btn" onClick={() => router.push("/ticketing/inbox")}>View All</button>
-            </div>
-          </header>
-          <div className="tickets-table-wrap">
-            <table className="tickets-table">
-              <thead>
-                <tr>
-                  <th>Ticket ID</th>
-                  <th>Priority</th>
-                  <th>Status</th>
-                  <th>Assigned to</th>
-                  <th>Due Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ticketRows.length > 0 ? (
-                  ticketRows.map((row, idx) => (
-                    <tr key={`${row.id}-${idx}`}>
-                      <td>{row.id}</td>
-                      <td>{row.priority}</td>
-                      <td>
-                        <span className={`status-pill ${row.statusClass}`}>{row.status}</span>
-                      </td>
-                      <td>{row.assignedTo}</td>
-                      <td>{row.dueDate}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={5}>No tickets found</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
+          </tbody>
+        </table>
       </div>
-    </div>
+    </section>
+
+  </div>
+</div>
   );
 }

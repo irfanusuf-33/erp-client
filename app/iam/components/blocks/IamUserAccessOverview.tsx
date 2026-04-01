@@ -1,4 +1,3 @@
-"use client";
 import { GripVertical } from "lucide-react";
 import type { IamUserAccessOverviewProps } from "@/types/iam.types";
 

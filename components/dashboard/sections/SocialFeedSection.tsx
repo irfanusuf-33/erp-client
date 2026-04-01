@@ -129,7 +129,7 @@ export default function SocialFeedSection() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Create Post Card */}
-      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm">
+      <div className="bg-white dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 p-5 shadow-sm">
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold flex-shrink-0">
             YOU
@@ -139,16 +139,16 @@ export default function SocialFeedSection() {
               value={newPost}
               onChange={(e) => setNewPost(e.target.value)}
               placeholder="Share an update with your team..."
-              className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 border border-slate-200 dark:border-zinc-800 rounded-lg bg-slate-50 dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
               rows={3}
             />
             <div className="flex items-center justify-between mt-3">
               <div className="flex items-center gap-2">
-                <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
-                  <Image className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                <button className="p-2 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-lg transition-colors">
+                  <Image className="w-5 h-5 text-slate-600 dark:text-zinc-400" />
                 </button>
-                <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
-                  <Smile className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                <button className="p-2 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-lg transition-colors">
+                  <Smile className="w-5 h-5 text-slate-600 dark:text-zinc-400" />
                 </button>
               </div>
               <button
@@ -169,7 +169,7 @@ export default function SocialFeedSection() {
         {postList.map((post) => (
           <div
             key={post.id}
-            className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow"
+            className="bg-white dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow"
           >
             {/* Post Header */}
             <div className="p-5 pb-3">
@@ -179,15 +179,15 @@ export default function SocialFeedSection() {
                     {post.author.avatar}
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">
                       {post.author.name}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-zinc-400">
                       {post.author.role} • {post.timestamp}
                     </p>
                   </div>
                 </div>
-                <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                <button className="p-2 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-lg transition-colors">
                   <MoreHorizontal className="w-5 h-5 text-slate-400" />
                 </button>
               </div>
@@ -195,7 +195,7 @@ export default function SocialFeedSection() {
 
             {/* Post Content */}
             <div className="px-5 pb-3">
-              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
+              <p className="text-sm text-slate-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
                 {post.content}
               </p>
             </div>
@@ -212,8 +212,8 @@ export default function SocialFeedSection() {
             )}
 
             {/* Post Stats */}
-            <div className="px-5 py-2 border-t border-b border-slate-100 dark:border-slate-700">
-              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <div className="px-5 py-2 border-t border-b border-slate-100 dark:border-zinc-800">
+              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-zinc-400">
                 <div className="flex items-center gap-1">
                   <ThumbsUp className="w-3.5 h-3.5 text-blue-500" />
                   <span>{post.likes} likes</span>
@@ -232,17 +232,17 @@ export default function SocialFeedSection() {
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
                   post.liked
                     ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    : 'text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800'
                 }`}
               >
                 <Heart className={`w-5 h-5 ${post.liked ? 'fill-current' : ''}`} />
                 <span className="text-sm font-medium">Like</span>
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors">
                 <MessageCircle className="w-5 h-5" />
                 <span className="text-sm font-medium">Comment</span>
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors">
                 <Share2 className="w-5 h-5" />
                 <span className="text-sm font-medium">Share</span>
               </button>

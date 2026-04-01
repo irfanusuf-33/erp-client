@@ -46,33 +46,41 @@ const TicketList = ({ tickets, selectedTicketId, onSelect, loading }: TicketList
   }, [tickets, searchTerm, statusFilter, priorityFilter]);
 
   return (
-    <div className="ticketing-item ticket-list">
-      <div className="ticket-list-header">
-        <div className="search-wrapper">
-          <SearchIcon className="search-icon" fontSize="small" />
+    <div className="border-r border-[#d8dbe2] bg-[#f4f5f7] h-full min-h-0 overflow-hidden flex flex-col">
+      
+      {/* HEADER */}
+      <div className="p-[0.625rem] border-b border-[#d8dbe2]">
+        
+        {/* SEARCH */}
+        <div className="flex items-center gap-2 bg-white border border-[#c8ccd6] rounded-lg px-[0.625rem]">
+          <SearchIcon className="text-[#979ba6]" fontSize="small" />
+
           <input
             type="text"
             placeholder="Search Tickets...."
-            className="search-tickets"
+            className="border-0 bg-transparent h-[2.125rem] w-full outline-none text-[0.75rem]"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+
           <button
             type="button"
-            className="filter-btn"
-            aria-label="Filter tickets"
             onClick={() => setShowFilters((prev) => !prev)}
+            className="text-[#2563eb] flex items-center"
           >
             <FilterListIcon fontSize="small" />
           </button>
         </div>
+
+        {/* FILTERS */}
         {showFilters && (
-          <div className="filters-row">
-            <div className="filter-select">
+          <div className="flex flex-wrap gap-2 mt-[0.625rem]">
+            
+            <div className="flex items-center gap-[0.125rem] h-[1.625rem] px-[0.625rem] bg-white border border-[#c8ccd6] rounded-md text-[0.75rem] text-[#363a43]">
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                aria-label="Filter by status"
+                className="bg-transparent outline-none"
               >
                 <option value="all">All Status</option>
                 <option value="open">Open</option>
@@ -80,11 +88,12 @@ const TicketList = ({ tickets, selectedTicketId, onSelect, loading }: TicketList
                 <option value="closed">Closed</option>
               </select>
             </div>
-            <div className="filter-select">
+
+            <div className="flex items-center gap-[0.125rem] h-[1.625rem] px-[0.625rem] bg-white border border-[#c8ccd6] rounded-md text-[0.75rem] text-[#363a43]">
               <select
                 value={priorityFilter}
                 onChange={(e) => setPriorityFilter(e.target.value)}
-                aria-label="Filter by priority"
+                className="bg-transparent outline-none"
               >
                 <option value="all">All Priority</option>
                 <option value="high">High</option>
@@ -92,52 +101,83 @@ const TicketList = ({ tickets, selectedTicketId, onSelect, loading }: TicketList
                 <option value="low">Low</option>
               </select>
             </div>
-            <div className="filter-select">
+
+            <div className="flex items-center gap-1 h-[1.625rem] px-[0.625rem] bg-white border border-[#c8ccd6] rounded-md text-[0.75rem] text-[#363a43]">
               <span>All Departments</span>
               <ExpandMoreIcon fontSize="small" />
             </div>
+
           </div>
         )}
       </div>
-      <div className="ticket-list-content-wrapper">
+
+      {/* CONTENT */}
+      <div className="flex-1 overflow-auto">
+        
         {loading ? (
-          <div className="chat-loader-container">
-            <div className="chat-loader"></div>
+          <div className="flex justify-center py-4">
+            <div className="w-5 h-5 border-2 border-[#c7ccda] border-t-[#5a5f6e] rounded-full animate-spin" />
           </div>
         ) : filteredTickets.length === 0 ? (
-          <div className="ticket-empty-state">
-            <SearchOffOutlinedIcon className="ticket-empty-icon" />
-            <p className="ticket-empty-title">No Tickets found</p>
-            <p className="ticket-empty-text">Lorem ipsum dolor sit amet, consectet</p>
+          <div className="h-full min-h-[26.25rem] flex flex-col items-center justify-center text-center text-[#7b808a] p-6">
+            <SearchOffOutlinedIcon className="text-[4.75rem] text-[#b5b8bd]" />
+            <p className="mt-3 font-semibold text-[#1f2228]">No Tickets found</p>
+            <p className="mt-1 text-[0.875rem]">Lorem ipsum dolor sit amet, consectet</p>
           </div>
         ) : (
           filteredTickets.map((ticket, index) => {
             const isSelected = ticket._id === selectedTicketId;
+
             return (
               <button
-                type="button"
                 key={index}
-                className={`ticket-list-item ${isSelected ? "selected" : ""}`}
+                type="button"
                 onClick={() => onSelect(isSelected ? null : ticket._id)}
+                className={`w-full text-left border-b border-[#d8dbe2] min-h-[4.75rem] px-[0.625rem] py-2 flex items-start gap-[0.625rem] relative ${
+                  isSelected ? "bg-[#e8ecf8]" : ""
+                }`}
               >
-                <div className="tag-container">
-                  <div className="tag">{ticket.name?.charAt(0)?.toUpperCase() || "N"}</div>
+                
+                {/* LEFT ACTIVE BAR */}
+                {isSelected && (
+                  <span className="absolute left-0 top-2 bottom-2 w-[0.25rem] rounded bg-[#4f79ff]" />
+                )}
+
+                {/* AVATAR */}
+                <div className="w-[2.125rem] h-[2.125rem] rounded-full bg-[#dfdfdf] flex items-center justify-center text-[#495264] font-semibold">
+                  {ticket.name?.charAt(0)?.toUpperCase() || "N"}
                 </div>
-                <div className="ticket-meta">
-                  <div className="title">{ticket.name}</div>
-                  <div className="desc">{ticket.description}</div>
-                  <div className="id-wrap">
-                    <div className="id">#{ticket.ticketId}</div>
-                    <div className="ticket-time">
+
+                {/* CONTENT */}
+                <div className="flex-1 min-w-0">
+                  
+                  <div className="font-semibold text-[0.875rem] text-[#1f2228]">
+                    {ticket.name}
+                  </div>
+
+                  <div className="mt-[0.125rem] text-[0.75rem] text-[#8a8f99] truncate">
+                    {ticket.description}
+                  </div>
+
+                  <div className="mt-[0.1875rem] flex items-center justify-between">
+                    
+                    <div className="text-[0.6875rem] text-[#4f79ff]">
+                      #{ticket.ticketId}
+                    </div>
+
+                    <div className="flex items-center gap-[0.125rem] text-[0.625rem] text-[#ff3a3a]">
                       <AccessTimeOutlinedIcon fontSize="inherit" />
                       <span>{formatTicketListTime(ticket.createdAt)}</span>
                     </div>
+
                   </div>
                 </div>
+
               </button>
             );
           })
         )}
+
       </div>
     </div>
   );

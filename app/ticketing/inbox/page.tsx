@@ -296,7 +296,7 @@ const TicketingMain = () => {
   }, [selectedTicketId]);
 
   return (
-    <div className="ticketing-content ticketing-workspace">
+    <div className="grid grid-cols-1 lg:grid-cols-[21.5625rem_1fr_20.625rem] h-screen min-h-0 bg-[#eef1f6] overflow-hidden">
       <TicketList
         tickets={tickets}
         loading={loadingTickets}

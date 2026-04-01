@@ -44,8 +44,8 @@ export default function InsightsSection() {
           <Sparkles className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">AI-Powered Insights</h2>
-          <p className="text-sm text-slate-600 dark:text-slate-400">Smart recommendations for your business</p>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-zinc-100">AI-Powered Insights</h2>
+          <p className="text-sm text-slate-600 dark:text-zinc-400">Smart recommendations for your business</p>
         </div>
       </div>
 
@@ -54,7 +54,7 @@ export default function InsightsSection() {
         {aiInsights.map((insight) => (
           <div
             key={insight.id}
-            className="bg-white dark:bg-slate-800 p-5 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-lg transition-shadow"
+            className="bg-white dark:bg-zinc-900 p-5 rounded-xl border border-slate-200 dark:border-zinc-800 hover:shadow-lg transition-shadow"
           >
             <div className="flex items-start gap-3">
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
@@ -74,14 +74,14 @@ export default function InsightsSection() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">
+                  <h3 className="text-base font-semibold text-slate-900 dark:text-zinc-100">
                     {insight.title}
                   </h3>
-                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                  <span className="text-xs font-medium text-slate-500 dark:text-zinc-400">
                     {insight.confidence}% confidence
                   </span>
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed">
                   {insight.description}
                 </p>
               </div>

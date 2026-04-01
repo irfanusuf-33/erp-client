@@ -1,4 +1,3 @@
-"use client";
 import { AlertTriangle, CheckCircle, AlertCircle, GripVertical } from "lucide-react";
 import type { IamInsightsAlertsProps, InsightsAlertsItem } from "@/types/iam.types";
 
