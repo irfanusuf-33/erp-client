@@ -591,7 +591,7 @@ export default function AddClient() {
           </label>
 
           <div className="flex gap-2 ml-auto">
-            <Button variant="outline" size="sm" type="button" onClick={() => router.push("/inventory/product/productList")}>Cancel</Button>
+            <Button variant="outline" size="sm" type="button" onClick={() => router.push("/crm/manage-clients")}>Cancel</Button>
             {createTemplate ? (
               <Button size="sm" type="button" onClick={() => setShowTemplateModal(true)} disabled={isSubmitting}>
                 {isSubmitting ? "Saving Template..." : "Create Template"}

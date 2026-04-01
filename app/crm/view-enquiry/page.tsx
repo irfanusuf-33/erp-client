@@ -1,46 +1,48 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useGlobalStore } from "@/store";
 import BaseTable from "@/components/shared/BaseTable";
 import type { MRT_ColumnDef } from "material-react-table";
 
-interface Group {
+interface Enquery {
   _id?: string;
-  groupName?: string;
-  description: string;
-  createdBy?: string;
+  noteId?: string;
+  note:string;
+  source: string;
+  noteDate:string;
+  assignedTo:string;
+  type:string
   createdAt?: string;
   status:boolean
 }
 
 type PaginationState = { pageIndex: number; pageSize: number };
 
-export default function ManageGroups() {
-
+export default function ViewEnquiry() {
   const [loading, setLoading] = useState(false);
   const [rowCount, setRowCount] = useState(0);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const groups: Group[] = [
-    {groupName:'voctrum123', description:'heyhas' , createdBy:'jon.smith@abc.com', createdAt:'16/12/2025', status:true},
-    {groupName:'voctrum162', description:'heydsa' , createdBy:'jon.doe@abc.com', createdAt:'16/12/2025', status:false},
-    {groupName:'voctrum762', description:'heyhas' , createdBy:'jon.bash@abc.com', createdAt:'16/12/2025', status:true},
-    {groupName:'voctrum892', description:'heyhas' , createdBy:'jon.will@abc.com', createdAt:'16/12/2025', status:false},
-    {groupName:'voctrum989', description:'heyhas' , createdBy:'jon.luice@abc.com', createdAt:'16/12/2025', status:true},
+  const enqueries: Enquery[] = [
+    {noteId:'2567780', note:'John' , source:'meeting', noteDate:'12/12/2023', assignedTo:'Voctrum', type:'manual', createdAt:'21/03/2026', status:true},
+    {noteId:'2567781', note:'Smith' , source:'meeting', noteDate:'12/12/2023', assignedTo:'Voctrum', type:'manual', createdAt:'21/03/2026', status:false},
+    {noteId:'2567782', note:'Doe' , source:'meeting', noteDate:'12/12/2023', assignedTo:'Voctrum', type:'manual', createdAt:'21/03/2026', status:true},
+    {noteId:'2567783', note:'Bash' , source:'meeting', noteDate:'12/12/2023', assignedTo:'Voctrum', type:'manual', createdAt:'21/03/2026', status:false},
+    {noteId:'2567784', note:'Will' , source:'meeting', noteDate:'12/12/2023', assignedTo:'Voctrum', type:'manual', createdAt:'21/03/2026', status:true},
+    {noteId:'2567785', note:'Tiger' , source:'meeting', noteDate:'12/12/2023', assignedTo:'Voctrum', type:'manual', createdAt:'21/03/2026', status:false},
   ]
 
 
-    const columns: MRT_ColumnDef<Group>[] = groups.length > 0 
-    ? Object.keys(groups[0]).filter(key => key !== '_id').map((key) => {
-        if (key === 'groupName') {
+    const columns: MRT_ColumnDef<Enquery>[] = enqueries.length > 0 
+    ? Object.keys(enqueries[0]).filter(key => key !== '_id').map((key) => {
+        if (key === 'noteId') {
           return {
             accessorKey: key,
-            header: 'Group Name',
+            header: 'Note ID',
             Cell: ({ row }) => (
-              <span className="cursor-pointer text-blue-600 dark:text-blue-400 hover:underline">
-                {row.original.groupName}
+              <span
+              >
+                {row.original.noteId}
               </span>
             ),
           };
@@ -69,16 +71,16 @@ export default function ManageGroups() {
 
     const toolbarActions = [
     {
-      label: (selectedGroups: Group[]) => {
-        if (selectedGroups.length === 0) return 'Toggle Status';
-        const allDisabled = selectedGroups.every(c => !c.status);
-        const allEnabled = selectedGroups.every(c => c.status);
+      label: (selectedEnqueries: Enquery[]) => {
+        if (selectedEnqueries.length === 0) return 'Toggle Status';
+        const allDisabled = selectedEnqueries.every(c => !c.status);
+        const allEnabled = selectedEnqueries.every(c => c.status);
         if (allDisabled) return 'Enable';
         if (allEnabled) return 'Disable';
         return 'Toggle Status';
       },
-      onClick: (selectedGroups: Group[]) => {
-        if (selectedGroups.length > 0) {
+      onClick: (selectedEnqueries: Enquery[]) => {
+        if (selectedEnqueries.length > 0) {
           // 
         }
       },
@@ -88,10 +90,10 @@ export default function ManageGroups() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Manage Groups</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Notes Management</h2>
 
       <BaseTable
-        data={groups}
+        data={enqueries}
         columns={columns}
         enableRowSelection
         toolbarActions={toolbarActions}
@@ -102,7 +104,7 @@ export default function ManageGroups() {
         onPaginationChange={setPagination}
         onGlobalFilterChange={setGlobalFilter}
         onExportRows={() => {}}
-        getRowId={(row) => row.groupName || row._id || ""}
+        getRowId={(row) => row.noteId || row._id || ""}
       />
     </div>
   );
