@@ -19,7 +19,7 @@ export default function SalesChart() {
     <Card className="h-full shadow-sm hover:shadow-md transition-shadow flex flex-col">
       <CardHeader className="pb-1 pt-2.5 px-3 flex flex-row items-center justify-between flex-shrink-0">
         <CardTitle className="text-sm font-semibold">Sales Overview</CardTitle>
-        <div className="drag-handle cursor-move p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
+        <div className="drag-handle cursor-move p-1 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded">
           <GripVertical className="w-3.5 h-3.5 text-slate-400" />
         </div>
       </CardHeader>

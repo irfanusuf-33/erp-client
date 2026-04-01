@@ -7,10 +7,7 @@ import { createInventorySlice, InventorySlice } from "./slices/inventory.slice";
 import { createTicketingSlice, TicketingSlice } from "./slices/ticketing.slice";
 import { createHrmSlice, HrmSlice } from "./slices/hrm.slice";
 import { createDashboardSlice, DashboardSlice } from "./slices/dashboard.slice";
-
-
-
-
+import { createCalendarSlice, CalendarSlice } from "./slices/calendar.slice";
 
 export type AppStoreSlices =
   AuthSlice &
@@ -18,8 +15,7 @@ export type AppStoreSlices =
   InventorySlice &
   HrmSlice &
   DashboardSlice &
-  TicketingSlice& {
-
+  CalendarSlice & {
     hasHydrated: boolean;
     setHasHydrated: (state: boolean) => void;
   };
@@ -35,7 +31,7 @@ export const useGlobalStore = create<AppStoreSlices>()(
 
             ...createHrmSlice(...a),
             ...createDashboardSlice(...a),
-
+            ...createCalendarSlice(...a),
 
             hasHydrated: false,
             setHasHydrated: (state: boolean) => a[0]({ hasHydrated: state }),

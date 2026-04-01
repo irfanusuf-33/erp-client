@@ -88,8 +88,8 @@ export default function InventoryTemplateList() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Inventory Templates</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Manage and reuse product templates</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-zinc-100">Inventory Templates</h1>
+          <p className="text-sm text-gray-500 dark:text-zinc-400">Manage and reuse product templates</p>
         </div>
       </div>
 

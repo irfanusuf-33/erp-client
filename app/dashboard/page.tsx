@@ -80,13 +80,13 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-zinc-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-4 md:px-6 py-4 sticky top-16 z-30">
-        <h1 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100">
+      <div className="bg-white dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 px-4 md:px-6 py-4 sticky top-16 z-30">
+        <h1 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-zinc-100">
           Hi, {userName}!
         </h1>
-        <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-0.5">
+        <p className="text-xs md:text-sm text-slate-600 dark:text-zinc-400 mt-0.5">
           Here's what's happening with your business today
         </p>
       </div>

@@ -10,7 +10,7 @@ interface Product {
   _id?: string;
   productId?: string;
   name: string;
-  pricingDetails?: Array<{ currency?: string; price?: number; costPrice?: number; cutOffPrice?: number }>;
+  pricingDetails?: Array<{ currency?: string; price?: number }>;
   category: string | string[];
   enable?: boolean;
   enabled?: boolean;
@@ -76,19 +76,16 @@ export default function InventoryProductList() {
     {
       accessorKey: "pricingDetails",
       header: "Price",
-      Cell: ({ row }) => {
-        const firstPrice = row.original.pricingDetails?.[0]?.price ?? "0.00";
-        return <span>${firstPrice}</span>;
-      },
+      Cell: ({ row }) => <span>${row.original.pricingDetails?.[0]?.price ?? "0.00"}</span>,
     },
     {
       accessorKey: "category",
       header: "Category",
       Cell: ({ row }) => {
-        const category = Array.isArray(row.original.category)
+        const cat = Array.isArray(row.original.category)
           ? row.original.category.join(", ")
           : row.original.category;
-        return <span>{category}</span>;
+        return <span>{cat}</span>;
       },
     },
     {
@@ -98,8 +95,8 @@ export default function InventoryProductList() {
         const isEnabled = row.original.enable || row.original.enabled;
         return isEnabled ? (
           <div className="flex items-center gap-1.5">
-            <CheckCircle size={16} className="text-green-700 dark:text-green-400" />
-            <span className="text-green-700 dark:text-green-400">Enabled</span>
+            <CheckCircle size={16} className="text-green-600 dark:text-green-400" />
+            <span className="text-green-600 dark:text-green-400">Enabled</span>
           </div>
         ) : (
           <div className="flex items-center gap-1.5">
@@ -113,18 +110,16 @@ export default function InventoryProductList() {
       accessorKey: "stockStatus",
       header: "Stock Status",
       Cell: ({ row }) => {
-        const stockStatus = row.original.stockStatus || getStockStatus(row.original.inventory?.ats || 0);
+        const status = row.original.stockStatus || getStockStatus(row.original.inventory?.ats || 0);
+        const cls =
+          status === "HighStock"
+            ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+            : status === "LowStock"
+            ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"
+            : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400";
         return (
-          <span
-            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-              stockStatus === "HighStock"
-                ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
-                : stockStatus === "LowStock"
-                ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"
-                : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-            }`}
-          >
-            {stockStatus}
+          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>
+            {status}
           </span>
         );
       },
@@ -145,8 +140,7 @@ export default function InventoryProductList() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Product List</h2>
-
+      <h2 className="text-2xl font-semibold text-gray-800 dark:text-zinc-100 mb-4">Product List</h2>
       <BaseTable
         data={products}
         columns={columns}

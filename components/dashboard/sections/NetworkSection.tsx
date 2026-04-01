@@ -167,7 +167,7 @@ const employees: Employee[] = [
 
 export default function NetworkSection() {
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
-  const globeEl = useRef<any>();
+  const globeEl = useRef<any>(null);
 
   useEffect(() => {
     // Auto-rotate globe
@@ -261,7 +261,7 @@ export default function NetworkSection() {
           
           {/* Modal */}
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md">
-            <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-zinc-800 overflow-hidden">
               {/* Header */}
               <div className="relative bg-gradient-to-br from-blue-500 to-purple-600 p-6 pb-16">
                 <button
@@ -298,53 +298,53 @@ export default function NetworkSection() {
 
                 {/* Details */}
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-zinc-900/50 rounded-lg">
                     <MapPin className="w-5 h-5 text-slate-400" />
                     <div className="flex-1">
-                      <p className="text-xs text-slate-500 dark:text-slate-400">Location</p>
-                      <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                      <p className="text-xs text-slate-500 dark:text-zinc-400">Location</p>
+                      <p className="text-sm font-medium text-slate-900 dark:text-zinc-100">
                         {selectedEmployee.location}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-zinc-900/50 rounded-lg">
                     <Mail className="w-5 h-5 text-slate-400" />
                     <div className="flex-1">
-                      <p className="text-xs text-slate-500 dark:text-slate-400">Email</p>
-                      <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                      <p className="text-xs text-slate-500 dark:text-zinc-400">Email</p>
+                      <p className="text-sm font-medium text-slate-900 dark:text-zinc-100">
                         {selectedEmployee.email}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-zinc-900/50 rounded-lg">
                     <Phone className="w-5 h-5 text-slate-400" />
                     <div className="flex-1">
-                      <p className="text-xs text-slate-500 dark:text-slate-400">Phone</p>
-                      <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                      <p className="text-xs text-slate-500 dark:text-zinc-400">Phone</p>
+                      <p className="text-sm font-medium text-slate-900 dark:text-zinc-100">
                         {selectedEmployee.phone}
                       </p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                    <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-zinc-900/50 rounded-lg">
                       <Calendar className="w-5 h-5 text-slate-400" />
                       <div className="flex-1">
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Joined</p>
-                        <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                        <p className="text-xs text-slate-500 dark:text-zinc-400">Joined</p>
+                        <p className="text-sm font-medium text-slate-900 dark:text-zinc-100">
                           {selectedEmployee.joinDate}
                         </p>
                       </div>
                     </div>
 
                     {selectedEmployee.teamSize && (
-                      <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg">
+                      <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-zinc-900/50 rounded-lg">
                         <Users className="w-5 h-5 text-slate-400" />
                         <div className="flex-1">
-                          <p className="text-xs text-slate-500 dark:text-slate-400">Team</p>
-                          <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                          <p className="text-xs text-slate-500 dark:text-zinc-400">Team</p>
+                          <p className="text-sm font-medium text-slate-900 dark:text-zinc-100">
                             {selectedEmployee.teamSize} members
                           </p>
                         </div>
@@ -358,7 +358,7 @@ export default function NetworkSection() {
                   <button className="flex-1 px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors">
                     View Profile
                   </button>
-                  <button className="flex-1 px-4 py-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-900 dark:text-slate-100 rounded-lg font-medium transition-colors">
+                  <button className="flex-1 px-4 py-2.5 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-900 dark:text-zinc-100 rounded-lg font-medium transition-colors">
                     Send Message
                   </button>
                 </div>

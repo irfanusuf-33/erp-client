@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Toaster } from "@/components/ui/sonner";
-import NavbarWrapper from "@/components/shared/NavbarWrapper";
-import ThemeProvider from "@/components/shared/ThemeProvider";
+import NavbarWrapper from "@/components/NavbarWrapper";
+import ThemeProvider from "@/components/ThemeProvider";
+import { Toaster } from "sonner";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -37,7 +37,17 @@ export default function RootLayout({
         <ThemeProvider>
           <NavbarWrapper />
           {children}
-          <Toaster position="top-center" richColors />
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            toastOptions={{
+              duration: 4000,
+              classNames: {
+                toast: "font-sans text-sm",
+              },
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>

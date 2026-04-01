@@ -21,10 +21,10 @@ const colorMap: Record<string, { bg: string; text: string; icon: string }> = {
 
 export default function ActivityFeed() {
   return (
-    <Card className="h-full shadow-sm hover:shadow-md transition-shadow flex flex-col border-slate-200 dark:border-slate-700">
-      <CardHeader className="pb-4 pt-5 px-5 flex flex-row items-center justify-between flex-shrink-0 border-b border-slate-100 dark:border-slate-800">
-        <CardTitle className="text-base font-semibold text-slate-900 dark:text-slate-100">Recent Activity</CardTitle>
-        <div className="drag-handle cursor-move p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors">
+    <Card className="h-full shadow-sm hover:shadow-md transition-shadow flex flex-col border-slate-200 dark:border-zinc-800">
+      <CardHeader className="pb-4 pt-5 px-5 flex flex-row items-center justify-between flex-shrink-0 border-b border-slate-100 dark:border-zinc-800">
+        <CardTitle className="text-base font-semibold text-slate-900 dark:text-zinc-100">Recent Activity</CardTitle>
+        <div className="drag-handle cursor-move p-1.5 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded transition-colors">
           <GripVertical className="w-4 h-4 text-slate-400" />
         </div>
       </CardHeader>
@@ -34,21 +34,21 @@ export default function ActivityFeed() {
             const Icon = activity.icon;
             const colors = colorMap[activity.color];
             return (
-              <div key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+              <div key={index} className="flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors">
                 <div className={`w-9 h-9 rounded-lg ${colors.bg} flex items-center justify-center flex-shrink-0`}>
                   <Icon className={`w-4 h-4 ${colors.icon}`} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm leading-tight mb-1">
-                    <span className="font-semibold text-slate-900 dark:text-slate-100">{activity.user}</span>
-                    <span className="text-slate-600 dark:text-slate-400"> {activity.action}</span>
+                    <span className="font-semibold text-slate-900 dark:text-zinc-100">{activity.user}</span>
+                    <span className="text-slate-600 dark:text-zinc-400"> {activity.action}</span>
                   </p>
                   <div className="flex items-center gap-2">
                     <span className={`text-xs font-medium ${colors.text}`}>{activity.detail}</span>
                     <span className="text-slate-400">•</span>
                     <div className="flex items-center gap-1">
                       <Clock className="w-3 h-3 text-slate-400" />
-                      <span className="text-xs text-slate-500 dark:text-slate-400">{activity.time}</span>
+                      <span className="text-xs text-slate-500 dark:text-zinc-400">{activity.time}</span>
                     </div>
                   </div>
                 </div>

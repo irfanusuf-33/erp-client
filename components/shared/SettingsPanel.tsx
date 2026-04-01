@@ -54,13 +54,13 @@ function OptionCard<T extends string>({
       onClick={onClick}
       className={`w-full text-left px-3 py-2.5 rounded-lg border text-sm transition-all flex items-center justify-between gap-2 ${
         active
-          ? "border-primary bg-primary/10 text-primary font-medium"
-          : "border-border bg-background hover:bg-muted text-foreground"
+          ? "border-blue-600 bg-blue-50 dark:bg-blue-600/15 text-blue-600 dark:text-blue-400 font-medium"
+          : "border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-800 dark:text-zinc-100"
       }`}
     >
       <span>
         <span className="block">{label}</span>
-        {sublabel && <span className="text-xs text-muted-foreground">{sublabel}</span>}
+        {sublabel && <span className="text-xs text-gray-500 dark:text-zinc-400">{sublabel}</span>}
       </span>
       {active && <Check className="w-4 h-4 shrink-0" />}
     </button>
@@ -68,11 +68,11 @@ function OptionCard<T extends string>({
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-sm font-semibold text-foreground mb-3">{children}</h3>;
+  return <h3 className="text-sm font-semibold text-gray-900 dark:text-zinc-100 mb-3">{children}</h3>;
 }
 
 function Divider() {
-  return <div className="border-t border-border my-5" />;
+  return <div className="border-t border-gray-200 dark:border-zinc-800 my-5" />;
 }
 
 // ─── Individual Sections ──────────────────────────────────────────────────────
@@ -95,8 +95,8 @@ function ThemeSection() {
             onClick={() => setTheme(t.value)}
             className={`flex flex-col items-center gap-2 py-4 rounded-xl border text-sm font-medium transition-all ${
               theme === t.value
-                ? "border-primary bg-primary/10 text-primary"
-                : "border-border bg-background hover:bg-muted text-muted-foreground"
+                ? "border-blue-600 bg-blue-50 dark:bg-blue-600/15 text-blue-600 dark:text-blue-400"
+                : "border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-500 dark:text-zinc-400"
             }`}
           >
             {t.icon}
@@ -175,15 +175,15 @@ function CurrencySection() {
             onClick={() => setCurrency(o.value)}
             className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg border text-sm transition-all ${
               currency === o.value
-                ? "border-primary bg-primary/10 text-primary font-medium"
-                : "border-border bg-background hover:bg-muted text-foreground"
+                ? "border-blue-600 bg-blue-50 dark:bg-blue-600/15 text-blue-600 dark:text-blue-400 font-medium"
+                : "border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-gray-800 dark:text-zinc-100"
             }`}
           >
             <span className="flex items-center gap-3">
               <span className="w-8 text-center font-mono text-base">{o.symbol}</span>
               <span>{o.label}</span>
             </span>
-            <span className="text-xs text-muted-foreground font-mono">{o.value}</span>
+            <span className="text-xs text-gray-500 dark:text-zinc-400 font-mono">{o.value}</span>
             {currency === o.value && <Check className="w-4 h-4 shrink-0 ml-2" />}
           </button>
         ))}
@@ -205,10 +205,10 @@ function EmailSection() {
       <SectionTitle>Email Notifications</SectionTitle>
       <div className="space-y-1">
         {items.map((item) => (
-          <div key={item.key} className="flex items-center justify-between py-3 border-b border-border last:border-0">
+          <div key={item.key} className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-zinc-800 last:border-0">
             <div>
-              <p className="text-sm font-medium text-foreground">{item.label}</p>
-              <p className="text-xs text-muted-foreground">{item.desc}</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-zinc-100">{item.label}</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-400">{item.desc}</p>
             </div>
             <Toggle checked={emailNotifications[item.key]} onChange={(v) => setEmailNotification(item.key, v)} />
           </div>
@@ -223,10 +223,10 @@ function RemindersSection() {
   return (
     <div>
       <SectionTitle>Reminder Settings</SectionTitle>
-      <div className="flex items-center justify-between py-3 border-b border-border">
+      <div className="flex items-center justify-between py-3 border-b border-gray-200 dark:border-zinc-800">
         <div>
-          <p className="text-sm font-medium text-foreground">Enable Reminders</p>
-          <p className="text-xs text-muted-foreground">Get notified before deadlines</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-zinc-100">Enable Reminders</p>
+          <p className="text-xs text-gray-500 dark:text-zinc-400">Get notified before deadlines</p>
         </div>
         <Toggle checked={reminderSettings.enabled} onChange={(v) => setReminderSettings({ enabled: v })} />
       </div>
@@ -275,14 +275,14 @@ function HistorySection() {
       <SectionTitle>Login History</SectionTitle>
       <div className="space-y-2">
         {loginHistory.map((entry) => (
-          <div key={entry.id} className="flex items-start gap-3 p-3 rounded-lg border border-border bg-background">
+          <div key={entry.id} className="flex items-start gap-3 p-3 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800">
             <div className={`mt-0.5 w-2 h-2 rounded-full shrink-0 ${entry.status === "success" ? "bg-green-500" : "bg-destructive"}`} />
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{entry.device}</p>
-              <p className="text-xs text-muted-foreground">{entry.location} · {entry.ip}</p>
+              <p className="text-sm font-medium text-gray-900 dark:text-zinc-100 truncate">{entry.device}</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-400">{entry.location} · {entry.ip}</p>
             </div>
             <div className="text-right shrink-0">
-              <p className="text-xs text-muted-foreground">{fmt(entry.timestamp)}</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-400">{fmt(entry.timestamp)}</p>
               <span className={`text-xs font-medium ${entry.status === "success" ? "text-green-600" : "text-destructive"}`}>
                 {entry.status === "success" ? "Success" : "Failed"}
               </span>
@@ -395,10 +395,10 @@ export default function SettingsPanel({ open, onClose }: { open: boolean; onClos
       />
 
       {/* Panel */}
-      <div className="relative ml-auto h-full w-full max-w-2xl bg-background shadow-2xl flex flex-col">
+      <div className="relative ml-auto h-full w-full max-w-2xl bg-white dark:bg-zinc-900 shadow-2xl flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
-          <h2 className="text-base font-semibold text-foreground">Settings</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-zinc-800 shrink-0">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-zinc-100">Settings</h2>
           <Button variant="ghost" size="icon-sm" onClick={onClose}>
             <X className="w-4 h-4" />
           </Button>
@@ -407,7 +407,7 @@ export default function SettingsPanel({ open, onClose }: { open: boolean; onClos
         {/* Body */}
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar nav */}
-          <nav className="w-52 shrink-0 border-r border-border py-3 overflow-y-auto">
+          <nav className="w-52 shrink-0 border-r border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/50 py-3 overflow-y-auto">
             {NAV.map((item) => (
               <button
                 key={item.id}
@@ -415,8 +415,8 @@ export default function SettingsPanel({ open, onClose }: { open: boolean; onClos
                 onClick={() => setActive(item.id)}
                 className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors text-left ${
                   active === item.id
-                    ? "bg-primary/10 text-primary font-medium border-r-2 border-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-blue-50 dark:bg-blue-600/15 text-blue-600 dark:text-blue-400 font-medium border-r-2 border-blue-600"
+                    : "text-gray-500 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-zinc-100"
                 }`}
               >
                 {item.icon}
@@ -427,7 +427,7 @@ export default function SettingsPanel({ open, onClose }: { open: boolean; onClos
           </nav>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto px-6 py-5">
+          <div className="flex-1 overflow-y-auto px-6 py-5 bg-white dark:bg-zinc-900">
             {sectionMap[active]}
           </div>
         </div>
