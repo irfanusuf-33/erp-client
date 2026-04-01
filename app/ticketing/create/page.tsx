@@ -52,124 +52,174 @@ const CreateTicket = () => {
     };
 
     return (
-        <div className="create-ticket-wrapper">
-            <h2 className="create-ticket-title">Create Ticket</h2>
-            <div className="create-ticket-card">
-                <div className="create-ticket-header">
-                    <h3 className="create-ticket-header-title">Ticket Details</h3>
-                    <p className="create-ticket-subtext">
-                        Please fill in the details to create a support ticket.
+        <div className="px-6 py-12">
+
+        {/* PAGE TITLE */}
+        <h2 className="text-[20px] font-semibold mb-4">
+            Create Ticket
+        </h2>
+
+        {/* CARD */}
+        <div className="mx-auto mt-10 max-w-[700px] bg-white rounded-lg p-6 shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-2px_rgba(0,0,0,0.05)]">
+
+            {/* HEADER */}
+            <div className="flex flex-col gap-1.5">
+            <h3 className="text-[18px] font-semibold">
+                Ticket Details
+            </h3>
+
+            <p className="text-sm text-[#929292]">
+                Please fill in the details to create a support ticket.
+            </p>
+
+            <p className="text-[13px] text-[#3b8aec]">
+                * All fields are required
+            </p>
+            </div>
+
+            {/* DIVIDER */}
+            <div className="my-4 border-t border-[#d1d5db]" />
+
+            {/* FORM */}
+            <form onSubmit={handleSubmit} className="flex flex-col">
+
+            {/* GRID */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+                {/* OWNER NAME */}
+                <div className="flex flex-col">
+                <label className="text-sm font-semibold mb-1">
+                    Owner Name
+                </label>
+
+                <input
+                    id="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={handleChange}
+                    disabled={!!ownerName}
+                    className="h-10 px-3 rounded-md border border-[#d1d5db] text-sm outline-none focus:border-[#3b8aec]"
+                />
+
+                {formErrors.name && (
+                    <p className="text-xs text-red-500 mt-1">
+                    {formErrors.name}
                     </p>
-                    <p className="create-ticket-required-note">* All fields are required</p>
+                )}
                 </div>
 
-                <hr className="create-ticket-divider" />
+                {/* OWNER NUMBER */}
+                <div className="flex flex-col">
+                <label className="text-sm font-semibold mb-1">
+                    Owner Number
+                </label>
 
-                <form className="create-ticket-form" onSubmit={handleSubmit}>
-                    <div className="create-ticket-grid">
+                <input
+                    id="phone"
+                    type="text"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    disabled={!!ownerNumber}
+                    className="h-10 px-3 rounded-md border border-[#d1d5db] text-sm outline-none focus:border-[#3b8aec]"
+                />
 
-                        <div className="create-ticket-form-group">
-                            <label className="create-ticket-label">Owner Name</label>
-                            <input
-                                id="name"
-                                className="create-ticket-input"
-                                type="text"
-                                value={formData.name}
-                                onChange={handleChange}
-                                disabled={!!ownerName}
-                            />
-                            {formErrors.name && (
-                                <p className="form-error-text">{formErrors.name}</p>
-                            )}
-                        </div>
+                {formErrors.phone && (
+                    <p className="text-xs text-red-500 mt-1">
+                    {formErrors.phone}
+                    </p>
+                )}
+                </div>
 
-                        <div className="create-ticket-form-group">
-                            <label className="create-ticket-label">Owner Number</label>
-                            <input
-                                id="phone"
-                                className="create-ticket-input"
-                                type="text"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                disabled={!!ownerNumber}
-                            />
-                            {formErrors.phone && (
-                                <p className="form-error-text">{formErrors.phone}</p>
-                            )}
-                        </div>
+                {/* PRIORITY */}
+                <div className="flex flex-col">
+                <label className="text-sm font-semibold mb-1">
+                    Priority
+                </label>
 
-                        <div className="create-ticket-form-group">
-                            <label className="create-ticket-label">Priority</label>
-                            <select
-                                id="priority"
-                                className="create-ticket-input"
-                                value={formData.priority}
-                                onChange={handleChange}
-                            >
-                                <option value="high">High</option>
-                                <option value="medium">Medium</option>
-                                <option value="low">Low</option>
-                            </select>
-                        </div>
+                <select
+                    id="priority"
+                    value={formData.priority}
+                    onChange={handleChange}
+                    className="h-10 px-3 rounded-md border border-[#d1d5db] text-sm bg-white outline-none focus:border-[#3b8aec]"
+                >
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+                </div>
 
-                        <div className="create-ticket-form-group">
-                            <label className="create-ticket-label">Status</label>
-                            <select
-                                id="status"
-                                className="create-ticket-input"
-                                value={formData.status}
-                                onChange={handleChange}
-                            >
-                                <option>Open</option>
-                                <option>In Progress</option>
-                                <option>Closed</option>
-                            </select>
-                        </div>
+                {/* STATUS */}
+                <div className="flex flex-col">
+                <label className="text-sm font-semibold mb-1">
+                    Status
+                </label>
 
-                        <div className="create-ticket-form-group">
-                            <label className="create-ticket-label">Due Date</label>
-                            <input
-                                id="dueDate"
-                                className="create-ticket-input"
-                                type="date"
-                                value={formData.dueDate}
-                                onChange={handleChange}
-                            />
-                        </div>
+                <select
+                    id="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                    className="h-10 px-3 rounded-md border border-[#d1d5db] text-sm bg-white outline-none focus:border-[#3b8aec]"
+                >
+                    <option>Open</option>
+                    <option>In Progress</option>
+                    <option>Closed</option>
+                </select>
+                </div>
 
-                        <div className="create-ticket-form-group full-width">
-                            <label className="create-ticket-label">
-                                Ticket Description
-                            </label>
-                            <input
-                                id="description"
-                                className="create-ticket-input"
-                                type="text"
-                                value={formData.description}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
+                {/* DUE DATE */}
+                <div className="flex flex-col">
+                <label className="text-sm font-semibold mb-1">
+                    Due Date
+                </label>
 
-                    <div className="create-ticket-actions">
-                        <button
-                            className="create-ticket-btn-outline"
-                            type="button"
-                            onClick={() => router.push("/ticketing/inbox")}
-                        >
-                            Cancel
-                        </button>
+                <input
+                    id="dueDate"
+                    type="date"
+                    value={formData.dueDate}
+                    onChange={handleChange}
+                    className="h-10 px-3 rounded-md border border-[#d1d5db] text-sm outline-none focus:border-[#3b8aec]"
+                />
+                </div>
 
-                        <button
-                            className="create-ticket-btn-primary"
-                            type="submit"
-                        >
-                            Create
-                        </button>
-                    </div>
+                {/* DESCRIPTION (FULL WIDTH) */}
+                <div className="flex flex-col sm:col-span-2">
+                <label className="text-sm font-semibold mb-1">
+                    Ticket Description
+                </label>
 
-                </form>
+                <input
+                    id="description"
+                    type="text"
+                    value={formData.description}
+                    onChange={handleChange}
+                    className="h-10 px-3 rounded-md border border-[#d1d5db] text-sm outline-none focus:border-[#3b8aec]"
+                />
+                </div>
+
             </div>
+
+            {/* ACTIONS */}
+            <div className="flex justify-end gap-3 mt-6">
+
+                <button
+                type="button"
+                onClick={() => router.push("/ticketing/inbox")}
+                className="px-6 py-2 rounded-full border border-[#3b8aec] text-[#3b8aec] text-sm font-semibold hover:bg-[#3b8aec] hover:text-white transition"
+                >
+                Cancel
+                </button>
+
+                <button
+                type="submit"
+                className="px-6 py-2 rounded-md bg-[#2563eb] text-white text-sm font-semibold shadow-[0_4px_6px_-1px_rgba(37,99,235,0.2)]"
+                >
+                Create
+                </button>
+
+            </div>
+
+            </form>
+        </div>
         </div>
     );
 };

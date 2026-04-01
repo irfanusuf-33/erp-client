@@ -167,7 +167,7 @@ export default function TicketingDashboardEntry() {
   /** LOADER UI */
   if (checkingAccess) {
     return (
-      <div className="ticketing-wireframe">
+      <div className="pt-4 pr-[1.875rem] pb-[1.875rem] pl-[1.875rem] bg-white mb-[6.25rem]">
         <div className="w-full py-10 flex justify-center">
           <span className="loading loading-spinner loading-lg" />
         </div>

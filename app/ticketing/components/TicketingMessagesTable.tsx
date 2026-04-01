@@ -193,84 +193,163 @@ function TicketingMessagesTable() {
 
   /* ---------------- UI ---------------- */
   return (
-    <div className="ticketing-table">
-      <div className="table-header">
-        <input
-          type="text"
-          placeholder="Search"
-          className="search-input"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <SearchIcon />
-      </div>
+<div className="border border-[#d1d5db] rounded-[0.5rem] p-[1rem] bg-white mb-[5rem]">
 
-      <div className="tickets-list">
-        {filteredMessages.length === 0 ? (
-          <div className='no-message-ticket-box'>
-            {/* <LightbulbOutlineIcon /> */}
-            <div>
-              <h1>Global Ticket Pool</h1>
-              <p>Tickets from Email, WhatsApp, etc will appear here.</p>
-            </div>
+  {/* HEADER */}
+  <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-[0.625rem] mb-[1rem] pb-[1rem] border-b border-[#d1d5db]">
+    
+    <div className="relative w-full md:w-[25rem]">
+      <input
+        type="text"
+        placeholder="Search"
+        className="w-full text-[0.875rem] border border-[#d1d5db] rounded-[0.5rem] pl-[2.25rem] pr-[0.75rem] py-[0.625rem]"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <SearchIcon className="absolute left-[0.625rem] top-[0.75rem] text-[#929292] text-[1.125rem]" />
+    </div>
+
+  </div>
+
+  {/* LIST */}
+  <div className="flex flex-col gap-[0.75rem]">
+
+    {filteredMessages.length === 0 ? (
+      <div className="border border-[#d1d5db] rounded-[0.5rem] p-[0.75rem] flex text-[0.9375rem] text-[#424650]">
+        
+        <div className="mr-[0.625rem] mt-[0.375rem] w-[2.1875rem] h-[2.8125rem] flex items-center justify-center text-[#2563eb]">
+          {/* icon optional */}
+        </div>
+
+        <div className="w-full">
+          <div className="bg-[#2563eb] text-white rounded-[0.3125rem] mt-[0.625rem] mb-[1.25rem] h-[2.5rem] flex items-center justify-center text-[0.875rem] font-semibold sm:w-[11.625rem] sm:h-[2.8125rem] sm:text-[1rem]">
+            Global Ticket Pool
           </div>
-        ) : (
-          filteredMessages.map((ticket, index) => (
-            <div key={index} className="ticket-card">
-              <div className="ticket-body">
-                <div>{getSourceIcon(ticket.source)}</div>
 
-                <div>
-                  <div>{ticket.id}</div>
-                  <div>{ticket.message}</div>
+          <p className="text-[0.8125rem] sm:text-[0.9375rem]">
+            Tickets from Email, WhatsApp, etc will appear here.
+          </p>
+        </div>
+      </div>
+    ) : (
+      filteredMessages.map((ticket, index) => (
+        <div
+          key={index}
+          className="border border-[#d1d5db] rounded-[0.375rem] p-[0.75rem] flex flex-col"
+        >
+          <div className="flex justify-between items-start gap-[0.75rem]">
 
-                  <Button onClick={() => openAssignModal(ticket)}>
-                    Assign
-                  </Button>
-                </div>
-
-                <div>{ticket.time}</div>
+            {/* ICON */}
+            <div className="border border-[#2563eb] rounded-full p-[0.25rem] mr-[1rem]">
+              <div className="text-[1.75rem] text-[#2563eb]">
+                {getSourceIcon(ticket.source)}
               </div>
             </div>
-          ))
-        )}
-      </div>
 
-      {isAssignModalOpen && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-            <h3>{canAssignDepartment ? "Assign Department" : "Assign Agent"}</h3>
+            {/* CONTENT */}
+            <div className="flex-1">
+              <div className="text-[#3B8AEC] font-semibold mb-[0.25rem]">
+                {ticket.id}
+              </div>
 
-            {canAssignDepartment ? (
-              <select
-                value={selectedDepartmentName}
-                onChange={(e) => setSelectedDepartmentName(e.target.value)}
-              >
-                <option value="">Select Department</option>
-                {departmentOptions.map(dep => (
-                  <option key={dep}>{dep}</option>
-                ))}
-              </select>
-            ) : (
-              <input
-                type="text"
-                placeholder="Search agent"
-                value={agentSearch}
-                onChange={(e) => setAgentSearch(e.target.value)}
-              />
-            )}
+              <div className="text-[#0F141A] text-[0.875rem] mb-[0.75rem]">
+                {ticket.message}
+              </div>
 
-            <button onClick={handleAssign} disabled={isAssigningAgent}>
-              {isAssigningAgent ? "Assigning..." : "Assign"}
-            </button>
+              <div className="flex justify-between items-center flex-wrap gap-[0.75rem]">
+                <span className="text-[#424650] font-medium">
+                  {ticket.sender}
+                </span>
 
-            <button onClick={() => setIsAssignModalOpen(false)}>
-              Cancel
-            </button>
+                <div className="flex items-center gap-[0.5rem] flex-wrap">
+                  <span className="border border-[#d1d5db] bg-[#f3f4f6] text-[#424650] rounded-full px-[0.625rem] py-[0.25rem] text-[0.75rem]">
+                    {assignedAgentsByMessage[ticket.id] && (
+                      <span className="assigned-agent-pill">
+                        {assignedAgentsByMessage[ticket.id].fName} {assignedAgentsByMessage[ticket.id].lName}
+                      </span>
+                    )}
+                    {assignedDepartmentsByMessage[ticket.id] && (
+                      <span className="assigned-agent-pill">
+                        {assignedDepartmentsByMessage[ticket.id]}
+                      </span>
+                    )}
+                  </span>
+
+                  <button
+                    onClick={() => openAssignModal(ticket)}
+                    className="bg-[#2563eb] text-white text-[0.75rem] px-[0.75rem] py-[0.375rem] rounded-[0.375rem]"
+                  >
+                    Assign
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* TIME */}
+            <div className="text-[0.75rem] text-[#929292]">
+              {ticket.time}
+            </div>
           </div>
         </div>
-      )}
+      ))
+    )}
+
+  </div>
+
+  {/* MODAL */}
+  {isAssignModalOpen && (
+    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+      <div className="w-[92vw] max-w-[47.5rem] rounded-[0.75rem] border border-[#d1d5db] bg-gradient-to-b from-white to-[#f9fafb] shadow-lg p-[1.375rem] md:p-[1.5rem]">
+
+        <h3 className="text-[1.25rem] font-semibold text-[#0F141A]">
+          {canAssignDepartment ? "Assign Department" : "Assign Agent"}
+        </h3>
+
+        <p className="text-[0.875rem] text-[#424650] mt-[0.25rem] mb-[1rem]">
+          Select an option below
+        </p>
+
+        {canAssignDepartment ? (
+          <select
+            value={selectedDepartmentName}
+            onChange={(e) => setSelectedDepartmentName(e.target.value)}
+            className="w-full mb-[0.875rem] h-[2.75rem] border border-[#d1d5db] rounded-[0.5rem] px-[0.75rem]"
+          >
+            <option value="">Select Department</option>
+            {departmentOptions.map((dep) => (
+              <option key={dep}>{dep}</option>
+            ))}
+          </select>
+        ) : (
+          <input
+            type="text"
+            placeholder="Search agent"
+            value={agentSearch}
+            onChange={(e) => setAgentSearch(e.target.value)}
+            className="w-full mb-[0.875rem] h-[2.75rem] border border-[#d1d5db] rounded-[0.5rem] px-[0.75rem] focus:border-[#3b8aec] focus:ring-2 focus:ring-[rgba(59,138,236,0.1)] outline-none"
+          />
+        )}
+
+        <div className="flex justify-end gap-[0.5rem] pt-[0.25rem]">
+          <button
+            onClick={() => setIsAssignModalOpen(false)}
+            className="border border-[#d1d5db] bg-white text-[#424650] min-w-[7.5rem] h-[2.5rem] rounded-[0.5rem]"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={handleAssign}
+            disabled={isAssigningAgent}
+            className="bg-[#2563eb] text-white min-w-[8rem] h-[2.5rem] rounded-[0.5rem] font-semibold shadow-[0_6px_16px_rgba(37,99,235,0.25)]"
+          >
+            {isAssigningAgent ? "Assigning..." : "Assign"}
+          </button>
+        </div>
+      </div>
     </div>
+  )}
+</div>
   );
 }
 
