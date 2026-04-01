@@ -439,151 +439,188 @@ const TicketInbox = ({ selectedTicket, chats = [] }: TicketInboxProps) => {
   };
 
   return (
-    <div className="ticketing-item ticket-message">
-      {!selectedTicket ? (
-        <div className="ticket-inbox-empty">
-          <SearchOffOutlinedIcon className="empty-icon" />
-          <h4>No Tickets selected</h4>
-          <p>Lorem ipsum dolor sit amet, consectet</p>
+<div className="flex flex-col h-full min-h-0 overflow-hidden">
+  {!selectedTicket ? (
+    <div className="flex flex-col items-center justify-center flex-1 text-[#818690]">
+      <SearchOffOutlinedIcon className="text-[5.375rem] text-[#b8bbc1]" />
+      <h4 className="mt-3 font-semibold text-[#1e2025]">
+        No Tickets selected
+      </h4>
+      <p className="mt-1">Lorem ipsum dolor sit amet, consectet</p>
+    </div>
+  ) : (
+    <>
+      {/* Header */}
+      <div className="h-[4.625rem] border-b border-[#d8dbe2] px-[1.125rem] flex items-center justify-between">
+        <div className="flex items-center gap-[0.625rem]">
+          <div className="w-[1.75rem] h-[1.75rem] rounded-full bg-[#d4d5d8] flex items-center justify-center text-[0.8125rem] font-semibold">
+            {selectedTicket.name?.charAt(0)?.toUpperCase() || "N"}
+          </div>
+          <div>
+            <p className="font-semibold text-[0.875rem] text-[#1f2228]">
+              {selectedTicket.name || "Name ABCD"}
+            </p>
+            <p className="text-[0.6875rem] text-[#8a8f99]">
+              {formatTicketTime(selectedTicket.createdAt)}
+            </p>
+          </div>
         </div>
-      ) : (
-        <>
-          <div className="message-header">
-            <div className="user-head">
-              <div className="avatar">{selectedTicket.name?.charAt(0)?.toUpperCase() || "N"}</div>
-              <div>
-                <p className="name">{selectedTicket.name || "Name ABCD"}</p>
-                <p className="time">{formatTicketTime(selectedTicket.createdAt)}</p>
+      </div>
+
+      {/* Chat */}
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 px-[1.125rem] pt-[0.875rem] pb-[0.5rem]"
+      >
+        {formattedMessages.length === 0 ? (
+          <div className="h-[4.75rem] rounded-[0.5rem] bg-[#f7f7f8] mt-[0.875rem]" />
+        ) : (
+          formattedMessages.map((message) => (
+            <div
+              key={message.id}
+              className={`flex mb-[1.125rem] items-start gap-2 ${
+                message.sender === "me" ? "justify-end" : ""
+              }`}
+            >
+              {message.sender === "other" && (
+                <div className="w-[1.75rem] h-[1.75rem] rounded-full bg-[#e9d5b5] flex items-center justify-center mt-[0.375rem]" />
+              )}
+
+              <div className="max-w-[70%]">
+                {/* Meta */}
+                {message.sender !== "me" && (
+                  <div className="mb-[0.375rem]">
+                    <p className="text-[#2f333c] text-[1rem] font-medium leading-[1.1]">
+                      {(message).sender ||
+                        selectedTicket?.name ||
+                        "WhatsApp User"}
+                    </p>
+                    <p className="text-[#838998] text-[0.75rem]">
+                      {(message).time || message.time}
+                    </p>
+                  </div>
+                )}
+
+                {/* Message Box */}
+                <div
+                  className={`w-fit max-w-full rounded-[0.625rem] px-[0.625rem] py-[0.5rem] border ${
+                    message.sender === "me"
+                      ? "bg-[#dfe4f6] border-[#dfe4f6]"
+                      : "bg-white border-[#e4e6ec]"
+                  }`}
+                >
+                  <p className="text-[#2f333c] text-[0.8125rem] whitespace-pre-wrap break-words">
+                    {message.message}
+                  </p>
+
+                  {message.attachmentName && (
+                    <p className="mt-[4px] text-[12px] opacity-90">
+                      <AttachFileOutlinedIcon fontSize="inherit" />{" "}
+                      {message.attachmentName}
+                    </p>
+                  )}
+                </div>
+
+                {/* Status */}
+                {message.sender === "me" &&
+                  message.status &&
+                  message.status !== "sent" && (
+                    <span className="block mt-[0.125rem] text-[0.6875rem] text-[#9298a3] text-right">
+                      ({message.status})
+                    </span>
+                  )}
+
+                {message.sender === "me" &&
+                  message.status === "failed" && (
+                    <button
+                      type="button"
+                      onClick={() => retryMessage(message)}
+                    >
+                      <ReplayOutlinedIcon fontSize="small" />
+                    </button>
+                  )}
               </div>
             </div>
+          ))
+        )}
+
+        {/* Closed Ticket */}
+        {isClosedTicket && (
+          <div className="mx-auto mt-4 mb-2 max-w-[38.75rem] w-full border border-[#e1e4eb] rounded-[0.625rem] bg-white px-[1.25rem] py-[1rem] text-center">
+            <div className="w-[1.875rem] h-[1.875rem] mx-auto mb-2 rounded-full flex items-center justify-center bg-[#ffe3e3] text-[#ef4b4b]">
+              <WorkOutlineOutlinedIcon fontSize="small" />
+            </div>
+            <h4 className="text-[1.25rem] font-semibold text-[#2f333c]">
+              Ticket Closed
+            </h4>
+            <p className="text-[0.8125rem] text-[#7e8592]">
+              {closedTicketNote}
+            </p>
           </div>
+        )}
 
-          <div className="chat-scroll-container" ref={scrollContainerRef}>
-            {formattedMessages.length === 0 ? (
-              <div className="chat-placeholder"></div>
-            ) : (
-              formattedMessages.map((message) => (
-                <div key={message.id} className={`message-row ${message.sender === "me" ? "me" : "other"}`}>
-                  {message.sender === "other" && <div className="chat-avatar"></div>}
-                  <div className="message-content" style={{ width: "fit-content", maxWidth: "70%" }}>
-                    <div className="message-meta">
-                      <p className="sender-name">
-                        {message.sender === "other"
-                          ? (message as any).senderName || selectedTicket?.name || "WhatsApp User"
-                          : " "}
-                      </p>
-                      <p className="sender-time">{(message as any).displayTime || message.time}</p>
-                    </div>
-                    <div className="message-box" style={{ width: "fit-content", maxWidth: "100%" }}>
-                      <p>{message.message}</p>
-                      {message.attachmentName ? (
-                        <p style={{ marginTop: "4px", fontSize: "12px", opacity: 0.9 }}>
-                          <AttachFileOutlinedIcon fontSize="inherit" /> {message.attachmentName}
-                        </p>
-                      ) : null}
-                    </div>
-                    {message.sender === "me" && message.status && message.status !== "sent" ? (
-                      <span>({message.status})</span>
-                    ) : null}
-                    {message.sender === "me" && message.status === "failed" ? (
-                      <button type="button" className="retry-btn" onClick={() => retryMessage(message)}>
-                        <ReplayOutlinedIcon fontSize="small" />
-                      </button>
-                    ) : null}
-                  </div>
-                </div>
-              ))
-            )}
-
-            {isClosedTicket ? (
-              <div className="ticket-closed-card">
-                <div className="ticket-closed-icon">
-                  <WorkOutlineOutlinedIcon fontSize="small" />
-                </div>
-                <h4>Ticket Closed</h4>
-                <p>{closedTicketNote}</p>
-              </div>
-            ) : null}
-
-            {!isClosedTicket && !canCurrentUserChat ? (
-              <div className="ticket-chat-restricted">
-                {hasAssignedAgents
-                  ? "Only assigned users can chat on this ticket."
-                  : "No agent is assigned to this ticket yet. Please assign an agent to start chatting."}
-              </div>
-            ) : null}
+        {/* Restricted */}
+        {!isClosedTicket && !canCurrentUserChat && (
+          <div className="mx-auto mt-4 mb-2 max-w-[38.75rem] w-full border border-[#f2d5a4] border-l-[0.25rem] border-l-[#d38a1f] rounded-[0.625rem] bg-[#fff8ea] text-[#805d1f] text-[0.8125rem] font-medium px-[0.875rem] py-[0.625rem] shadow-sm">
+            {hasAssignedAgents
+              ? "Only assigned users can chat on this ticket."
+              : "No agent is assigned to this ticket yet. Please assign an agent to start chatting."}
           </div>
-        </>
+        )}
+      </div>
+    </>
+  )}
+
+  {/* Footer */}
+  {selectedTicket && !isClosedTicket && canCurrentUserChat && (
+    <div className="px-[1.125rem] pt-[0.75rem] pb-[1.125rem]">
+      {attachedFile && (
+        <div className="flex items-center gap-2 mb-2 px-2 py-1 border border-[#d9d9d9] rounded-[8px] w-fit max-w-full">
+          <AttachFileOutlinedIcon fontSize="small" />
+          <span className="truncate">{attachedFile.name}</span>
+          <button
+            onClick={() => {
+              setAttachedFile(null);
+              if (fileInputRef.current) fileInputRef.current.value = "";
+            }}
+          >
+            <CloseOutlinedIcon fontSize="small" />
+          </button>
+        </div>
       )}
 
-      {selectedTicket && !isClosedTicket && canCurrentUserChat ? (
-        <div className="message-footer">
-          {attachedFile ? (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                marginBottom: "8px",
-                padding: "6px 10px",
-                border: "1px solid #d9d9d9",
-                borderRadius: "8px",
-                width: "fit-content",
-                maxWidth: "100%",
-              }}
-            >
-              <AttachFileOutlinedIcon fontSize="small" />
-              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{attachedFile.name}</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setAttachedFile(null);
-                  if (fileInputRef.current) {
-                    fileInputRef.current.value = "";
-                  }
-                }}
-                style={{ display: "flex", alignItems: "center", border: "none", background: "transparent", cursor: "pointer" }}
-                aria-label="Remove attached file"
-              >
-                <CloseOutlinedIcon fontSize="small" />
-              </button>
-            </div>
-          ) : null}
-          <div className="message-input-wrap">
-            <input
-              className="message-input-field"
-              placeholder="Type Your Message here....."
-              value={messageInput}
-              onChange={(e) => setMessageInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSendMessage();
-                }
-              }}
-            />
-            <div className="icons">
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                style={{ background: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center" }}
-                aria-label="Attach file"
-              >
-                <AttachFileOutlinedIcon fontSize="small" />
-              </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                style={{ display: "none" }}
-                onChange={handleAttachFile}
-              />
-              <button type="button" className="send-btn" onClick={handleSendMessage} aria-label="Send message">
-                <SendRoundedIcon fontSize="small" />
-              </button>
-            </div>
-          </div>
+      <div className="relative">
+        <input
+          className="w-full h-[2.625rem] rounded-[0.625rem] border border-[#d6dae4] pl-[0.875rem] pr-[5.375rem] bg-white text-[0.8125rem] shadow-sm outline-none"
+          placeholder="Type Your Message here....."
+          value={messageInput}
+          onChange={(e) => setMessageInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+        />
+
+        <div className="absolute right-[0.625rem] top-1/2 -translate-y-1/2 flex items-center gap-[0.625rem] text-[#626977]">
+          <button onClick={() => fileInputRef.current?.click()}>
+            <AttachFileOutlinedIcon fontSize="small" />
+          </button>
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            onChange={handleAttachFile}
+          />
+
+          <button
+            className="w-[1.625rem] h-[1.625rem] rounded-full bg-[#4f79ff] text-white flex items-center justify-center"
+            onClick={handleSendMessage}
+          >
+            <SendRoundedIcon fontSize="small" />
+          </button>
         </div>
-      ) : null}
+      </div>
     </div>
+  )}
+</div>
   );
 };
 
