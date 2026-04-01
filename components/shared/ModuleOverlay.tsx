@@ -234,7 +234,7 @@ export default function ModuleOverlay({ onClose }: ModuleOverlayProps) {
     >
       {/* dropdown panel — stop propagation so clicking inside doesn't close */}
       <div
-        className="absolute left-0 right-0 bg-white dark:bg-slate-800 border-t border-[#2ec4b6] dark:border-[#2ec4b6] overflow-y-auto"
+        className="absolute left-0 right-0 bg-white dark:bg-zinc-900 border-t border-[#2ec4b6] dark:border-[#2ec4b6] overflow-y-auto"
         style={{ top: "64px", maxHeight: "calc(100vh - 64px)", boxShadow: "0 8px 32px rgba(46,196,182,0.18)" }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -246,13 +246,13 @@ export default function ModuleOverlay({ onClose }: ModuleOverlayProps) {
                   key={i}
                   href={mod.link}
                   onClick={onClose}
-                  className="flex flex-col rounded p-2 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#e6faf8] dark:hover:bg-slate-700 cursor-pointer no-underline"
+                  className="flex flex-col rounded p-2 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#e6faf8] dark:hover:bg-zinc-800 cursor-pointer no-underline"
                 >
                   <div className="flex items-center gap-4">
                     <ModuleIcon>{mod.icon}</ModuleIcon>
-                    <h3 className="text-[15px] font-semibold text-gray-800 dark:text-slate-100 leading-snug">{mod.title}</h3>
+                    <h3 className="text-[15px] font-semibold text-gray-800 dark:text-zinc-100 leading-snug">{mod.title}</h3>
                   </div>
-                  <p className="mt-1 ml-[52px] text-sm text-gray-600 dark:text-slate-400 leading-snug">{mod.description}</p>
+                  <p className="mt-1 ml-[52px] text-sm text-gray-600 dark:text-zinc-400 leading-snug">{mod.description}</p>
                 </Link>
               ))}
             </div>

@@ -47,10 +47,10 @@ const colorMap: Record<string, { bg: string; border: string; text: string }> = {
 
 export default function UpcomingEvents() {
   return (
-    <Card className="h-full shadow-sm hover:shadow-md transition-shadow flex flex-col border-slate-200 dark:border-slate-700">
-      <CardHeader className="pb-4 pt-5 px-5 flex flex-row items-center justify-between flex-shrink-0 border-b border-slate-100 dark:border-slate-800">
-        <CardTitle className="text-base font-semibold text-slate-900 dark:text-slate-100">Upcoming Events</CardTitle>
-        <div className="drag-handle cursor-move p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors">
+    <Card className="h-full shadow-sm hover:shadow-md transition-shadow flex flex-col border-slate-200 dark:border-zinc-800">
+      <CardHeader className="pb-4 pt-5 px-5 flex flex-row items-center justify-between flex-shrink-0 border-b border-slate-100 dark:border-zinc-800">
+        <CardTitle className="text-base font-semibold text-slate-900 dark:text-zinc-100">Upcoming Events</CardTitle>
+        <div className="drag-handle cursor-move p-1.5 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded transition-colors">
           <GripVertical className="w-4 h-4 text-slate-400" />
         </div>
       </CardHeader>
@@ -64,23 +64,23 @@ export default function UpcomingEvents() {
                 className={`p-3 rounded-lg border-l-4 ${colors.border} ${colors.bg} hover:shadow-sm transition-all`}
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 leading-tight">
+                  <h4 className="text-sm font-semibold text-slate-900 dark:text-zinc-100 leading-tight">
                     {event.title}
                   </h4>
                   <Calendar className={`w-4 h-4 ${colors.text} flex-shrink-0`} />
                 </div>
                 <div className="space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+                  <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-zinc-400">
                     <Clock className="w-3.5 h-3.5" />
                     <span className="font-medium">{event.date}</span>
                     <span>•</span>
                     <span>{event.time}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+                  <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-zinc-400">
                     <MapPin className="w-3.5 h-3.5" />
                     <span>{event.location}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
+                  <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-zinc-400">
                     <Users className="w-3.5 h-3.5" />
                     <span>{event.attendees} attendees</span>
                   </div>

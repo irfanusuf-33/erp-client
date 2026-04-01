@@ -20,6 +20,7 @@ interface BankDetailsFormProps {
   onInputChange: (field: keyof BankFormData, value: string) => void;
   onSave?: () => void;
   onCancel?: () => void;
+  errors?: Record<string, string>;
 }
 
 export default function BankDetailsForm({ formData, onInputChange }: BankDetailsFormProps) {

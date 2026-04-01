@@ -19,8 +19,8 @@ export default function KPICard({ title, value, change, icon: Icon, color }: KPI
     <Card className="h-full hover:shadow-md transition-shadow flex flex-col">
       <CardContent className="p-2.5 flex-1 flex flex-col justify-between">
         <div className="flex items-start justify-between mb-1">
-          <p className="text-[9px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide leading-tight">{title}</p>
-          <div className="drag-handle cursor-move p-0.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
+          <p className="text-[9px] text-slate-500 dark:text-zinc-400 font-medium uppercase tracking-wide leading-tight">{title}</p>
+          <div className="drag-handle cursor-move p-0.5 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded">
             <GripVertical className="w-2.5 h-2.5 text-slate-400" />
           </div>
         </div>

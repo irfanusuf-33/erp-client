@@ -19,10 +19,10 @@ const colorMap: Record<string, { bg: string; hover: string; icon: string }> = {
 
 export default function QuickActions() {
   return (
-    <Card className="h-full shadow-sm hover:shadow-md transition-shadow flex flex-col border-slate-200 dark:border-slate-700">
-      <CardHeader className="pb-4 pt-5 px-5 flex flex-row items-center justify-between flex-shrink-0 border-b border-slate-100 dark:border-slate-800">
-        <CardTitle className="text-base font-semibold text-slate-900 dark:text-slate-100">Quick Actions</CardTitle>
-        <div className="drag-handle cursor-move p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors">
+    <Card className="h-full shadow-sm hover:shadow-md transition-shadow flex flex-col border-slate-200 dark:border-zinc-800">
+      <CardHeader className="pb-4 pt-5 px-5 flex flex-row items-center justify-between flex-shrink-0 border-b border-slate-100 dark:border-zinc-800">
+        <CardTitle className="text-base font-semibold text-slate-900 dark:text-zinc-100">Quick Actions</CardTitle>
+        <div className="drag-handle cursor-move p-1.5 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded transition-colors">
           <GripVertical className="w-4 h-4 text-slate-400" />
         </div>
       </CardHeader>
@@ -34,18 +34,18 @@ export default function QuickActions() {
             return (
               <button
                 key={action.label}
-                className={`p-4 rounded-xl border border-slate-200 dark:border-slate-700 ${colors.bg} ${colors.hover} transition-all hover:shadow-md group`}
+                className={`p-4 rounded-xl border border-slate-200 dark:border-zinc-800 ${colors.bg} ${colors.hover} transition-all hover:shadow-md group`}
               >
                 <div className="flex flex-col items-center gap-2 text-center">
                   <div className="relative">
                     <Icon className={`w-6 h-6 ${colors.icon}`} />
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-sm">
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center shadow-sm">
                       <Plus className={`w-3 h-3 ${colors.icon}`} />
                     </div>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-0.5">{action.label}</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">{action.description}</p>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-zinc-100 mb-0.5">{action.label}</p>
+                    <p className="text-xs text-slate-500 dark:text-zinc-400">{action.description}</p>
                   </div>
                 </div>
               </button>

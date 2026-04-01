@@ -16,7 +16,7 @@ export default function CRMFunnel() {
     <Card className="h-full shadow-sm hover:shadow-md transition-shadow flex flex-col">
       <CardHeader className="pb-1 pt-2.5 px-3 flex flex-row items-center justify-between flex-shrink-0">
         <CardTitle className="text-sm font-semibold">Sales Funnel</CardTitle>
-        <div className="drag-handle cursor-move p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
+        <div className="drag-handle cursor-move p-1 hover:bg-slate-100 dark:hover:bg-zinc-800 rounded">
           <GripVertical className="w-3.5 h-3.5 text-slate-400" />
         </div>
       </CardHeader>
@@ -25,10 +25,10 @@ export default function CRMFunnel() {
           {funnelData.map((item) => (
             <div key={item.stage}>
               <div className="flex items-center justify-between mb-0.5">
-                <span className="text-[10px] font-medium text-slate-700 dark:text-slate-300">{item.stage}</span>
+                <span className="text-[10px] font-medium text-slate-700 dark:text-zinc-300">{item.stage}</span>
                 <span className="text-[10px] font-semibold" style={{ color: item.color }}>{item.count}</span>
               </div>
-              <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5">
+              <div className="w-full bg-slate-100 dark:bg-zinc-900 rounded-full h-1.5">
                 <div
                   className="h-1.5 rounded-full transition-all"
                   style={{ width: `${item.percentage}%`, backgroundColor: item.color }}
