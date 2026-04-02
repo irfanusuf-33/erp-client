@@ -60,7 +60,7 @@ export default function DashboardTabs({ activeTab, onTabChange }: DashboardTabsP
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 sticky top-16 z-40">
+    <div className="bg-white dark:bg-zinc-900 border-b border-slate-200 dark:border-zinc-800 sticky top-16 z-20">
       <div className="px-4 md:px-6">
         {/* Mobile Dropdown */}
         <div className="md:hidden py-3">
