@@ -7,6 +7,65 @@ export type NumberFormat = "1,234.56" | "1.234,56" | "1 234.56";
 export type Currency = "USD" | "EUR" | "GBP" | "SAR" | "INR" | "CAD" | "AED";
 export type Theme = "light" | "dark" | "system";
 
+// ─── Navbar Settings Types ────────────────────────────────────────────────────
+export type NavbarOrientation = "horizontal" | "vertical" | "hybrid";
+export type NavbarSidebarBehavior = "expanded" | "collapsed";
+export type NavbarPosition = "left" | "right";
+export type NavbarWidth = "narrow" | "standard" | "wide";
+export type NavbarSticky = "fixed" | "scrollable";
+export type NavbarTheme = "dark" | "light" | "system";
+export type NavbarBackground = "solid" | "glass";
+export type NavbarShadow = "none" | "soft" | "medium";
+export type NavbarIconStyle = "outline" | "filled";
+export type NavbarAnimation = "fast" | "normal" | "slow";
+export type NavbarActiveStyle = "background" | "border" | "underline";
+export type NavbarSearchPosition = "left" | "center" | "right";
+
+export type NavbarModule = {
+  id: string;
+  label: string;
+  visible: boolean;
+  pinned: boolean;
+  order: number;
+};
+
+export type NavbarSettings = {
+  // Layout
+  orientation: NavbarOrientation;
+  sidebarBehavior: NavbarSidebarBehavior;
+  position: NavbarPosition;
+  width: NavbarWidth;
+  sticky: NavbarSticky;
+  // Appearance
+  navTheme: NavbarTheme;
+  background: NavbarBackground;
+  showBorder: boolean;
+  shadow: NavbarShadow;
+  accentColor: string;
+  iconStyle: NavbarIconStyle;
+  showLabels: boolean;
+  // Behavior
+  expandOnHover: boolean;
+  autoCollapse: boolean;
+  animation: NavbarAnimation;
+  showTooltips: boolean;
+  activeStyle: NavbarActiveStyle;
+  // Search
+  searchEnabled: boolean;
+  searchPosition: NavbarSearchPosition;
+  searchPlaceholder: string;
+  // Modules
+  modules: NavbarModule[];
+  showPinnedAtTop: boolean;
+  showRecentModules: boolean;
+  // Advanced
+  showBreadcrumbs: boolean;
+  showAiButton: boolean;
+  showAppLauncher: boolean;
+  showNotificationCenter: boolean;
+  showOrgSwitcher: boolean;
+};
+
 export type LoginHistoryEntry = {
   id: string;
   device: string;
@@ -14,6 +73,47 @@ export type LoginHistoryEntry = {
   ip: string;
   timestamp: string;
   status: "success" | "failed";
+};
+
+const DEFAULT_MODULES: NavbarModule[] = [
+  { id: "crm",        label: "CRM",        visible: true,  pinned: false, order: 0 },
+  { id: "hrm",        label: "HRM",        visible: true,  pinned: false, order: 1 },
+  { id: "inventory",  label: "Inventory",  visible: true,  pinned: false, order: 2 },
+  { id: "ticketing",  label: "Ticketing",  visible: true,  pinned: false, order: 3 },
+  { id: "calendar",   label: "Calendar",   visible: true,  pinned: false, order: 4 },
+  { id: "iam",        label: "IAM",        visible: true,  pinned: false, order: 5 },
+  { id: "dashboard",  label: "Dashboard",  visible: true,  pinned: false, order: 6 },
+];
+
+export const DEFAULT_NAVBAR_SETTINGS: NavbarSettings = {
+  orientation: "horizontal",
+  sidebarBehavior: "expanded",
+  position: "left",
+  width: "standard",
+  sticky: "fixed",
+  navTheme: "system",
+  background: "solid",
+  showBorder: true,
+  shadow: "soft",
+  accentColor: "#2563eb",
+  iconStyle: "outline",
+  showLabels: true,
+  expandOnHover: false,
+  autoCollapse: false,
+  animation: "normal",
+  showTooltips: true,
+  activeStyle: "background",
+  searchEnabled: true,
+  searchPosition: "right",
+  searchPlaceholder: "Search...",
+  modules: DEFAULT_MODULES,
+  showPinnedAtTop: true,
+  showRecentModules: false,
+  showBreadcrumbs: false,
+  showAiButton: false,
+  showAppLauncher: true,
+  showNotificationCenter: true,
+  showOrgSwitcher: false,
 };
 
 export type SettingsState = {
@@ -24,6 +124,9 @@ export type SettingsState = {
   numberFormat: NumberFormat;
   currency: Currency;
 
+  // Navbar
+  navbarSettings: NavbarSettings;
+
   // Notifications
   emailNotifications: {
     marketing: boolean;
@@ -33,11 +136,11 @@ export type SettingsState = {
   };
   reminderSettings: {
     enabled: boolean;
-    reminderTime: string; // e.g. "09:00"
+    reminderTime: string;
     daysBeforeDeadline: number;
   };
 
-  // Login history (mock — in real app fetched from API)
+  // Login history
   loginHistory: LoginHistoryEntry[];
 
   // Actions
@@ -48,6 +151,8 @@ export type SettingsState = {
   setCurrency: (c: Currency) => void;
   setEmailNotification: (key: keyof SettingsState["emailNotifications"], val: boolean) => void;
   setReminderSettings: (s: Partial<SettingsState["reminderSettings"]>) => void;
+  setNavbarSettings: (s: Partial<NavbarSettings>) => void;
+  resetNavbarSettings: () => void;
 };
 
 export const useSettingsStore = create<SettingsState>()(
@@ -58,6 +163,7 @@ export const useSettingsStore = create<SettingsState>()(
       timeFormat: "12h",
       numberFormat: "1,234.56",
       currency: "USD",
+      navbarSettings: DEFAULT_NAVBAR_SETTINGS,
       emailNotifications: {
         marketing: false,
         security: true,
@@ -85,6 +191,10 @@ export const useSettingsStore = create<SettingsState>()(
         set((s) => ({ emailNotifications: { ...s.emailNotifications, [key]: val } })),
       setReminderSettings: (s) =>
         set((prev) => ({ reminderSettings: { ...prev.reminderSettings, ...s } })),
+      setNavbarSettings: (s) =>
+        set((prev) => ({ navbarSettings: { ...prev.navbarSettings, ...s } })),
+      resetNavbarSettings: () =>
+        set({ navbarSettings: DEFAULT_NAVBAR_SETTINGS }),
     }),
     {
       name: "erp-settings-storage",
@@ -95,6 +205,7 @@ export const useSettingsStore = create<SettingsState>()(
         timeFormat: s.timeFormat,
         numberFormat: s.numberFormat,
         currency: s.currency,
+        navbarSettings: s.navbarSettings,
         emailNotifications: s.emailNotifications,
         reminderSettings: s.reminderSettings,
       }),

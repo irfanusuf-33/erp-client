@@ -56,12 +56,12 @@ export default function ProfilePanel({ open, onClose, onOpenSettings, onOpenNoti
     <>
       {/* Backdrop with blur */}
       <div 
-        className="fixed inset-0 bg-black/30 dark:bg-black/50 backdrop-blur-sm z-[100] transition-opacity"
+        className="fixed inset-0 bg-black/30 dark:bg-black/50 backdrop-blur-sm z-[9997] transition-opacity"
         onClick={onClose}
       />
 
       {/* Panel */}
-      <div className="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white dark:bg-zinc-900 shadow-2xl z-[101] flex flex-col animate-slide-in-right">
+      <div className="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white dark:bg-zinc-900 shadow-2xl z-[9998] flex flex-col animate-slide-in-right">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-zinc-800">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-zinc-100">Profile</h2>
