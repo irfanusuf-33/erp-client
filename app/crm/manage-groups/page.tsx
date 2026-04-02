@@ -24,12 +24,14 @@ export default function ManageGroups() {
   const [globalFilter, setGlobalFilter] = useState("");
 
   const groups: Group[] = [
-    {groupName:'voctrum123', description:'heyhas' , createdBy:'jon.smith@abc.com', createdAt:'16/12/2025', status:true},
-    {groupName:'voctrum162', description:'heydsa' , createdBy:'jon.doe@abc.com', createdAt:'16/12/2025', status:false},
-    {groupName:'voctrum762', description:'heyhas' , createdBy:'jon.bash@abc.com', createdAt:'16/12/2025', status:true},
-    {groupName:'voctrum892', description:'heyhas' , createdBy:'jon.will@abc.com', createdAt:'16/12/2025', status:false},
-    {groupName:'voctrum989', description:'heyhas' , createdBy:'jon.luice@abc.com', createdAt:'16/12/2025', status:true},
+    {_id:'132',groupName:'voctrum123', description:'heyhas' , createdBy:'jon.smith@abc.com', createdAt:'16/12/2025', status:true},
+    {_id:'133', groupName:'voctrum162', description:'heydsa' , createdBy:'jon.doe@abc.com', createdAt:'16/12/2025', status:false},
+    {_id:'134',groupName:'voctrum762', description:'heyhas' , createdBy:'jon.bash@abc.com', createdAt:'16/12/2025', status:true},
+    {_id:'135',groupName:'voctrum892', description:'heyhas' , createdBy:'jon.will@abc.com', createdAt:'16/12/2025', status:false},
+    {_id:'136',groupName:'voctrum989', description:'heyhas' , createdBy:'jon.luice@abc.com', createdAt:'16/12/2025', status:true},
   ]
+
+  const router = useRouter()
 
 
     const columns: MRT_ColumnDef<Group>[] = groups.length > 0 
@@ -39,7 +41,10 @@ export default function ManageGroups() {
             accessorKey: key,
             header: 'Group Name',
             Cell: ({ row }) => (
-              <span className="cursor-pointer text-blue-600 dark:text-blue-400 hover:underline">
+              <span 
+              className="cursor-pointer text-blue-600 dark:text-blue-400 hover:underline" 
+              onClick={()=> router.push(`/crm/group-detail/${row.original._id}`)}
+              >
                 {row.original.groupName}
               </span>
             ),
