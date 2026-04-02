@@ -39,7 +39,7 @@ const navGroups = [
   {
     label: "Settings",
     children: [
-      { label: "General",        href: "/hrm/settings/general" },
+      { label: "General",        href: "/hrm/admin/settings/general" },
     ],
   },
 ];
@@ -71,7 +71,7 @@ function DropdownItem({ item }: { item: (typeof navGroups)[0] }) {
       <div className="absolute top-full left-0 z-50 hidden group-hover:block pt-0.5">
         <div
           className="bg-white rounded-lg min-w-[180px] py-2"
-          style={{ boxShadow: "0 4px 20px rgba(249, 115, 22, 0.25)" }}
+          style={{ boxShadow: "0 4px 20px rgba(128, 143, 235, 0.25)" }}
         >
           {item.children.map((link) => {
             const active = pathname === link.href || pathname.startsWith(link.href);

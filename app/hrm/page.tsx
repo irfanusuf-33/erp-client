@@ -22,6 +22,7 @@ import {
   JobApplication,
   Leave,
 } from "@/types/hrm.types";
+import StatCard from "./components/StatCard";
 
 const stats = [
   { heading: "Total Employees", number: "0", label: "+0 this month", color: "#10B981", icon: Users },
@@ -45,27 +46,14 @@ export default function HrmDashboard() {
     <div className="flex flex-col gap-5 p-6 bg-slate-50 min-h-screen">
 
       {/* ── Overview ── */}
-      <div>
-        <h1 className="text-xl font-semibold mb-4">Overview</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {stats.map((stat, i) => {
-            const Icon = stat.icon;
-            return (
-              <div key={i} className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex items-start gap-3">
-                <div className="w-[3px] self-stretch rounded-full" style={{ backgroundColor: stat.color }} />
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-2">
-                    <h1 className="text-sm font-medium text-gray-600">{stat.heading}</h1>
-                    <Icon size={18} className="text-slate-400" />
-                  </div>
-                  <h1 className="text-2xl font-bold">{stat.number}</h1>
-                  <p className="text-xs mt-1" style={{ color: stat.color }}>{stat.label}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+    <div>
+  <h1 className="text-xl font-semibold mb-4">Overview</h1>
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    {stats.map((stat, i) => (
+      <StatCard key={i} {...stat} />
+    ))}
+  </div>
+</div>
 
       {/* ── Holidays | Events | Alerts ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">

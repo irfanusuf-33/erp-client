@@ -5,6 +5,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { Search, Clock, ChevronLeft, ChevronRight, Info, CheckCircle, CalendarX, LogOut } from "lucide-react";
 import { useGlobalStore } from "@/store";
+import StatCard from "../../components/StatCard";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -147,25 +148,14 @@ export default function DailyArrivalsPage() {
 
       {/* ── Stat Cards ── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {[
-          { label: "On Time",       value: stats.onTime,   color: "text-emerald-600", border: "border-l-emerald-500", iconBg: "bg-emerald-50", iconColor: "text-emerald-500", icon: CheckCircle },
-          { label: "Late Arrivals", value: stats.late,     color: "text-rose-500",    border: "border-l-rose-500",    iconBg: "bg-rose-50",    iconColor: "text-rose-500",    icon: CalendarX   },
-          { label: "Early Out",     value: stats.earlyOut, color: "text-amber-500",   border: "border-l-amber-500",   iconBg: "bg-amber-50",   iconColor: "text-amber-500",   icon: LogOut      },
-        ].map(({ label, value, color, border, iconBg, iconColor, icon: Icon }) => (
-          <div key={label} className={`bg-white rounded-xl border border-slate-100 border-l-4 ${border} shadow-sm p-5 flex items-center justify-between`}>
-            <div className="flex flex-col gap-1">
-              <span className={`text-sm font-medium ${color}`}>{label}</span>
-              <div className="flex items-baseline gap-1">
-                <span className={`text-2xl font-bold ${color}`}>{String(value).padStart(2, "0")}</span>
-                <span className="text-sm text-slate-400">/ {stats.total}</span>
-              </div>
-            </div>
-            <div className={`p-2.5 rounded-lg ${iconBg}`}>
-              <Icon size={20} className={iconColor} />
-            </div>
-          </div>
-        ))}
-      </div>
+  {[
+    { heading: "On Time",       number: String(stats.onTime).padStart(2, "0"),   label: `/ ${stats.total} total`, color: "#10b981", icon: CheckCircle },
+    { heading: "Late Arrivals", number: String(stats.late).padStart(2, "0"),     label: `/ ${stats.total} total`, color: "#ef4444", icon: CalendarX   },
+    { heading: "Early Out",     number: String(stats.earlyOut).padStart(2, "0"), label: `/ ${stats.total} total`, color: "#f59e0b", icon: LogOut      },
+  ].map((stat, i) => (
+    <StatCard key={i} {...stat} />
+  ))}
+</div>
 
       {/* ── Table ── */}
       <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
